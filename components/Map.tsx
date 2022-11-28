@@ -7,7 +7,9 @@ export default function Map({position, setPosition}): any {
     const [locationMarker, setLocationMarker] = useState(null);
     console.log(position);
     
-
+    /**
+     * Set user position
+     */
     useEffect(() => {
         const fetchPosition = async () => {
             const { status } = await Location.requestForegroundPermissionsAsync();
@@ -46,6 +48,7 @@ export default function Map({position, setPosition}): any {
                     longitudeDelta: 4,
                 }}
             >
+                {locationMarker}
             </MapView>
             <Text>test</Text>
         </View>

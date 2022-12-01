@@ -9,7 +9,6 @@ export default function App() {
   const [position, setPosition] = useState({});
   return (
     <View style={styles.container}>
-      <Text>Sparkrentals</Text>
       <Map position={position} setPosition={setPosition}></Map>
       <StatusBar style="auto" />
     </View>

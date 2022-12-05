@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react';
 import { ScrollView, Image, Text, View, StyleSheet, StatusBar } from 'react-native';
 import MapView, { Marker, Circle } from 'react-native-maps';
 import * as Location from 'expo-location';
+import React from 'react';
 
 export default function Map({position, setPosition}): any {
     const [locationMarker, setLocationMarker] = useState(null);
     const [highlight, setHighlight] = useState(null);
+    
     /**
      * Set user position
      */
@@ -37,6 +39,10 @@ export default function Map({position, setPosition}): any {
 
     }, []);
 
+
+    /**
+     * Set zones
+     */
     useEffect(() => {
         function highlightMap(): void {
             setHighlight(<Circle

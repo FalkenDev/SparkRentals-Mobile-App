@@ -4,6 +4,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import { StyleSheet, Text, View } from 'react-native';
 import Map from './components/Map';
 import FlashMessage from 'react-native-flash-message';
+import React from 'react';
 
 export default function App() {
   const [position, setPosition] = useState({});

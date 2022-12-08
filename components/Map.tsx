@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ScrollView, Image, Text, View, StyleSheet, StatusBar } from 'react-native';
-import MapView, { Marker, Circle } from 'react-native-maps';
+import MapView, { Marker, Circle, Polygon } from 'react-native-maps';
 import * as Location from 'expo-location';
 import React from 'react';
 import mapModel from '../models/map';
@@ -10,7 +10,9 @@ import config from '../config/config.json';
 export default function Map({API_KEY, position, setPosition}): any {
     const [locationMarker, setLocationMarker] = useState(null);
     const [highlight, setHighlight] = useState(null);    
-        
+    const [currentCity, setCurrentCity] = useState(null);
+    const [zones, setZones] = useState([]);
+    
     /**
      * Set user position
      */
@@ -29,9 +31,12 @@ export default function Map({API_KEY, position, setPosition}): any {
             };
 
             setPosition(userCoordinates);
+            
+            mapModel.getClosestCity(API_KEY, position);
 
             setLocationMarker(<Marker
                 coordinate={{
+                    //latlang hardcoded for testing
                     // latitude: currentLocation.coords.latitude,
                     // longitude: currentLocation.coords.longitude
                     latitude: 56.161013580817986,
@@ -43,28 +48,31 @@ export default function Map({API_KEY, position, setPosition}): any {
             />);
         };
 
+
         fetchPosition();
 
     }, []);
 
-
     /**
-     * Set zones
+     * Set city to city that is closest to user and zones for that city
      */
-    // useEffect(() => {
-    //     function highlightMap(): void {
-    //         setHighlight(<Circle
-    //             center={ {
-    //                 latitude: 56.16506906899779,
-    //                 longitude: 14.866441449341021
-    //             } }
-    //             radius = {200}
-    //             strokeColor = {'rgba(34,139,34,0.5)'} 
-    //             fillColor = {'rgba(34,139,34,0.5)'}
-    //         />)
-    //     }
-    //     highlightMap();
-    // }, []);    
+    useEffect(() => {
+        async function getCurrentCity(): Promise<void> {
+            const result = await mapModel.getClosestCity(API_KEY, position);
+            
+            const zones = mapModel.getZones(result);
+            
+            setCurrentCity(result);
+            
+            /**
+             * Set zones on map
+             * FIX: fillColor currently not working
+             */
+            setZones(zones);
+            
+        };
+        getCurrentCity();
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -73,11 +81,19 @@ export default function Map({API_KEY, position, setPosition}): any {
                 region={{
                     latitude: position.latitude? position.latitude : 0,
                     longitude: position.longitude? position.longitude : 0,
-                    latitudeDelta: 0.02,
-                    longitudeDelta: 0.02,
+                    latitudeDelta: 0.03,
+                    longitudeDelta: 0.03,
                 }}
             >
+
                 {locationMarker}
+                {zones.map((z) => (                    
+                    <Polygon 
+                        coordinates={z['coordinates']}
+                        strokeColor={z['zoneColor']}
+                        strokeWidth={3}
+                    />
+                ))}
             </MapView>
         </View>
     )

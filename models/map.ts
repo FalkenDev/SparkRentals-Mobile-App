@@ -31,8 +31,8 @@ const mapModel = {
         const zoneColors = {
             parkingZone: '#228B22',
             noParkingZone: '#8B0000',
-            bonusParkingZone: '#8A2BE2'
-
+            bonusParkingZone: '#8A2BE2',
+            chargingZone: '#FFFF00'
         };
 
         // Object to be returned containing all zones and data
@@ -42,7 +42,7 @@ const mapModel = {
         for (let i = 0; i < zones.length; i++) {
             const coordinates = city['zones'][i]['coordinates'];
             
-            console.log(city['zones'][i]['_id']);
+            console.log(city['zones'][i]['zoneType']);
             
             
             const zone = {

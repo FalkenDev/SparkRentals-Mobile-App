@@ -1,9 +1,10 @@
+import { API_KEY } from '@env';
 import config from '../config/config.json';
 
 const mapModel = {
 
     getCities: async function getCities(API_KEY: string): Promise<Object> {        
-        const response = await fetch(`${config.base_url}cities?api_key=234c561f80fb76cea4894ae4baebe5b0`);
+        const response = await fetch(`${config.base_url}cities?api_key=${API_KEY}`);
         
         const result = await response.json();        
 
@@ -22,7 +23,7 @@ const mapModel = {
         return cities['cities'][1];
     },
 
-    getZones: function getZones(city: object) {
+    getZones: function getZones(city: object): string[] {
         
         // All zones in current city
         const zones = city['zones'];
@@ -35,7 +36,7 @@ const mapModel = {
             chargingZone: 'rgba(255, 255, 5, 0.3)'
         };
 
-        // Object to be returned containing all zones and data
+        // Array to be returned containing all zones and data
         const zoneMarkers = [];
         
         // Loop through all zones and append them to return object
@@ -59,7 +60,12 @@ const mapModel = {
         }        
         
         return zoneMarkers;
-    }
+    },
+
+    getScooters: async function getScooters(API_KEY: string, city: object) {
+        const response = await fetch(`${config.base_url}scooters/owner/${cityName}?api_key=${API_KEY}`)
+        // http://localhost:8393/v1/scooters/owner/Karlskrona?api_key=234c561f80fb76cea4894ae4baebe5b0
+    },
 
 };
 

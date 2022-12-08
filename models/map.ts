@@ -29,10 +29,10 @@ const mapModel = {
         
         // Zone colors based on zoneType
         const zoneColors = {
-            parkingZone: '#228B22',
-            noParkingZone: '#8B0000',
-            bonusParkingZone: '#8A2BE2',
-            chargingZone: '#FFFF00'
+            parkingZone: 'rgba(0, 194, 0, 0.3)',
+            noParkingZone: 'rgba(255, 0, 0, 0.3)',
+            bonusParkingZone: 'rgba(245, 40, 145, 0.3)',
+            chargingZone: 'rgba(255, 255, 5, 0.3)'
         };
 
         // Object to be returned containing all zones and data

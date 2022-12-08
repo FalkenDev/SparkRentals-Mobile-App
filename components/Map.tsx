@@ -92,6 +92,8 @@ export default function Map({API_KEY, position, setPosition}): any {
                         coordinates={z['coordinates']}
                         strokeColor={z['zoneColor']}
                         strokeWidth={3}
+                        fillColor={z['zoneColor']}
+
                     />
                 ))}
             </MapView>

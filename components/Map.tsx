@@ -7,7 +7,6 @@ import mapModel from '../models/map';
 import scooterModel from '../models/scooter';
 import {API_KEY} from "@env";
 import config from '../config/config.json';
-import Scooter1 from '../assets/Scooter1.png';
 
 export default function Map({API_KEY, position, setPosition}): any {
     const [locationMarker, setLocationMarker] = useState(null);
@@ -110,7 +109,7 @@ export default function Map({API_KEY, position, setPosition}): any {
                     <Marker
                         title={s['name']}
                         coordinate={s['coordinates']}
-                        icon={Scooter1}
+                        icon={require('../assets/Scooter1.png')}
                         tappable={true}
                         key={index}
                         >

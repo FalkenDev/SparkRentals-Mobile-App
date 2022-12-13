@@ -3,6 +3,11 @@ import config from '../config/config.json';
 
 const mapModel = {
 
+    /**
+     * Get all cities from API
+     * @param API_KEY 
+     * @returns Promise<Object>
+     */
     getCities: async function getCities(API_KEY: string): Promise<Object> {        
         const response = await fetch(`${config.base_url}cities?api_key=${API_KEY}`);
         
@@ -11,6 +16,12 @@ const mapModel = {
         return result;
     },
 
+    /**
+     * Get closest city based on users location
+     * @param API_KEY 
+     * @param userData 
+     * @returns Promise<object>
+     */
     getClosestCity: async function getClosestCity(API_KEY: string, userData: object): Promise<Object> {
         const cities = await mapModel.getCities(API_KEY);
         
@@ -23,6 +34,11 @@ const mapModel = {
         return cities['cities'][1];
     },
 
+    /**
+     * Get zones for a given city
+     * @param city 
+     * @returns string
+     */
     getZones: function getZones(city: object): string[] {
         
         // All zones in current city

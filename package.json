@@ -9,10 +9,14 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-navigation/bottom-tabs": "^6.5.1",
+    "@react-navigation/native": "^6.1.1",
+    "@react-navigation/native-stack": "^6.9.6",
     "dotenv": "^16.0.3",
     "expo": "~46.0.16",
     "expo-location": "~14.3.0",
     "expo-status-bar": "~1.4.0",
+    "expo-updates": "~0.14.7",
     "jest": "^26.6.3",
     "jest-expo": "^47.0.1",
     "react": "18.0.0",
@@ -22,7 +26,7 @@
     "react-native-flash-message": "^0.3.1",
     "react-native-maps": "0.31.1",
     "react-native-safe-area-context": "4.3.1",
-    "expo-updates": "~0.14.7"
+    "react-native-screens": "~3.15.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

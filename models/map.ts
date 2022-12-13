@@ -43,7 +43,7 @@ const mapModel = {
         for (let i = 0; i < zones.length; i++) {
             const coordinates = city['zones'][i]['coordinates'];
             
-            console.log(city['zones'][i]['zoneType']);
+            // console.log(city['zones'][i]['zoneType']);
             
             
             const zone = {
@@ -62,9 +62,12 @@ const mapModel = {
         return zoneMarkers;
     },
 
-    getScooters: async function getScooters(API_KEY: string, city: object) {
-        const response = await fetch(`${config.base_url}scooters/owner/${cityName}?api_key=${API_KEY}`)
-        // http://localhost:8393/v1/scooters/owner/Karlskrona?api_key=234c561f80fb76cea4894ae4baebe5b0
+    getScooters: async function getScooters(API_KEY: string, city: object): Promise<object> {
+        const cityName = city['name'];
+        const response = await fetch(`${config.base_url}scooters/owner/${cityName}?api_key=${API_KEY}`);
+        const result = await response.json();
+        
+        return result;
     },
 
 };

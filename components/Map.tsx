@@ -6,12 +6,14 @@ import React from 'react';
 import mapModel from '../models/map';
 import {API_KEY} from "@env";
 import config from '../config/config.json';
+import Scooter1 from '../assets/Scooter1.png';
 
 export default function Map({API_KEY, position, setPosition}): any {
     const [locationMarker, setLocationMarker] = useState(null);
     const [highlight, setHighlight] = useState(null);    
     const [currentCity, setCurrentCity] = useState(null);
     const [zones, setZones] = useState([]);
+    const [scooters, setScooters] = useState([]);
     
     /**
      * Set user position
@@ -30,6 +32,7 @@ export default function Map({API_KEY, position, setPosition}): any {
                 longitude: 15.587742977884904
             };
 
+    
             setPosition(userCoordinates);
             
             mapModel.getClosestCity(API_KEY, position);
@@ -57,22 +60,34 @@ export default function Map({API_KEY, position, setPosition}): any {
      * Set city to city that is closest to user and zones for that city
      */
     useEffect(() => {
-        async function getCurrentCity(): Promise<void> {
-            const result = await mapModel.getClosestCity(API_KEY, position);
+        async function setUpMap(): Promise<void> {
+            const city = await mapModel.getClosestCity(API_KEY, position);
             
-            const zones = mapModel.getZones(result);
             
-            setCurrentCity(result);
-            
+            // Set city that is closest to user
+            setCurrentCity(city);
+                        
             /**
              * Set zones on map
              * FIX: fillColor currently not working
              */
+            const zones = mapModel.getZones(city);
             setZones(zones);
+
+
+            /**
+             * Get all scooters and create markers for them on the map
+             */
+            const result = await mapModel.getScooters(API_KEY, city); 
+            const scooters = result['cityScooters'];
+            setScooters(scooters);
             
         };
-        getCurrentCity();
+        setUpMap();
     }, []);
+
+
+
 
     return (
         <View style={styles.container}>
@@ -84,16 +99,29 @@ export default function Map({API_KEY, position, setPosition}): any {
                     latitudeDelta: 0.03,
                     longitudeDelta: 0.03,
                 }}
+                userInterfaceStyle={'dark'}
+                // liteMode={true}
             >
 
                 {locationMarker}
-                {zones.map((z) => (                    
+
+                {scooters.map((s, index) => 
+                    <Marker
+                        title={s['name']}
+                        coordinate={s['coordinates']}
+                        icon={Scooter1}
+                        tappable={true}
+                        key={index}
+                        >
+                    </Marker>
+                )}
+                {zones.map((z, index) => (                    
                     <Polygon 
                         coordinates={z['coordinates']}
                         strokeColor={z['zoneColor']}
                         strokeWidth={3}
                         fillColor={z['zoneColor']}
-
+                        key={index}
                     />
                 ))}
             </MapView>

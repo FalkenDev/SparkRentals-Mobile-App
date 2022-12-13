@@ -3,17 +3,31 @@ import { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, Pressable, StyleSheet, Image } from "react-native";
 import authModel from "../../models/auth";
 import EmailRegister from "./EmailRegister";
-export default function EmailForm() {
+import CheckBox from 'expo-checkbox';
+
+export default function EmailForm({api_key}) {
     const [name, setName] = useState(null);
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
     const [phonenumber, setPhonenumber] = useState(null);
-    const [accept, setAccepts] = useState(null);
+    const [accept, setAccepts] = useState(false);
 
-    function test() {
-        authModel.test();
-        console.log(name);
+    async function createUser() {
+        const user = {
+            name: name,
+            email: email,
+            password: password,
+            phonenumber: phonenumber
+        }
+
+        console.log(user);
+        authModel.register(user);
     }
+
+    function checkAlert() {
+        console.log('must accept terms');
+        
+    };
 
     console.log(name);
     
@@ -35,25 +49,54 @@ export default function EmailForm() {
             placeholder="Email"
             style={styles.input}
             keyboardType="email-address"
+            onChangeText={(content: string) => {
+                setEmail(content)
+            }}
             />
 
             <TextInput
             placeholder="Password"
             style={styles.input}
             keyboardType="visible-password"
+            onChangeText={(content: string) => {
+                setPassword(content)
+            }}
             />
 
             <TextInput
             placeholder="Phonenumber"
             style={styles.input}
             keyboardType='phone-pad'
+            onChangeText={(content: string) => {
+                setPhonenumber(content)
+            }}
             />
 
-            <Text style={styles.termsText}>By registering, you agree to our terms and conditions and privacy policy.</Text>
+            
+            <View style={styles.termsContainer}>
+                <CheckBox
+                    style={styles.checkbox}
+                    disabled={false}
+                    value={accept}
+                    color={'cornflowerblue'}
+                    onValueChange={() => {
+                        setAccepts((accept ? false : true));
+                    }}
+                >
 
-            <Pressable style={styles.emailRegister} onPress={test}>
+                </CheckBox>
+                <Text style={styles.termsText}>By registering, you agree to our terms and conditions and privacy policy.</Text>
+            </View>
+            
+            {accept ? 
+                <Pressable style={styles.emailRegister} onPress={createUser}>
                 <Text>Register</Text>
-            </Pressable>
+                </Pressable>
+            :
+                <Pressable style={styles.emailRegisterGray} onPress={checkAlert}>
+                <Text style={styles.greyedOut}>Register</Text>
+                </Pressable>
+            }
 
         </View>
     );
@@ -87,6 +130,33 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 120,
+    },
+
+    emailRegisterGray: {
+        backgroundColor: 'gray',
+        width: '80%',
+        height: 50,
+        borderRadius: 10,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 120,
+    },
+
+    greyedOut: {
+        color: '#989898'
+    },
+
+    termsContainer: {
+        width: '80%',
+        alignItems: 'baseline',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+
+    checkbox: {
+        height: 30,
+        width: 30,
     },
 
     termsText: {

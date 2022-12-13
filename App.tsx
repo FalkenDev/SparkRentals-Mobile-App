@@ -29,7 +29,9 @@ export default function App() {
           {() => <MapNavigator API_KEY={API_KEY} position={position} setPosition={setPosition}/>}
         </Stack.Screen>
         :
-        <Stack.Screen name="Auth" component={AuthStack}/>
+        <Stack.Screen name="Auth">
+          {() => <AuthStack />}
+        </Stack.Screen>
         }
         </Stack.Navigator>
       </NavigationContainer>

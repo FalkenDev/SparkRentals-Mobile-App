@@ -4,11 +4,11 @@ import { ScrollView, Image, Text, View, StyleSheet, StatusBar, Dimensions, Press
 import {SafeAreaView} from 'react-native-safe-area-context';
 import EmailForm from './EmailForm';
 
-export default function EmailRegister(): any {
+export default function EmailRegister(api_key): any {
 
     return (
         <SafeAreaView>
-            <EmailForm></EmailForm>
+            <EmailForm api_key={api_key}></EmailForm>
         </SafeAreaView>
     )
 };

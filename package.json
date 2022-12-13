@@ -9,11 +9,14 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-community/checkbox": "^0.5.14",
     "@react-navigation/bottom-tabs": "^6.5.1",
     "@react-navigation/native": "^6.1.1",
     "@react-navigation/native-stack": "^6.9.6",
     "dotenv": "^16.0.3",
+    "email-validator": "^2.0.4",
     "expo": "~46.0.16",
+    "expo-checkbox": "^2.2.2",
     "expo-location": "~14.3.0",
     "expo-status-bar": "~1.4.0",
     "expo-updates": "~0.14.7",

@@ -8,8 +8,7 @@ import React from 'react';
 import {API_KEY} from "@env";
 
 
-export default function App() {
-  
+export default function App() {    
   const [position, setPosition] = useState({});
   return (
     <View style={styles.container}>

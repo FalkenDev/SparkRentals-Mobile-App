@@ -60,16 +60,7 @@ const mapModel = {
         }        
         
         return zoneMarkers;
-    },
-
-    getScooters: async function getScooters(API_KEY: string, city: object): Promise<object> {
-        const cityName = city['name'];
-        const response = await fetch(`${config.base_url}scooters/owner/${cityName}?api_key=${API_KEY}`);
-        const result = await response.json();
-        
-        return result;
-    },
-
+    }
 };
 
 export default mapModel;

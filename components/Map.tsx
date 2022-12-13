@@ -4,6 +4,7 @@ import MapView, { Marker, Circle, Polygon } from 'react-native-maps';
 import * as Location from 'expo-location';
 import React from 'react';
 import mapModel from '../models/map';
+import scooterModel from '../models/scooter';
 import {API_KEY} from "@env";
 import config from '../config/config.json';
 import Scooter1 from '../assets/Scooter1.png';
@@ -78,7 +79,7 @@ export default function Map({API_KEY, position, setPosition}): any {
             /**
              * Get all scooters and create markers for them on the map
              */
-            const result = await mapModel.getScooters(API_KEY, city); 
+            const result = await scooterModel.getScooters(API_KEY, city); 
             const scooters = result['cityScooters'];
             setScooters(scooters);
             

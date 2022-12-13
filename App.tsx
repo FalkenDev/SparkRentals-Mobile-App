@@ -20,7 +20,6 @@ export default function App() {
         <Map API_KEY={API_KEY} position={position} setPosition={setPosition}></Map>
         :
         <Login></Login>
-
       }
       <StatusBar style="auto" />
     </View>

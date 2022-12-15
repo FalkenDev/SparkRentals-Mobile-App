@@ -92,7 +92,7 @@ export default function EmailForm({setToken, navigation, setIsLoggedIn}) {
     return (
         <View style={styles.container}>
             <Image style={styles.logo} source={require('../../assets/logo_dark.png')}></Image>
-            <Text style={styles.formTitle}>Title</Text>
+            <Text style={styles.formTitle}>Register</Text>
 
             <TextInput
             placeholder="Firstname Lastname"

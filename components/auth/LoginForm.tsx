@@ -30,7 +30,7 @@ export default function LoginForm({navigation, setIsLoggedIn}) {
     return (
         <View style={styles.container}>
             <Image style={styles.logo} source={require('../../assets/logo_dark.png')}></Image>
-            <Text style={styles.formTitle}>Title</Text>
+            <Text style={styles.formTitle}>Login</Text>
 
 
             <TextInput
@@ -51,8 +51,6 @@ export default function LoginForm({navigation, setIsLoggedIn}) {
             }}
             />
 
-            
-            
             <Pressable style={styles.emailRegister} onPress={logIn}>
             <Text>Login</Text>
             </Pressable>
@@ -125,7 +123,7 @@ const styles = StyleSheet.create({
     },
 
     logo: {
-        marginTop: 20,
+        marginTop: 60,
         // backgroundColor: 'red'
     },
 

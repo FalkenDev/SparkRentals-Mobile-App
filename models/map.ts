@@ -1,28 +1,55 @@
 import { API_KEY } from '@env';
 import config from '../config/config.json';
+import storage from './storage';
 
 const mapModel = {
 
-    getCities: async function getCities(API_KEY: string): Promise<Object> {        
-        const response = await fetch(`${config.base_url}cities?api_key=${API_KEY}`);
+    /**
+     * Get all cities from API
+     * @param API_KEY 
+     * @returns Promise<Object>
+     */
+    getCities: async function getCities(API_KEY: string): Promise<Object> {       
+        const token = await storage.readToken();
         
-        const result = await response.json();        
+        
+        const response = await fetch(`${config.base_url}cities?api_key=${API_KEY}`, {
+            method: 'GET',
+            headers: {
+                'x-access-token': token['token']
+            }
+        });
+        
+        const result = await response.json();
 
+        
+        
         return result;
     },
 
+    /**
+     * Get closest city based on users location
+     * @param API_KEY 
+     * @param userData 
+     * @returns Promise<object>
+     */
     getClosestCity: async function getClosestCity(API_KEY: string, userData: object): Promise<Object> {
         const cities = await mapModel.getCities(API_KEY);
-        
         // for (const city of Object.entries(cities['cities'])) {
         //     console.log(city[1]['zones'][0]);
         // };
         // const currentCity = {
         //     'name':
         // }
+        
         return cities['cities'][1];
     },
 
+    /**
+     * Get zones for a given city
+     * @param city 
+     * @returns string
+     */
     getZones: function getZones(city: object): string[] {
         
         // All zones in current city
@@ -60,16 +87,7 @@ const mapModel = {
         }        
         
         return zoneMarkers;
-    },
-
-    getScooters: async function getScooters(API_KEY: string, city: object): Promise<object> {
-        const cityName = city['name'];
-        const response = await fetch(`${config.base_url}scooters/owner/${cityName}?api_key=${API_KEY}`);
-        const result = await response.json();
-        
-        return result;
-    },
-
+    }
 };
 
 export default mapModel;

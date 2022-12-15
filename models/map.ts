@@ -9,20 +9,19 @@ const mapModel = {
      * @param API_KEY 
      * @returns Promise<Object>
      */
-    getCities: async function getCities(API_KEY: string, token: string): Promise<Object> {       
-        const token2 = await storage.readToken();
+    getCities: async function getCities(API_KEY: string): Promise<Object> {       
+        const token = await storage.readToken();
         
         
         const response = await fetch(`${config.base_url}cities?api_key=${API_KEY}`, {
             method: 'GET',
             headers: {
-                'x-access-token': token2['token']
+                'x-access-token': token['token']
             }
         });
         
         const result = await response.json();
 
-        console.log(token);
         
         
         return result;
@@ -34,8 +33,8 @@ const mapModel = {
      * @param userData 
      * @returns Promise<object>
      */
-    getClosestCity: async function getClosestCity(API_KEY: string, userData: object, token: string): Promise<Object> {
-        const cities = await mapModel.getCities(API_KEY, token);
+    getClosestCity: async function getClosestCity(API_KEY: string, userData: object): Promise<Object> {
+        const cities = await mapModel.getCities(API_KEY);
         // for (const city of Object.entries(cities['cities'])) {
         //     console.log(city[1]['zones'][0]);
         // };

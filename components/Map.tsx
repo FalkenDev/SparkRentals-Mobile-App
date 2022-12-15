@@ -40,7 +40,7 @@ export default function Map({API_KEY, position, setPosition, token}): any {
     
             setPosition(userCoordinates);
             
-            mapModel.getClosestCity(API_KEY, position, token);
+            mapModel.getClosestCity(API_KEY, position);
 
             setLocationMarker(<Marker
                 coordinate={{
@@ -66,7 +66,7 @@ export default function Map({API_KEY, position, setPosition, token}): any {
      */
     useEffect(() => {
         async function setUpMap(): Promise<void> {
-            const city = await mapModel.getClosestCity(API_KEY, position, token);
+            const city = await mapModel.getClosestCity(API_KEY, position);
             
             
             // Set city that is closest to user
@@ -83,7 +83,7 @@ export default function Map({API_KEY, position, setPosition, token}): any {
             /**
              * Get all scooters and create markers for them on the map
              */
-            const result = await scooterModel.getScooters(API_KEY, city, token); 
+            const result = await scooterModel.getScooters(API_KEY, city); 
             const scooters = result['cityScooters'];
             setScooters(scooters);
             

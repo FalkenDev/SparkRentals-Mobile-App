@@ -9,14 +9,17 @@ const deviceHeight = Dimensions.get('window').height;
 
 export default function Login({navigation}): any {
 
-    async function googleLogin() {
+    async function googleLogin(): Promise<void> {
         console.log('google');
     };
 
-    async function emailRegister() {
+    async function emailRegister(): Promise<void> {
         navigation.navigate('EmailRegister');
     }
 
+    async function emailLogin(): Promise<void> {
+        navigation.navigate('LoginForm');
+    }
     return (
         <View style={styles.container}>
             <View style={styles.imageContainer}>
@@ -33,6 +36,11 @@ export default function Login({navigation}): any {
                 <Pressable onPress={emailRegister} style={styles.emailRegister}>
                     <Text>Register with email</Text>
                 </Pressable>
+
+                <View style={styles.emailContainer}>
+                <Text>Already have an account? </Text>
+                <Pressable onPress={emailLogin}><Text style={styles.link}>Login with email</Text></Pressable>
+                </View>
             </View>
         </View>
     )
@@ -46,6 +54,14 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       height: '100%',
       width: '100%'
+    },
+
+    emailContainer: {
+        flexDirection: 'row'
+    },
+
+    link: {
+        color: 'blue'
     },
 
     splash: {

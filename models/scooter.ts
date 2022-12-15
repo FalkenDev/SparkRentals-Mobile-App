@@ -9,14 +9,14 @@ const scooterModel = {
      * @param city 
      * @returns 
      */
-    getScooters: async function getScooters(API_KEY: string, city: object, token): Promise<object> {
-        const token2 = await storage.readToken();
+    getScooters: async function getScooters(API_KEY: string, city: object): Promise<object> {
+        const token = await storage.readToken();
 
         const cityName = city['name'];
         const response = await fetch(`${config.base_url}scooters/owner/${cityName}?api_key=${API_KEY}`, {
             method: 'GET',
             headers: {
-                'x-access-token': token2['token']
+                'x-access-token': token['token']
             }
         });
         const result = await response.json();

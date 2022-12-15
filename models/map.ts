@@ -1,5 +1,6 @@
 import { API_KEY } from '@env';
 import config from '../config/config.json';
+import storage from './storage';
 
 const mapModel = {
 
@@ -8,11 +9,22 @@ const mapModel = {
      * @param API_KEY 
      * @returns Promise<Object>
      */
-    getCities: async function getCities(API_KEY: string): Promise<Object> {       
-        const response = await fetch(`${config.base_url}cities?api_key=${API_KEY}`);
+    getCities: async function getCities(API_KEY: string, token: string): Promise<Object> {       
+        const token2 = await storage.readToken();
         
-        const result = await response.json();        
+        
+        const response = await fetch(`${config.base_url}cities?api_key=${API_KEY}`, {
+            method: 'GET',
+            headers: {
+                'x-access-token': token2['token']
+            }
+        });
+        
+        const result = await response.json();
 
+        console.log(token);
+        
+        
         return result;
     },
 
@@ -22,14 +34,15 @@ const mapModel = {
      * @param userData 
      * @returns Promise<object>
      */
-    getClosestCity: async function getClosestCity(API_KEY: string, userData: object): Promise<Object> {
-        const cities = await mapModel.getCities(API_KEY);
+    getClosestCity: async function getClosestCity(API_KEY: string, userData: object, token: string): Promise<Object> {
+        const cities = await mapModel.getCities(API_KEY, token);
         // for (const city of Object.entries(cities['cities'])) {
         //     console.log(city[1]['zones'][0]);
         // };
         // const currentCity = {
         //     'name':
         // }
+        
         return cities['cities'][1];
     },
 

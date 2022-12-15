@@ -4,11 +4,11 @@ import { ScrollView, Image, Text, View, StyleSheet, StatusBar, Dimensions, Press
 import {SafeAreaView} from 'react-native-safe-area-context';
 import EmailForm from './EmailForm';
 
-export default function EmailRegister({setToken}): any {
+export default function EmailRegister({setToken, navigation, setIsLoggedIn}): any {
 
     return (
         <SafeAreaView>
-            <EmailForm setToken={setToken}></EmailForm>
+            <EmailForm navigation={navigation} setToken={setToken} setIsLoggedIn={setIsLoggedIn}></EmailForm>
         </SafeAreaView>
     )
 };

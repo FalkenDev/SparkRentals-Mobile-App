@@ -6,11 +6,11 @@ import LoginHome from './auth/LoginHome';
 
 const Stack = createNativeStackNavigator();
 
-export default function mapStack({API_KEY, position, setPosition}) {
+export default function mapStack({API_KEY, position, setPosition, token}) {
     return (
         <Stack.Navigator initialRouteName="MapHome" screenOptions={{headerShown: false}}>
             <Stack.Screen name="MapHome">
-                {() => <Map API_KEY={API_KEY} position={position} setPosition={setPosition} />}
+                {() => <Map token={token} API_KEY={API_KEY} position={position} setPosition={setPosition} />}
             </Stack.Screen>
         </Stack.Navigator>
         );

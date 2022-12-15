@@ -28,11 +28,11 @@ export default function App() {
           
           {isLoggedIn ?
         <Stack.Screen name="MapNavigator">
-          {() => <MapNavigator API_KEY={API_KEY} position={position} setPosition={setPosition}/>}
+          {() => <MapNavigator token={token} API_KEY={API_KEY} position={position} setPosition={setPosition}/>}
         </Stack.Screen>
         :
         <Stack.Screen name="Auth">
-          {() => <AuthStack setToken={setToken} />}
+          {() => <AuthStack setToken={setToken} setIsLoggedIn={setIsLoggedIn}/>}
         </Stack.Screen>
         }
         </Stack.Navigator>

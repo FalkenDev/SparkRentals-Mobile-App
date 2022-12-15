@@ -8,7 +8,7 @@ import scooterModel from '../models/scooter';
 import {API_KEY} from "@env";
 import config from '../config/config.json';
 
-export default function Map({API_KEY, position, setPosition}): any {
+export default function Map({API_KEY, position, setPosition, token}): any {
     const [locationMarker, setLocationMarker] = useState(null);
     const [highlight, setHighlight] = useState(null);    
     const [currentCity, setCurrentCity] = useState(null);
@@ -40,7 +40,7 @@ export default function Map({API_KEY, position, setPosition}): any {
     
             setPosition(userCoordinates);
             
-            mapModel.getClosestCity(API_KEY, position);
+            mapModel.getClosestCity(API_KEY, position, token);
 
             setLocationMarker(<Marker
                 coordinate={{
@@ -66,7 +66,7 @@ export default function Map({API_KEY, position, setPosition}): any {
      */
     useEffect(() => {
         async function setUpMap(): Promise<void> {
-            const city = await mapModel.getClosestCity(API_KEY, position);
+            const city = await mapModel.getClosestCity(API_KEY, position, token);
             
             
             // Set city that is closest to user
@@ -83,7 +83,7 @@ export default function Map({API_KEY, position, setPosition}): any {
             /**
              * Get all scooters and create markers for them on the map
              */
-            const result = await scooterModel.getScooters(API_KEY, city); 
+            const result = await scooterModel.getScooters(API_KEY, city, token); 
             const scooters = result['cityScooters'];
             setScooters(scooters);
             

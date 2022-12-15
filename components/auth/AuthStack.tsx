@@ -6,14 +6,14 @@ import EmailRegister from './EmailRegister';
 
 const Stack = createNativeStackNavigator();
 
-export default function AuthStack({setToken}) {
+export default function AuthStack({setToken, setIsLoggedIn}) {
     return (
         <Stack.Navigator initialRouteName="LoginHome" screenOptions={{headerShown: false}}>
             <Stack.Screen name="LoginHome" >
                 {(screenProps) => <LoginHome {...screenProps}/>}
             </Stack.Screen>
             <Stack.Screen name="EmailRegister">
-                {() => <EmailRegister  setToken={setToken} ></EmailRegister>}
+                {(screenProps) => <EmailRegister {...screenProps} setToken={setToken} setIsLoggedIn={setIsLoggedIn}></EmailRegister>}
             </Stack.Screen>
         </Stack.Navigator>
         );

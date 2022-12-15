@@ -7,7 +7,7 @@ import CheckBox from 'expo-checkbox';
 import FlashMessage from 'react-native-flash-message';
 import { showMessage, hideMessage } from "react-native-flash-message";
 
-export default function EmailForm({setToken}) {
+export default function EmailForm({setToken, navigation, setIsLoggedIn}) {
     const [name, setName] = useState(null);
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
@@ -27,6 +27,7 @@ export default function EmailForm({setToken}) {
                 type: 'danger'
             })
         } else {
+            
             // Prepare user object
             const user = {
                 firstName: firstName,
@@ -41,28 +42,41 @@ export default function EmailForm({setToken}) {
             const result = await authModel.register(user);
 
             // Check if registration successful
-            if (Object.prototype.hasOwnProperty.call(result, 'errors')) {
-                showMessage({
-                    message: result['errors']['title'],
-                    type: 'danger'
-                })
-            } else {
-                showMessage({
-                    message: result['data']['message'],
-                    type: 'success'
-                });
+            if (result['type'] === "success") {
+                logIn();
+            }
 
-                const userLogin = {
-                    email: user['email'],
-                    password: user['password']
-                };
+            showMessage({
+                message: result['title'],
+                description: result['message'],
+                type: result['type'],
 
-                const loginUser = await authModel.login(userLogin);
-            };
+            });
 
 
         };
     };
+
+    async function logIn() {
+        const userLogin = {
+            email: email,
+            password: password
+        };
+
+        const loginUser = await authModel.login(userLogin);
+        if (Object.prototype.hasOwnProperty.call(loginUser, 'errors')) {
+            showMessage({
+                message: loginUser['errors']['title'],
+                type: 'danger'
+            })
+        } else {
+            console.log(loginUser);
+            
+            setToken(loginUser['token']);
+            setIsLoggedIn(true);
+        }
+    };
+
 
     function checkEmail(email: string): Boolean {
         return authModel.checkEmail(email);
@@ -73,11 +87,7 @@ export default function EmailForm({setToken}) {
             message: 'You must agree to terms to register',
             type: 'danger'
         });
-    };
-        
-
-    console.log(name);
-    
+    };    
 
     return (
         <View style={styles.container}>

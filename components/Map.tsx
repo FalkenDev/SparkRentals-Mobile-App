@@ -22,6 +22,11 @@ export default function Map({API_KEY, position, setPosition}): any {
         async function fetchPosition(): Promise<void> {
             const { status } = await Location.requestForegroundPermissionsAsync();
 
+            // if (status !== 'granted') {
+            //     setErrorMessage('Permission to access location was denied');
+            //     return;
+            // }
+
             const currentLocation = await Location.getCurrentPositionAsync({});
 
             const userCoordinates = {

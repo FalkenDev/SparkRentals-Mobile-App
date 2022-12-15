@@ -1,11 +1,13 @@
 import React from "react";
 import { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, Pressable, StyleSheet, Image } from "react-native";
+import { View, Text, TextInput, Button, Pressable, StyleSheet, Image, StatusBar } from "react-native";
 import authModel from "../../models/auth";
 import EmailRegister from "./EmailRegister";
 import CheckBox from 'expo-checkbox';
+import FlashMessage from 'react-native-flash-message';
+import { showMessage, hideMessage } from "react-native-flash-message";
 
-export default function EmailForm({api_key}) {
+export default function EmailForm({setToken}) {
     const [name, setName] = useState(null);
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
@@ -13,21 +15,66 @@ export default function EmailForm({api_key}) {
     const [accept, setAccepts] = useState(false);
 
     async function createUser() {
-        const user = {
-            name: name,
-            email: email,
-            password: password,
-            phonenumber: phonenumber
-        }
 
-        console.log(user);
-        authModel.register(user);
-    }
+        const userName = name.split('');
+        const firstName = userName[0];
+        const lastName = userName[1];
+
+        // Check if email is valid
+        if (!(checkEmail(email))) {
+            showMessage({
+                message: 'Invalid email',
+                type: 'danger'
+            })
+        } else {
+            // Prepare user object
+            const user = {
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                password: password,
+                phoneNumber: phonenumber,
+                balance: 1.2
+            };
+
+            // Register user
+            const result = await authModel.register(user);
+
+            // Check if registration successful
+            if (Object.prototype.hasOwnProperty.call(result, 'errors')) {
+                showMessage({
+                    message: result['errors']['title'],
+                    type: 'danger'
+                })
+            } else {
+                showMessage({
+                    message: result['data']['message'],
+                    type: 'success'
+                });
+
+                const userLogin = {
+                    email: user['email'],
+                    password: user['password']
+                };
+
+                const loginUser = await authModel.login(userLogin);
+            };
+
+
+        };
+    };
+
+    function checkEmail(email: string): Boolean {
+        return authModel.checkEmail(email);
+    };
 
     function checkAlert() {
-        console.log('must accept terms');
-        
+        showMessage({
+            message: 'You must agree to terms to register',
+            type: 'danger'
+        });
     };
+        
 
     console.log(name);
     
@@ -50,7 +97,7 @@ export default function EmailForm({api_key}) {
             style={styles.input}
             keyboardType="email-address"
             onChangeText={(content: string) => {
-                setEmail(content)
+                setEmail(content);
             }}
             />
 
@@ -97,7 +144,7 @@ export default function EmailForm({api_key}) {
                 <Text style={styles.greyedOut}>Register</Text>
                 </Pressable>
             }
-
+        <FlashMessage position={'top'}/>
         </View>
     );
 };

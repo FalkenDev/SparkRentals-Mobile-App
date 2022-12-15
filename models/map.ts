@@ -8,7 +8,7 @@ const mapModel = {
      * @param API_KEY 
      * @returns Promise<Object>
      */
-    getCities: async function getCities(API_KEY: string): Promise<Object> {        
+    getCities: async function getCities(API_KEY: string): Promise<Object> {       
         const response = await fetch(`${config.base_url}cities?api_key=${API_KEY}`);
         
         const result = await response.json();        
@@ -24,7 +24,6 @@ const mapModel = {
      */
     getClosestCity: async function getClosestCity(API_KEY: string, userData: object): Promise<Object> {
         const cities = await mapModel.getCities(API_KEY);
-        
         // for (const city of Object.entries(cities['cities'])) {
         //     console.log(city[1]['zones'][0]);
         // };

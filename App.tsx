@@ -19,8 +19,10 @@ const Stack = createNativeStackNavigator();
 export default function App() {    
   const [position, setPosition] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState(null);
 
   return (
+    <View style={styles.container}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{headerShown: false}}>
           
@@ -30,11 +32,13 @@ export default function App() {
         </Stack.Screen>
         :
         <Stack.Screen name="Auth">
-          {() => <AuthStack />}
+          {() => <AuthStack setToken={setToken} />}
         </Stack.Screen>
         }
         </Stack.Navigator>
       </NavigationContainer>
+      <FlashMessage position={'top'}/>
+    </View>
   );
 
 }
@@ -42,9 +46,9 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    // backgroundColor: '#fff',
+    // alignItems: 'center',
+    // justifyContent: 'center',
   },
 });
 // {/* <View style={styles.container}>

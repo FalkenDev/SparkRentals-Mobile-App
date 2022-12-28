@@ -10,8 +10,7 @@ const mapModel = {
      * @returns Promise<Object>
      */
     getCities: async function getCities(API_KEY: string): Promise<Object> {       
-        const token = await storage.readToken();
-        
+        const token = await storage.readToken();        
         
         const response = await fetch(`${config.base_url}cities?api_key=${API_KEY}`, {
             method: 'GET',

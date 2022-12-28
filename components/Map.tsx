@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ScrollView, Image, Text, View, StyleSheet, StatusBar } from 'react-native';
+import { ScrollView, Image, Text, View, StyleSheet, StatusBar, Button, Pressable } from 'react-native';
 import MapView, { Marker, Circle, Polygon } from 'react-native-maps';
 import * as Location from 'expo-location';
 import React from 'react';
@@ -8,7 +8,7 @@ import scooterModel from '../models/scooter';
 import {API_KEY} from "@env";
 import config from '../config/config.json';
 
-export default function Map({API_KEY, position, setPosition, token}): any {
+export default function Map({navigation, API_KEY, position, setPosition, token}): any {
     const [locationMarker, setLocationMarker] = useState(null);
     const [highlight, setHighlight] = useState(null);    
     const [currentCity, setCurrentCity] = useState(null);
@@ -85,14 +85,23 @@ export default function Map({API_KEY, position, setPosition, token}): any {
              */
             const result = await scooterModel.getScooters(API_KEY, city); 
             const scooters = result['cityScooters'];
-            setScooters(scooters);
+            const sortedScooters = scooterModel.sortAvailableScooters(scooters);
+            console.log(sortedScooters);
+            
+            setScooters(sortedScooters);
             
         };
         setUpMap();
     }, []);
 
 
-
+    function DrawerButton({navigation}) {
+        return (
+          <Pressable style={styles.drawer} onPress={() => navigation.openDrawer()}> 
+            <Text> Drawer </Text> 
+          </Pressable>
+        );
+      }
 
     return (
         <View style={styles.container}>
@@ -113,6 +122,7 @@ export default function Map({API_KEY, position, setPosition, token}): any {
                 {scooters.map((s, index) => 
                     <Marker
                         title={s['name']}
+                        description={`Charge ${s['battery']}% ${s['status']}`}
                         coordinate={s['coordinates']}
                         icon={require('../assets/Scooter1.png')}
                         tappable={true}
@@ -130,6 +140,7 @@ export default function Map({API_KEY, position, setPosition, token}): any {
                     />
                 ))}
             </MapView>
+            <DrawerButton navigation={navigation}/>
         </View>
     )
 }
@@ -148,6 +159,16 @@ const styles = StyleSheet.create({
         left: 0,
         bottom: 0,
         right: 0,
+    },
+
+    drawer: {
+        position: 'absolute',
+        width: 50,
+        height: 50, 
+        left: 50,
+        backgroundColor: 'white',
+        marginTop: 50,
+        borderRadius: 25
     }
 });
 

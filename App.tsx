@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View, Button } from 'react-native';
 // import Map from './components/Map';
 import MapNavigator from './components/MapNavigator';
 import Login from './components/auth/LoginHome';
@@ -13,30 +13,60 @@ import {API_KEY} from "@env";
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import EmailRegister from './components/auth/EmailRegister';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList,DrawerItem } from '@react-navigation/drawer';
+import { useNavigation } from '@react-navigation/native';
+import DrawerNavigator from './components/drawer/DrawerNavigator';
+import Wallet from './components/drawer/Wallet';
+
 
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
+
+function CustomDrawerContent(props) {
+  return (
+    <DrawerContentScrollView {...props}>
+      <DrawerItemList {...props} />
+      <DrawerItem
+        label="Close drawer"
+        onPress={() => props.navigation.closeDrawer()}
+      />
+      <DrawerItem
+        label="Toggle drawer"
+        onPress={() => props.navigation.toggleDrawer()}
+      />
+    </DrawerContentScrollView>
+  );
+}
 
 export default function App() {    
   const [position, setPosition] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState(null);
+  const [toggleDrawer, setToggelDrawer] = useState(false);
 
   return (
     <View style={styles.container}>
+      
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{headerShown: false}}>
-          
-          {isLoggedIn ?
-        <Stack.Screen name="MapNavigator">
-          {() => <MapNavigator token={token} API_KEY={API_KEY} position={position} setPosition={setPosition}/>}
-        </Stack.Screen>
+        <Drawer.Navigator screenOptions={{headerShown: false}}  useLegacyImplementation
+      drawerContent={(props) => <CustomDrawerContent {...props} />}>
+
+        {isLoggedIn ?
+        <Drawer.Screen name="MapNavigator">
+          {(screenProps) => <MapNavigator {...screenProps} token={token} API_KEY={API_KEY} position={position} setPosition={setPosition}/>}
+        </Drawer.Screen>
         :
-        <Stack.Screen name="Auth">
+        <Drawer.Screen name="Auth">
           {() => <AuthStack setToken={setToken} setIsLoggedIn={setIsLoggedIn}/>}
-        </Stack.Screen>
+        </Drawer.Screen>
         }
-        </Stack.Navigator>
+        
+        <Drawer.Screen name='Wallet' component={Wallet} />
+        {/* <Drawer.Screen name="Feed" component={Feed} /> */}
+
+        </Drawer.Navigator>
       </NavigationContainer>
+
       <FlashMessage position={'top'}/>
     </View>
   );

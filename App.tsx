@@ -15,7 +15,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import EmailRegister from './components/auth/EmailRegister';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList,DrawerItem } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
-import DrawerNavigator from './components/drawer/DrawerNavigator';
 import Wallet from './components/drawer/Wallet';
 
 
@@ -26,14 +25,6 @@ function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
       <DrawerItemList {...props} />
-      <DrawerItem
-        label="Close drawer"
-        onPress={() => props.navigation.closeDrawer()}
-      />
-      <DrawerItem
-        label="Toggle drawer"
-        onPress={() => props.navigation.toggleDrawer()}
-      />
     </DrawerContentScrollView>
   );
 }

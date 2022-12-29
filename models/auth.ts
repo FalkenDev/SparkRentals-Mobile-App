@@ -46,6 +46,9 @@ const authModel = {
 
         const result = await response.json();
 
+        console.log(result);
+        
+
         if (Object.prototype.hasOwnProperty.call(result, 'errors')) {
             return {
                 title: result.errors.title,

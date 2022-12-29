@@ -17,13 +17,25 @@ export default function LoginForm({navigation, setIsLoggedIn}) {
         };
 
         const loginUser = await authModel.login(userLogin);
-        if (Object.prototype.hasOwnProperty.call(loginUser, 'errors')) {
+        console.log(loginUser);
+        
+        if (loginUser['title'] === 'Wrong password') {
             showMessage({
-                message: loginUser['errors']['title'],
+                message: loginUser['title'],
+                type: 'danger'
+            })
+        } else if (loginUser['title'] === 'User not found') {
+            showMessage({
+                message: loginUser['title'],
                 type: 'danger'
             })
         } else {
+            showMessage({
+                message: loginUser['message'],
+                type: 'success'
+            })
             setIsLoggedIn(true);
+            
         }
     };
 

@@ -46,8 +46,12 @@ const authModel = {
 
         const result = await response.json();
 
-        console.log(result);
+        //Store userdata
+        const userData = result['data']['user'];
+        console.log(userData);
         
+        
+        await storage.storeUser(userData);
 
         if (Object.prototype.hasOwnProperty.call(result, 'errors')) {
             return {
@@ -57,8 +61,10 @@ const authModel = {
             };
         }
 
+        //Store token
         const token = result['data']['token'];
-
+        // console.log(token);
+        
         await storage.storeToken(token);
 
         return {

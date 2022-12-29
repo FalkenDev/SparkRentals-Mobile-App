@@ -17,7 +17,6 @@ export default function LoginForm({navigation, setIsLoggedIn}) {
         };
 
         const loginUser = await authModel.login(userLogin);
-        console.log(loginUser);
         
         if (loginUser['title'] === 'Wrong password') {
             showMessage({

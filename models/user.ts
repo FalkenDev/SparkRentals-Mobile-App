@@ -3,11 +3,13 @@ import config from '../config/config.json';
 import storage from './storage';
 
 const userModel = {
-    getUsers: async function getUsers() {
+    getUserData: async function getUserData(userData) {
         const token = await storage.readToken();        
-        console.log(token);
+        console.log(userData['userData']);
         
-        const response = await fetch(`${config.base_url}users/63ad0369a137b44bc75fd2d2?api_key=${API_KEY}`, {
+        const user = userData['userData']
+        
+        const response = await fetch(`${config.base_url}users/${user['id']}?api_key=${API_KEY}`, {
             method: 'GET',
             headers: {
                 'x-access-token': token['token']
@@ -16,30 +18,18 @@ const userModel = {
         
         const result = await response.json();
 
-        
-        
         return result;
     },
 
-    getBalance: async function getBalance(): Promise<Object> {
-        const token = await storage.readToken();        
-        const users = await userModel.getUsers();
+    getBalance: async function getBalance(): Promise<any> {
+        const token = await storage.readToken();
+        const userData = await storage.readUser();        
+        const user = await userModel.getUserData(userData);
 
-        console.log(users);
-        
-
-        const response = await fetch(`${config.base_url}cities?api_key=${API_KEY}`, {
-            method: 'GET',
-            headers: {
-                'x-access-token': token['token']
-            }
-        });
-        
-        const result = await response.json();
-
+        const userBalance = user['user']['balance'];
         
         
-        return result;
+        return userBalance;
     }
 };
 

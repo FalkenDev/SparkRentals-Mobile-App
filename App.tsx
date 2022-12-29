@@ -52,7 +52,9 @@ export default function App() {
         </Drawer.Screen>
         }
         
-        <Drawer.Screen name='Wallet' component={Wallet} />
+        <Drawer.Screen name='Wallet'>
+          {(screenProps) => <Wallet {...screenProps} />}
+        </Drawer.Screen>
         {/* <Drawer.Screen name="Feed" component={Feed} /> */}
 
         </Drawer.Navigator>

@@ -86,7 +86,10 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
             const result = await scooterModel.getScooters(API_KEY, city); 
             const scooters = result['cityScooters'];
             const sortedScooters = scooterModel.sortAvailableScooters(scooters);
-            // console.log(sortedScooters);
+            // console.log(scooters[0]);
+            
+            // console.log(sortedScooters[0]);
+
             
             setScooters(sortedScooters);
             

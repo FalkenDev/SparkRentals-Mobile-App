@@ -4,14 +4,14 @@ import { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Pressable } from 'react-native';
 import userModel from '../../models/user';
 
-export default function Wallet(): any {
+export default function Wallet({navigation}): any {
     const [balance, setBalance] = useState(null);
 
     useEffect(() => {
         async function getBalance(): Promise<void> {
             const result = userModel.getBalance();
 
-            
+
         };
 
         getBalance();
@@ -19,6 +19,9 @@ export default function Wallet(): any {
 
     return (
         <View style={styles.container}>
+            <Pressable style={styles.backButton} onPress={() => navigation.navigate('MapNavigator')}>
+                <Text>X</Text>
+            </Pressable>
             <Text>Your Balance</Text>
             <Text>0 kr</Text>
             <Text>You should have at least SEK 30 in your wallet to start the journey</Text>
@@ -53,5 +56,15 @@ const styles = StyleSheet.create({
 
     buttonText: {
         color: 'white'
+    },
+
+    backButton: {
+        position: 'absolute',
+        width: 50,
+        height: 50, 
+        left: 20,
+        backgroundColor: 'red',
+        top: 50,
+        borderRadius: 25
     }
 });

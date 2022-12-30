@@ -18,16 +18,21 @@ export default function Wallet({navigation}): any {
 
     return (
         <View style={styles.container}>
-            <Pressable style={styles.backButton} onPress={() => navigation.navigate('MapNavigator')}>
-                <Text>X</Text>
-            </Pressable>
-            <Text style={styles.title}>Your Balance</Text>
-            <Text style={styles.balance}>{balance} kr</Text>
-            <Text style={styles.info}>You should have at least SEK 30 in your wallet to start the journey</Text>
+
+
+            <View style={[styles.infoContainer]}>
+                <Pressable style={[styles.backButton, styles.shadowProp]} onPress={() => navigation.navigate('MapNavigator')}>
+                    <Text>X</Text>
+                </Pressable>
+
+                <Text style={styles.title}>Your Balance</Text>
+                <Text style={styles.balance}>{balance} kr</Text>
+                <Text style={styles.info}>You should have at least SEK 30 in your wallet to start the journey</Text>
+            </View>
             
             <View style={styles.prepaidContainer}>
-                <Text>Use prepaid card to deposit money</Text>
-                <Pressable style={styles.prepaidButton} > 
+                <Text style={styles.prepaidInfo}>Use prepaid card to deposit money</Text>
+                <Pressable style={[styles.prepaidButton, styles.shadowProp]} > 
                     <Text style={styles.buttonText} > Use prepaid card </Text> 
                 </Pressable>
             </View>
@@ -43,29 +48,42 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
     //   backgroundColor: 'red',
       alignItems: 'center',
-      justifyContent: 'space-evenly',
-    //   height: '75%',
+    //   justifyContent: 'space-evenly',
+      height: '50%',
       width: '100%'
     },
 
     prepaidButton: {
         backgroundColor: 'cornflowerblue',
-        width: '80%',
+        width: '90%',
         height: 50,
         borderRadius: 50,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 120,
+        marginTop: 30,
+    },
+
+    infoContainer: {
+        width: '100%',
+        height: '50%',
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+        // backgroundColor: 'blue',
+
     },
 
     prepaidContainer: {
-        width: '100%',
-        height: '40%',
+        width: '90%',
+        height: '30%',
         alignItems: 'center',
+        justifyContent: 'center',
+        // padding: 20,
         // flex: 2,
-        backgroundColor: 'red',
-
+        // backgroundColor: 'red',
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        borderColor: 'grey',
     },
 
     buttonText: {
@@ -77,9 +95,13 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50, 
         left: 20,
-        backgroundColor: 'red',
+        backgroundColor: 'white',
         top: 50,
-        borderRadius: 25
+        borderRadius: 25,
+        borderWidth: 1,
+        borderColor: 'gray',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
 
     title: {
@@ -98,4 +120,14 @@ const styles = StyleSheet.create({
         color: 'gray',
         textAlign: 'center'
     },
+
+    prepaidInfo: {
+        fontWeight: 'bold',
+        fontSize: 18
+    },
+
+    shadowProp: {
+        elevation: 5,
+        shadowColor: 'black'
+      },
 });

@@ -7,6 +7,7 @@ import mapModel from '../models/map';
 import scooterModel from '../models/scooter';
 import {API_KEY} from "@env";
 import config from '../config/config.json';
+import Icon from 'react-native-vector-icons/Octicons';
 
 export default function Map({navigation, API_KEY, position, setPosition, token}): any {
     const [locationMarker, setLocationMarker] = useState(null);
@@ -100,11 +101,22 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
 
     function DrawerButton({navigation}) {
         return (
-          <Pressable style={styles.drawer} onPress={() => navigation.openDrawer()}> 
-            <Text> Drawer </Text> 
+          <Pressable style={[styles.drawer, styles.shadowProp]} onPress={() => navigation.openDrawer()}> 
+            <Icon 
+            name='three-bars' 
+            size={30} 
+            color='black'
+            />
           </Pressable>
         );
-      }
+      };
+
+    // const MenuIcon = ({ navigation }) => <Icon 
+    //     name='three-bars' 
+    //     size={100} 
+    //     color='#000' 
+    //     onPress={() => navigation.openDrawer()}
+    // />;
 
     return (
         <View style={styles.container}>
@@ -119,7 +131,6 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
                 userInterfaceStyle={'dark'}
                 // liteMode={true}
             >
-
                 {locationMarker}
 
                 {scooters.map((s, index) => 
@@ -171,7 +182,14 @@ const styles = StyleSheet.create({
         left: 50,
         backgroundColor: 'white',
         marginTop: 50,
-        borderRadius: 25
-    }
+        borderRadius: 25,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    
+    shadowProp: {
+        elevation: 5,
+        shadowColor: 'black'
+      },
 });
 

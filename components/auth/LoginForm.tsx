@@ -18,12 +18,7 @@ export default function LoginForm({navigation, setIsLoggedIn}) {
 
         const loginUser = await authModel.login(userLogin);
         
-        if (loginUser['title'] === 'Wrong password') {
-            showMessage({
-                message: loginUser['title'],
-                type: 'danger'
-            })
-        } else if (loginUser['title'] === 'User not found') {
+        if (loginUser['type'] === 'danger') {
             showMessage({
                 message: loginUser['title'],
                 type: 'danger'

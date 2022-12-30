@@ -45,14 +45,9 @@ const authModel = {
         });
 
         const result = await response.json();
-
-        //Store userdata
-        const userData = result['data']['user'];
-        console.log(userData);
+        // console.log(result);
+        // console.log(result);
         
-        
-        await storage.storeUser(userData);
-
         if (Object.prototype.hasOwnProperty.call(result, 'errors')) {
             return {
                 title: result.errors.title,
@@ -60,6 +55,14 @@ const authModel = {
                 type: "danger",
             };
         }
+                
+        //Store userdata
+        const userData = result['data']['user'];
+        // console.log(userData);
+        
+        
+        await storage.storeUser(userData);
+
 
         //Store token
         const token = result['data']['token'];

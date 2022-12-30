@@ -3,10 +3,12 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Pressable, Modal, TextInput} from 'react-native';
 import userModel from '../../models/user';
+import Icon from 'react-native-vector-icons/Octicons';
 
 export default function Wallet({navigation}): any {
     const [balance, setBalance] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
+    const [prepaid, setPrepaid] = useState(null);
 
     //Get balance for logged in user
     useEffect(() => {
@@ -22,8 +24,12 @@ export default function Wallet({navigation}): any {
 
 
             <View style={[styles.infoContainer]}>
-                <Pressable style={[styles.backButton, styles.shadowProp]} onPress={() => navigation.navigate('MapNavigator')}>
-                    <Text style={{fontWeight: 'bold', fontSize: 15}}>X</Text>
+                <Pressable style={[styles.backButton, styles.shadowProp]} onPress={() => navigation.navigate('Map')}>
+                    <Icon 
+                        name='x' 
+                        size={25} 
+                        color='black'
+                    />
                 </Pressable>
 
                 <Text style={styles.title}>Your Balance</Text>
@@ -48,12 +54,29 @@ export default function Wallet({navigation}): any {
             >
                 <View style={styles.modalContainer}></View>
                 <View style={styles.modalMessage}>
+
+                <View style={styles.modalCloseContainer}>
+
+                    <Pressable style={[styles.closeButton, styles.shadowProp]} onPress={() => setModalVisible(false)}>
+                        <Icon 
+                            name='x' 
+                            size={15} 
+                            color='black'
+                        />
+                    </Pressable>
+
+                </View>
+
                     <TextInput
                     placeholder="Enter prepaid card number"
                     style={styles.input}
                     keyboardType="email-address"
                     onChangeText={(content: string) => {
+                        setPrepaid(content)
                     }}
+
+                    onSubmitEditing={() => console.log(prepaid)
+                    }
                     />
                 </View>
             </Modal>
@@ -124,6 +147,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
+    modalCloseContainer: {
+        width: '90%',
+        alignItems: 'flex-end',
+    },
+
+    closeButton: {
+        width: 25,
+        height: 25, 
+        backgroundColor: 'white',
+        borderRadius: 25,
+        borderWidth: 1,
+        borderColor: 'gray',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
 
     title: {
         fontWeight: 'bold',
@@ -153,7 +191,7 @@ const styles = StyleSheet.create({
       },
 
     modalContainer: {
-        backgroundColor: 'rgba(255, 255, 255, 0.6)',
+        backgroundColor: 'rgba(220, 220, 220, 0.6)',
         width: '100%',
         height: '100%',
         flex: 1,
@@ -162,9 +200,10 @@ const styles = StyleSheet.create({
     modalMessage: {
         backgroundColor: 'white',
         width: '100%',
-        height: '20%',
+        height: '25%',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        borderRadius: 25
     },
 
     input: {

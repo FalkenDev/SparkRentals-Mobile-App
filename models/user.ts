@@ -22,14 +22,21 @@ const userModel = {
     },
 
     getBalance: async function getBalance(): Promise<any> {
-        const token = await storage.readToken();
         const userData = await storage.readUser();        
         const user = await userModel.getUserData(userData);
 
         const userBalance = user['user']['balance'];
         
-        
         return userBalance;
+    },
+
+    getHistory: async function getHistory(): Promise<any> {
+        const userData = await storage.readUser();        
+        const user = await userModel.getUserData(userData);
+
+        const userHistory = user['user']['history'];
+        
+        return userHistory;
     }
 };
 

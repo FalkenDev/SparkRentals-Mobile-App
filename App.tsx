@@ -16,6 +16,7 @@ import EmailRegister from './components/auth/EmailRegister';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList,DrawerItem } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
 import Wallet from './components/drawer/Wallet';
+import History from './components/drawer/History';
 
 
 const Stack = createNativeStackNavigator();
@@ -43,7 +44,7 @@ export default function App() {
       drawerContent={(props) => <CustomDrawerContent {...props} />}>
 
         {isLoggedIn ?
-        <Drawer.Screen name="MapNavigator">
+        <Drawer.Screen name="Map">
           {(screenProps) => <MapNavigator {...screenProps} token={token} API_KEY={API_KEY} position={position} setPosition={setPosition}/>}
         </Drawer.Screen>
         :
@@ -55,7 +56,10 @@ export default function App() {
         <Drawer.Screen name='Wallet'>
           {(screenProps) => <Wallet {...screenProps} />}
         </Drawer.Screen>
-        {/* <Drawer.Screen name="Feed" component={Feed} /> */}
+
+        <Drawer.Screen name='Ride History'>
+          {(screenProps) => <History {...screenProps} />}
+        </Drawer.Screen>
 
         </Drawer.Navigator>
       </NavigationContainer>

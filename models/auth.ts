@@ -66,7 +66,7 @@ const authModel = {
 
         //Store token
         const token = result['data']['token'];
-        // console.log(token);
+        console.log(token);
         
         await storage.storeToken(token);
 

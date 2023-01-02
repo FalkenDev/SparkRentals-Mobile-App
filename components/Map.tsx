@@ -10,6 +10,7 @@ import config from '../config/config.json';
 import Icon from 'react-native-vector-icons/Octicons';
 import ScooterModal from './ScooterModal';
 import NavBar from './drawer/NavBar';
+import ZoneModal from './ZoneModal';
 
 export default function Map({navigation, API_KEY, position, setPosition, token}): any {
     const [locationMarker, setLocationMarker] = useState(null);
@@ -19,6 +20,11 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
     const [scooters, setScooters] = useState([]);
     const [currentScooter, setCurrentScooter] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
+    const [zoneModalVisible, setZoneModalVisible] = useState(false);
+    const [currentZone, setCurrentZone] = useState(null);
+
+    console.log(currentCity);
+    
     
     /**
      * Set user position
@@ -79,7 +85,6 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
                         
             /**
              * Set zones on map
-             * FIX: fillColor currently not working
              */
             const zones = mapModel.getZones(city);
             setZones(zones);
@@ -151,12 +156,20 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
                         strokeWidth={3}
                         fillColor={z['zoneColor']}
                         key={index}
+                        tappable={true}
+                        onPress={() => {
+                            setCurrentZone(z)
+                            setZoneModalVisible(true)                            
+                        }}
                     />
                 ))}
             </MapView>
 
     
             <ScooterModal navigation={navigation} scooter={currentScooter} modalVisible={modalVisible} currentCity={currentCity} setModalVisible={setModalVisible} />
+
+            <ZoneModal navigation={navigation} zone={currentZone} zoneModalVisible={zoneModalVisible} setZoneModalVisible={setZoneModalVisible} />
+
             <NavBar navigation={navigation} />
         </View>
     )

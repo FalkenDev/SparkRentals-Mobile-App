@@ -5,64 +5,19 @@ import { View, Text, TextInput, Button, Pressable, StyleSheet, Image, StatusBar,
 import mapModel from "../models/map";
 import GestureRecognizer from 'react-native-swipe-gestures';
 
-export default function ScooterModal({navigation, scooter, modalVisible, setModalVisible, currentCity}) {
-    const [scooterName, setScooterName] = useState(null);
-    const [scooterId, setScooterId] = useState(null);
-    const [battery, setBattery] = useState(null);
-    const [fixedRate, setFixedRate] = useState(null);
-    const [timeRate, setTimeRate] = useState(null);
-
-
-    const batteryImages = {
-        '100': require('../assets/battery_100.png'),
-        '75': require('../assets/battery_75.png'),
-        '50': require('../assets/battery_50.png'),
-        '25': require('../assets/battery_25.png')
-    }
-
-    function getBattery(batteryPercentage) {
-        if (batteryPercentage >= 75) {
-            return '100'
-        } else if (batteryPercentage >= 50) {
-            return '75'
-        } else if (batteryPercentage >= 25) {
-            return '50'
-        } else {
-            return '25'
-        }
-    };
-
-    useEffect(() => {
-        function getScooterInfo(): void {            
-            if (scooter) {
-                const title = scooter['name'].split('#');
-                setScooterName(title[0]);
-                setScooterId(title[1]);
-                setBattery(getBattery(scooter['battery']));
-
-                setFixedRate(currentCity['taxRates']['fixedRate']);
-                setTimeRate(currentCity['taxRates']['timeRate']);
-                // console.log(currentCity['taxRates']);
-                
-            }
-        }
-        getScooterInfo();
-    });
-
-
-    // console.log(scooter);
+export default function ZoneModal({navigation, zone, zoneModalVisible, setZoneModalVisible}) {
     
     return (
         <GestureRecognizer
             style={{flex: 1}}
-            onSwipeDown={ () => setModalVisible(false) }
+            onSwipeDown={ () => setZoneModalVisible(false) }
         >
         <Modal
         animationType="slide"
         transparent={true}
-        visible={modalVisible}
+        visible={zoneModalVisible}
         onRequestClose={() => {
-            setModalVisible(!modalVisible)
+            setZoneModalVisible(!zoneModalVisible)
         }}
 
         >
@@ -73,20 +28,21 @@ export default function ScooterModal({navigation, scooter, modalVisible, setModa
             <View style={styles.swipeButton}></View>
 
                 <View style={styles.titleContainer}>
-                    <Image style={styles.scooterImage} source={require('../assets/scooter2.png')}></Image>
-
                     <View style={styles.textContainer}>
-                        <Text style={styles.scooterTitle}> {scooterName} {scooterId}</Text>
-                        <Image style={styles.battery} source={batteryImages[`${battery}`]}></Image>
+                        <Text> Zone: {zone['_id']} </Text>
                     </View>
 
                 </View>
+
+                <Text style={{color: 'grey'}}> Park here and reduce null from your trip. </Text>
  
-                <Pressable style={styles.tourButton} >
-                    <Text style={{color: 'white'}}>Start tour</Text>
+                <Pressable 
+                style={styles.tourButton} 
+                onPress={() => setZoneModalVisible(false)}
+                >
+                    <Text style={{color: 'white', fontWeight: 'bold'}}>OK</Text>
                 </Pressable>
 
-                <Text style={{color: 'grey'}}> {fixedRate} kr unlocking + {timeRate} kr / min. </Text>
                 
             </View>
         </Modal>
@@ -127,12 +83,14 @@ const styles = StyleSheet.create({
     modalMessage: {
         backgroundColor: 'white',
         width: '100%',
-        height: '30%',
+        height: '25%',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        paddingTop: 10
+        paddingTop: 10,
         // flexDirection: 'row'
-        // borderRadius: 25
+        // borderRadius: 25,
+        borderTopLeftRadius: 25,
+        borderTopRightRadius: 25
     },
 
     scooterTitle: {
@@ -155,11 +113,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'cornflowerblue',
         width: '80%',
         height: 50,
-        borderRadius: 10,
+        borderRadius: 25,
         // display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 10
+        marginTop: 10
         // marginTop: 120,
     },
 })

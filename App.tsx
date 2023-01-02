@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import { Pressable, StyleSheet, Text, View, Button } from 'react-native';
+import { Pressable, StyleSheet, Text, View, Button, Image } from 'react-native';
 // import Map from './components/Map';
 import MapNavigator from './components/MapNavigator';
 import Login from './components/auth/LoginHome';
@@ -25,6 +25,7 @@ const Drawer = createDrawerNavigator();
 function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
+      <Image style={styles.drawerImage} source={require('./assets/logo_dark.png')}></Image>
       <DrawerItemList {...props} />
     </DrawerContentScrollView>
   );
@@ -73,19 +74,11 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: '#fff',
-    // alignItems: 'center',
-    // justifyContent: 'center',
+  },
+
+  drawerImage: {
+    margin: 20,
+    marginBottom: 50,
+    marginTop: 30
   },
 });
-// {/* <View style={styles.container}>
-// <StatusBar style="auto" />
-//     </View> */}
-// {isLoggedIn ?
-//   <Stack.Screen name="Map">
-//     {() => <Map API_KEY={API_KEY} position={position} setPosition={setPosition}></Map>}
-//   </Stack.Screen>
-//   :
-//   <Stack.Screen name="Auth" component={Login}/>
- 
-// }

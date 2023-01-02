@@ -27,20 +27,12 @@ const scooterModel = {
 
     sortAvailableScooters: function sortAvailableScooters(scooters: object) {
         const availableScooters = [];
-        // console.log(scooters['cityScooters']);
-        // console.log(scooters['cityScooters'][0]);
         
         for (let i = 0; i < scooters.length; i++) {
             if (scooters[i]['status'] === 'Available') {
                 availableScooters.push(scooters[i])
             }
         }
-        // for (const scooter in scooters) {          
-
-        //     if (scooter['status'] === 'Available') {
-        //         availableScooters.push(scooter)
-        //     }
-        // };
         
         return availableScooters;
     }

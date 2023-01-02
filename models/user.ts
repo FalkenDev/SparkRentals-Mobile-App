@@ -29,10 +29,31 @@ const userModel = {
     },
 
     getHistory: async function getHistory(): Promise<any> {
-        const userData = await storage.readUser();        
-        const user = await userModel.getUserData(userData);
+        /**
+         * HARDCODED VALUES FOR TESTING, NOT FINAL FUNCTION!!
+         */
+        
+        // const userData = await storage.readUser();
+        const token = await storage.readToken();                
+        const respone = await fetch(`${config.base_url}users/63b31ac4aadef0e2a634be7a?api_key=${API_KEY}`, {
+            method: 'GET',
+            headers: {
+                'x-access-token': token['token']
+            }
+        }
+        );
 
-        const userHistory = user['user']['history'];
+        const result = await respone.json();
+
+        const userData = result['user'];
+        
+
+        // const user = await userModel.getUserData(userData);
+
+        // const userHistory = user['user']['history'];
+        
+        const userHistory = userData['history'];
+        // console.log(userHistory);
         
         return userHistory;
     },

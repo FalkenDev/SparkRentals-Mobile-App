@@ -19,6 +19,12 @@ export default function Wallet({navigation}): any {
         getBalance();
     });
 
+    async function addBalance() {
+        setModalVisible(false);
+        const result = await userModel.addFunds(prepaid);
+        // console.log(result);
+    };
+
     return (
         <View style={styles.container}>
 
@@ -75,7 +81,7 @@ export default function Wallet({navigation}): any {
                         setPrepaid(content)
                     }}
 
-                    onSubmitEditing={() => console.log(prepaid)
+                    onSubmitEditing={() => addBalance()
                     }
                     />
                 </View>

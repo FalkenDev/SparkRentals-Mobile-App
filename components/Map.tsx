@@ -8,6 +8,8 @@ import scooterModel from '../models/scooter';
 import {API_KEY} from "@env";
 import config from '../config/config.json';
 import Icon from 'react-native-vector-icons/Octicons';
+import ScooterModal from './ScooterModal';
+import NavBar from './drawer/NavBar';
 
 export default function Map({navigation, API_KEY, position, setPosition, token}): any {
     const [locationMarker, setLocationMarker] = useState(null);
@@ -15,6 +17,8 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
     const [currentCity, setCurrentCity] = useState(null);
     const [zones, setZones] = useState([]);
     const [scooters, setScooters] = useState([]);
+    const [currentScooter, setCurrentScooter] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
     
     /**
      * Set user position
@@ -41,7 +45,7 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
     
             setPosition(userCoordinates);
             
-            mapModel.getClosestCity(API_KEY, position);
+            mapModel.getClosestCity(position);
 
             setLocationMarker(<Marker
                 coordinate={{
@@ -67,7 +71,7 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
      */
     useEffect(() => {
         async function setUpMap(): Promise<void> {
-            const city = await mapModel.getClosestCity(API_KEY, position);
+            const city = await mapModel.getClosestCity(position);
             
             
             // Set city that is closest to user
@@ -85,13 +89,13 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
              * Get all scooters and create markers for them on the map
              */
             const result = await scooterModel.getScooters(API_KEY, city); 
+
             const scooters = result['cityScooters'];
             const sortedScooters = scooterModel.sortAvailableScooters(scooters);
             // console.log(scooters[0]);
             
             // console.log(sortedScooters[0]);
 
-            
             setScooters(sortedScooters);
             
         };
@@ -111,13 +115,6 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
         );
       };
 
-    // const MenuIcon = ({ navigation }) => <Icon 
-    //     name='three-bars' 
-    //     size={100} 
-    //     color='#000' 
-    //     onPress={() => navigation.openDrawer()}
-    // />;
-
     return (
         <View style={styles.container}>
             <MapView
@@ -129,18 +126,21 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
                     longitudeDelta: 0.03,
                 }}
                 userInterfaceStyle={'dark'}
-                // liteMode={true}
             >
                 {locationMarker}
 
                 {scooters.map((s, index) => 
                     <Marker
-                        title={s['name']}
-                        description={`Charge ${s['battery']}% ${s['status']}`}
+                        // title={s['name']}
+                        // description={`Charge ${s['battery']}% ${s['status']}`}
                         coordinate={s['coordinates']}
                         icon={require('../assets/Scooter1.png')}
                         tappable={true}
                         key={index}
+                        onPress={() => {
+                            setCurrentScooter(s)
+                            setModalVisible(true)
+                        }}
                         >
                     </Marker>
                 )}
@@ -154,7 +154,10 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
                     />
                 ))}
             </MapView>
-            <DrawerButton navigation={navigation}/>
+
+    
+            <ScooterModal navigation={navigation} scooter={currentScooter} modalVisible={modalVisible} currentCity={currentCity} setModalVisible={setModalVisible} />
+            <NavBar navigation={navigation} />
         </View>
     )
 }

@@ -38,31 +38,33 @@ const userModel = {
     },
 
     addFunds: async function addFunds(prepaid: string): Promise<any> {
-    const token = await storage.readToken();
-    const user = await storage.readUser();        
-    const userData = await userModel.getUserData(user);
+        const token = await storage.readToken();
+        const user = await storage.readUser();        
+        const userData = await userModel.getUserData(user);
 
-    const userId = userData['user']['_id'];
+        const userId = userData['user']['_id'];
+        // console.log(userId);
+        
+        const requestBody = {
+            'user_id': userId,
+            'prepaid_code': prepaid
+        };    
 
-    const requestBody = {
-        'prepaid_code': prepaid,
-        'user_id': userId
-    };
-    
+        console.log(JSON.stringify(requestBody));
+        
+        
+        const response = await fetch(`${config.base_url}users/addfund?api_key=${API_KEY}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': token['token']
+            },
+            body: JSON.stringify(requestBody)
+        });
 
-    const response = await fetch(`${config.base_url}users/addfund?api_key=${API_KEY}`, {
-        method: 'POST',
-        headers: {
-            'x-access-token': token['token']
-        },
-        body: JSON.stringify(requestBody)
-    });
-
-    const result = await response.json();
-    
-    return result;
-    // users/addfund
-    // user_id och prepaid_code
+        const result = await response        
+        
+        return result;
     }
 };
 

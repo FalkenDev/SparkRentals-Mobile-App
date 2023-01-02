@@ -15,6 +15,7 @@ export default function Wallet({navigation}): any {
         async function getBalance(): Promise<void> {
             const result = await userModel.getBalance();
             setBalance(result);
+
         };
         getBalance();
     });
@@ -22,7 +23,10 @@ export default function Wallet({navigation}): any {
     async function addBalance() {
         setModalVisible(false);
         const result = await userModel.addFunds(prepaid);
-        // console.log(result);
+        const updatedBalance = await userModel.getBalance();
+        console.log(updatedBalance);
+        
+        setBalance(updatedBalance);
     };
 
     return (

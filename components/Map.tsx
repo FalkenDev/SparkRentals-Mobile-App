@@ -22,8 +22,6 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
     const [modalVisible, setModalVisible] = useState(false);
     const [zoneModalVisible, setZoneModalVisible] = useState(false);
     const [currentZone, setCurrentZone] = useState(null);
-
-    console.log(currentCity);
     
     
     /**

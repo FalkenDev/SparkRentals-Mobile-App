@@ -29,7 +29,7 @@ export default function ZoneModal({navigation, zone, zoneModalVisible, setZoneMo
 
                 <View style={styles.titleContainer}>
                     <View style={styles.textContainer}>
-                        <Text> Zone: {zone['_id']} </Text>
+                        {/* <Text> Zone: {zone['_id']} </Text> */}
                     </View>
 
                 </View>
@@ -52,7 +52,6 @@ export default function ZoneModal({navigation, zone, zoneModalVisible, setZoneMo
 
 const styles = StyleSheet.create({
     modalContainer: {
-        // backgroundColor: 'rgba(80, 80, 80, 0.6)',
         width: '100%',
         height: '100%',
         flex: 1,
@@ -75,9 +74,6 @@ const styles = StyleSheet.create({
     textContainer: {
         width: '45%',
         marginBottom: 10,
-        // padding: 0
-        // alignItems: 'center'
-        // flexDirection: 'row'
     },
 
     modalMessage: {
@@ -101,8 +97,6 @@ const styles = StyleSheet.create({
     
     battery: {
         marginLeft: 5,
-        // width: 15,
-        // height: 28
     },
 
     scooterImage: {
@@ -114,10 +108,8 @@ const styles = StyleSheet.create({
         width: '80%',
         height: 50,
         borderRadius: 25,
-        // display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 10
-        // marginTop: 120,
     },
 })

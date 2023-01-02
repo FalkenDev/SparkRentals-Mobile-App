@@ -5,9 +5,12 @@ import { StyleSheet, Text, View, Pressable, Modal, TextInput, ScrollView} from '
 import userModel from '../../models/user';
 import Icon from 'react-native-vector-icons/Octicons';
 import mapModel from '../../models/map';
+import HistoryMap from './HistoryMap';
 
 export default function Wallet({navigation}): any {
     const [history, setHistory] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [currentJourney, setCurrentJourney] = useState(null);
 
         // Get balance for logged in user
         useEffect(() => {
@@ -38,6 +41,12 @@ export default function Wallet({navigation}): any {
             
             <ScrollView style={styles.prepaidContainer}>
                 {history.map((h, index) => (
+                <Pressable onPress={() => {
+                    setCurrentJourney(h)
+                    setModalVisible(true)
+                }}
+                key={index}
+                >
                 <View style={styles.rideHistory}>
 
                     <View style={styles.primaryInfo}>
@@ -51,12 +60,13 @@ export default function Wallet({navigation}): any {
                         <Text style={styles.textDate}>{h.date}</Text>
                     </View>
                 </View>
-                
+                </Pressable>
                 ))}
-
             </ScrollView>
             
 
+                <HistoryMap navigation={navigation} journey={currentJourney} modalVisible={modalVisible} setModalVisible={setModalVisible}></HistoryMap>
+                
         </View>
     )
 }

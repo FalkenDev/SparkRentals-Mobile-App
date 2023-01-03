@@ -17,13 +17,19 @@ export default function LoginForm({navigation, setIsLoggedIn}) {
         };
 
         const loginUser = await authModel.login(userLogin);
-        if (Object.prototype.hasOwnProperty.call(loginUser, 'errors')) {
+        
+        if (loginUser['type'] === 'danger') {
             showMessage({
-                message: loginUser['errors']['title'],
+                message: loginUser['title'],
                 type: 'danger'
             })
         } else {
+            showMessage({
+                message: loginUser['message'],
+                type: 'success'
+            })
             setIsLoggedIn(true);
+            
         }
     };
 

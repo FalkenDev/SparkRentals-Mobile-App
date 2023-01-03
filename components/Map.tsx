@@ -8,9 +8,13 @@ import scooterModel from '../models/scooter';
 import {API_KEY} from "@env";
 import config from '../config/config.json';
 import Icon from 'react-native-vector-icons/Octicons';
-import ScooterModal from './ScooterModal';
+import ScooterModal from './modals/ScooterModal';
 import NavBar from './drawer/NavBar';
-import ZoneModal from './ZoneModal';
+import ZoneModal from './modals/ZoneModal';
+import ScanScreen from './modals/QrScanner';
+import QRCodeScanner from 'react-native-qrcode-scanner';
+import QrScanner from './modals/QrScanner';
+import JourneyModal from './modals/JourneyModal';
 
 export default function Map({navigation, API_KEY, position, setPosition, token}): any {
     const [locationMarker, setLocationMarker] = useState(null);
@@ -22,6 +26,9 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
     const [modalVisible, setModalVisible] = useState(false);
     const [zoneModalVisible, setZoneModalVisible] = useState(false);
     const [currentZone, setCurrentZone] = useState(null);
+    const [cameraVisible, setCameraVisible] = useState(false);
+    const [journeyModal, setJourneyModal] = useState(false);
+
     
     
     /**
@@ -164,11 +171,13 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
             </MapView>
 
     
-            <ScooterModal navigation={navigation} scooter={currentScooter} modalVisible={modalVisible} currentCity={currentCity} setModalVisible={setModalVisible} />
+            <ScooterModal navigation={navigation} scooter={currentScooter} modalVisible={modalVisible} currentCity={currentCity} setModalVisible={setModalVisible} setJourneyModal={setJourneyModal}/>
 
             <ZoneModal navigation={navigation} zone={currentZone} zoneModalVisible={zoneModalVisible} setZoneModalVisible={setZoneModalVisible} />
 
-            <Pressable style={styles.googleLogin}>
+            <JourneyModal navigation={navigation} scooter={currentScooter} journeyModal={journeyModal} setJourneyModal={setJourneyModal} />
+            
+            <Pressable onPress={() => {setCameraVisible(true)}} style={styles.googleLogin}>
                     <Icon 
                         name='screen-full' 
                         size={15} 
@@ -178,7 +187,9 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
             </Pressable>
 
             <NavBar navigation={navigation} />
+            <QrScanner navigation={navigation} cameraVisible={cameraVisible} setCameraVisible={setCameraVisible}/>
         </View>
+        
     )
 }
 

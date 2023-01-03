@@ -35,7 +35,7 @@ const userModel = {
         
         // const userData = await storage.readUser();
         const token = await storage.readToken();                
-        const respone = await fetch(`${config.base_url}users/63b3f1f0ca9019ea96bded62?api_key=${API_KEY}`, {
+        const respone = await fetch(`${config.base_url}users/63b422b2883e38e2b9b32680?api_key=${API_KEY}`, {
             method: 'GET',
             headers: {
                 'x-access-token': token['token']
@@ -83,7 +83,7 @@ const userModel = {
             body: JSON.stringify(requestBody)
         });
 
-        const result = await response        
+        const result = await response;        
         
         return result;
     }

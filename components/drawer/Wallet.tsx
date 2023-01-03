@@ -100,11 +100,12 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#fff',
-    //   backgroundColor: 'red',
+    // //   backgroundColor: 'red',
       alignItems: 'center',
-    //   justifyContent: 'space-evenly',
+    // //   justifyContent: 'space-evenly',
       height: '50%',
       width: '100%'
+
     },
 
     prepaidButton: {

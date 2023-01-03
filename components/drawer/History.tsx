@@ -17,8 +17,6 @@ export default function Wallet({navigation}): any {
             async function getHistory(): Promise<void> {
                 const result = await userModel.getHistory();
                 setHistory(result);
-                console.log(history);
-
                 
             };
             getHistory();

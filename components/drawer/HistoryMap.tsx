@@ -9,10 +9,13 @@ import config from '../../config/config.json';
 import Icon from 'react-native-vector-icons/Octicons';
 import { start } from 'react-native-compass-heading';
 
+
 export default function HistoryMap({navigation, journey, modalVisible, setModalVisible}): any {
     const [startCoordinates, setStartCoordinates] = useState([]);
     const [endCoordinates, setEndCoordinates] = useState([]);
 
+    console.log(journey);
+    
     useEffect(() => {
         function setCoordinates() {
             if (modalVisible) {
@@ -35,6 +38,7 @@ export default function HistoryMap({navigation, journey, modalVisible, setModalV
         }}
         >
             <View style={styles.container}>
+     
                 <MapView
                     style={styles.map}
                     // region={{
@@ -55,22 +59,35 @@ export default function HistoryMap({navigation, journey, modalVisible, setModalV
                 </MapView>
 
                 <View style={styles.infoContainer}>
+                <Pressable style={[styles.backButton, styles.shadowProp]} onPress={() => setModalVisible(false)}>
+                    <Icon 
+                        name='arrow-left' 
+                        size={25} 
+                        color='black'
+                    />
+                </Pressable>
                     <View style={styles.info}>
 
                         <View style={styles.listInfo}>
                             <Text style={styles.infoTitle}>Journey started</Text>
+                            <Text>{journey.date}</Text>
                         </View>
 
                         <View style={styles.listInfo}>
                             <Text style={styles.infoTitle}>Information about the trip</Text>
+                            <Text>{mapModel.calcDistance(startCoordinates[0], startCoordinates[1], endCoordinates[0], endCoordinates[1])} km / {journey.totalMin} min </Text>
+
+                            <Text> {journey.totalPrice} kr</Text>
                         </View>
 
                         <View style={styles.listInfo}>
                             <Text style={styles.infoTitle}>ID</Text>
+                            <Text>{journey['_id']}</Text>
                         </View>
 
                         <View style={styles.listInfo}>
                             <Text style={styles.infoTitle}>Vehicle</Text>
+                            <Text>{journey.scooterName}</Text>
                         </View>
 
                     </View>
@@ -111,7 +128,7 @@ const styles = StyleSheet.create({
     },
 
     info: {
-        height: '40%',
+        height: '45%',
         width: '100%',
         backgroundColor: 'white',
         justifyContent: 'space-around',
@@ -123,11 +140,27 @@ const styles = StyleSheet.create({
         height: '20%',
         borderBottomWidth: 1,
         width: '90%',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
         // marginBottom: 10
     },
 
     infoTitle: {
         fontWeight: '600',
-    }
+    },
+
+    backButton: {
+        position: 'absolute',
+        width: 40,
+        height: 40, 
+        left: 20,
+        backgroundColor: 'white',
+        top: 5,
+        borderRadius: 25,
+        borderWidth: 1,
+        borderColor: 'gray',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
 });
 

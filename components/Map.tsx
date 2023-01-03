@@ -168,6 +168,15 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
 
             <ZoneModal navigation={navigation} zone={currentZone} zoneModalVisible={zoneModalVisible} setZoneModalVisible={setZoneModalVisible} />
 
+            <Pressable style={styles.googleLogin}>
+                    <Icon 
+                        name='screen-full' 
+                        size={15} 
+                        color='white'
+                    />
+                    <Text style={styles.googleText}>Scan to unlock</Text>
+            </Pressable>
+
             <NavBar navigation={navigation} />
         </View>
     )
@@ -204,6 +213,30 @@ const styles = StyleSheet.create({
     shadowProp: {
         elevation: 5,
         shadowColor: 'black'
-      },
+    },
+
+    googleLogin: {
+        backgroundColor: '#1A1A1A',
+        width: '65%',
+        height: 45,
+        borderRadius: 25,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 30
+    },
+
+    googleText: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 18,
+        marginLeft: 10
+    },
+
+    googleIcon: {
+        height: 20,
+        width: 20
+    }
 });
 

@@ -10,7 +10,7 @@ export default function NavBar({navigation}) {
           <Pressable style={[styles.drawer, styles.shadowProp]} onPress={() => navigation.openDrawer()}> 
             <Icon 
             name='three-bars' 
-            size={30} 
+            size={20} 
             color='black'
             />
           </Pressable>
@@ -20,7 +20,12 @@ export default function NavBar({navigation}) {
       function HowToDrive({navigation}) {
         return (
             <Pressable style={[styles.info, styles.shadowProp]}>
-                <Text>How to drive?</Text>
+                <Icon 
+                    name='question' 
+                    size={16} 
+                    color='black'
+                />
+                <Text style={{marginLeft: 8}}>How to drive?</Text>
             </Pressable>
         )
       }
@@ -30,7 +35,7 @@ export default function NavBar({navigation}) {
             <Pressable style={[styles.drawer, styles.shadowProp]}> 
               <Icon 
               name='paper-airplane' 
-              size={30} 
+              size={20} 
               color='black'
               />
             </Pressable>
@@ -59,19 +64,20 @@ const styles = StyleSheet.create({
     info: {
         // position: 'absolute',
         width: 250,
-        height: 50, 
+        height: 40, 
         // left: 50,
         backgroundColor: 'white',
         marginTop: 50,
         borderRadius: 25,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        flexDirection: 'row'
     },
 
     drawer: {
         // position: 'absolute',
-        width: 50,
-        height: 50, 
+        width: 40,
+        height: 40, 
         // left: 50,
         backgroundColor: 'white',
         marginTop: 50,

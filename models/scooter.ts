@@ -20,9 +20,22 @@ const scooterModel = {
             }
         });
         const result = await response.json();
+        // console.log(result);
         
         return result;
     },
+
+    sortAvailableScooters: function sortAvailableScooters(scooters: object) {
+        const availableScooters = [];
+        
+        for (let i = 0; i < scooters.length; i++) {
+            if (scooters[i]['status'] === 'Available') {
+                availableScooters.push(scooters[i])
+            }
+        }
+        
+        return availableScooters;
+    }
 
 }
 

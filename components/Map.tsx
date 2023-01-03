@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ScrollView, Image, Text, View, StyleSheet, StatusBar } from 'react-native';
+import { ScrollView, Image, Text, View, StyleSheet, StatusBar, Button, Pressable } from 'react-native';
 import MapView, { Marker, Circle, Polygon } from 'react-native-maps';
 import * as Location from 'expo-location';
 import React from 'react';
@@ -7,13 +7,22 @@ import mapModel from '../models/map';
 import scooterModel from '../models/scooter';
 import {API_KEY} from "@env";
 import config from '../config/config.json';
+import Icon from 'react-native-vector-icons/Octicons';
+import ScooterModal from './ScooterModal';
+import NavBar from './drawer/NavBar';
+import ZoneModal from './ZoneModal';
 
-export default function Map({API_KEY, position, setPosition, token}): any {
+export default function Map({navigation, API_KEY, position, setPosition, token}): any {
     const [locationMarker, setLocationMarker] = useState(null);
     const [highlight, setHighlight] = useState(null);    
     const [currentCity, setCurrentCity] = useState(null);
     const [zones, setZones] = useState([]);
     const [scooters, setScooters] = useState([]);
+    const [currentScooter, setCurrentScooter] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [zoneModalVisible, setZoneModalVisible] = useState(false);
+    const [currentZone, setCurrentZone] = useState(null);
+    
     
     /**
      * Set user position
@@ -40,7 +49,7 @@ export default function Map({API_KEY, position, setPosition, token}): any {
     
             setPosition(userCoordinates);
             
-            mapModel.getClosestCity(API_KEY, position);
+            mapModel.getClosestCity(position);
 
             setLocationMarker(<Marker
                 coordinate={{
@@ -66,7 +75,7 @@ export default function Map({API_KEY, position, setPosition, token}): any {
      */
     useEffect(() => {
         async function setUpMap(): Promise<void> {
-            const city = await mapModel.getClosestCity(API_KEY, position);
+            const city = await mapModel.getClosestCity(position);
             
             
             // Set city that is closest to user
@@ -74,7 +83,6 @@ export default function Map({API_KEY, position, setPosition, token}): any {
                         
             /**
              * Set zones on map
-             * FIX: fillColor currently not working
              */
             const zones = mapModel.getZones(city);
             setZones(zones);
@@ -84,15 +92,31 @@ export default function Map({API_KEY, position, setPosition, token}): any {
              * Get all scooters and create markers for them on the map
              */
             const result = await scooterModel.getScooters(API_KEY, city); 
+
             const scooters = result['cityScooters'];
-            setScooters(scooters);
+            const sortedScooters = scooterModel.sortAvailableScooters(scooters);
+            // console.log(scooters[0]);
+            
+            // console.log(sortedScooters[0]);
+
+            setScooters(sortedScooters);
             
         };
         setUpMap();
     }, []);
 
 
-
+    function DrawerButton({navigation}) {
+        return (
+          <Pressable style={[styles.drawer, styles.shadowProp]} onPress={() => navigation.openDrawer()}> 
+            <Icon 
+            name='three-bars' 
+            size={30} 
+            color='black'
+            />
+          </Pressable>
+        );
+      };
 
     return (
         <View style={styles.container}>
@@ -105,18 +129,21 @@ export default function Map({API_KEY, position, setPosition, token}): any {
                     longitudeDelta: 0.03,
                 }}
                 userInterfaceStyle={'dark'}
-                // liteMode={true}
             >
-
                 {locationMarker}
 
                 {scooters.map((s, index) => 
                     <Marker
-                        title={s['name']}
+                        // title={s['name']}
+                        // description={`Charge ${s['battery']}% ${s['status']}`}
                         coordinate={s['coordinates']}
                         icon={require('../assets/Scooter1.png')}
                         tappable={true}
                         key={index}
+                        onPress={() => {
+                            setCurrentScooter(s)
+                            setModalVisible(true)
+                        }}
                         >
                     </Marker>
                 )}
@@ -127,9 +154,21 @@ export default function Map({API_KEY, position, setPosition, token}): any {
                         strokeWidth={3}
                         fillColor={z['zoneColor']}
                         key={index}
+                        tappable={true}
+                        onPress={() => {
+                            setCurrentZone(z)
+                            setZoneModalVisible(true)                            
+                        }}
                     />
                 ))}
             </MapView>
+
+    
+            <ScooterModal navigation={navigation} scooter={currentScooter} modalVisible={modalVisible} currentCity={currentCity} setModalVisible={setModalVisible} />
+
+            <ZoneModal navigation={navigation} zone={currentZone} zoneModalVisible={zoneModalVisible} setZoneModalVisible={setZoneModalVisible} />
+
+            <NavBar navigation={navigation} />
         </View>
     )
 }
@@ -148,6 +187,23 @@ const styles = StyleSheet.create({
         left: 0,
         bottom: 0,
         right: 0,
-    }
+    },
+
+    drawer: {
+        position: 'absolute',
+        width: 50,
+        height: 50, 
+        left: 50,
+        backgroundColor: 'white',
+        marginTop: 50,
+        borderRadius: 25,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    
+    shadowProp: {
+        elevation: 5,
+        shadowColor: 'black'
+      },
 });
 

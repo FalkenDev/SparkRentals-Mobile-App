@@ -5,23 +5,17 @@ import { View, Text, TextInput, Button, Pressable, StyleSheet, Image, StatusBar,
 import mapModel from "../../models/map";
 import GestureRecognizer from 'react-native-swipe-gestures';
 import scooterModel from "../../models/scooter";
-import { start } from "react-native-compass-heading";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import Icon from 'react-native-vector-icons/Octicons';
-import moment from "moment";
-import CountUpTimer from "react-countup-timer";
+import { Stopwatch, Timer } from 'react-native-stopwatch-timer';
 
-
-export default function JourneyModal({navigation, scooter, journeyModal, setJourneyModal}) {
+export default function JourneyModal({navigation, scooter, journeyModal, setJourneyModal, toggleTimer, setToggleTimer}) {
     const [scooterName, setScooterName] = useState(null);
     const [scooterNumber, setScooterNumber] = useState(null);
     const [battery, setBattery] = useState(null);
     const [fixedRate, setFixedRate] = useState(null);
-    const [timeRate, setTimeRate] = useState(null);
     const [scooterId, setScooterId] = useState(null);
-
-    
-
+    const [timer, setTimer] = useState(null);
 
     const batteryImages = {
         '100': require('../../assets/battery_100.png'),
@@ -49,7 +43,7 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
                 setScooterName(title[0]);
                 setScooterNumber(title[1]);
                 setBattery(getBattery(scooter['battery']));
-                setScooterId(scooter['_id']);              
+                setScooterId(scooter['_id']);
             }
         }
         getScooterInfo();
@@ -74,6 +68,10 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
         });
 
         setJourneyModal(!journeyModal)
+    };
+
+    function getFormattedTime(time) {
+        const currentTime = time;
     };
 
     return (
@@ -101,19 +99,50 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
 
                     <View style={styles.textContainer}>
                         <Text style={styles.scooterTitle}> {scooterName} {scooterNumber}</Text>
-                        <Image style={styles.battery} source={batteryImages[`${battery}`]}></Image>
-                        <Icon 
-                            name='clock' 
-                            size={30} 
-                            color='black'
-                        />
-                        <CountUpTimer startTime={0}/>                        
+
+
+                        <View style={styles.travelInfoContainer}>
+                            <View style={styles.travelInfo}>
+                                <Icon 
+                                    name='location' 
+                                    size={30} 
+                                    color='black'
+                                />
+
+                                <Text>1.2 km</Text>
+                            </View>
+   
+
+
+                            <View style={styles.travelInfo}>
+                                <Icon 
+                                    name='clock' 
+                                    size={30} 
+                                    color='black'
+                                />
+                                <Stopwatch start={toggleTimer}
+                                    reset={toggleTimer}
+                                    options={styles.timer}
+                                    // options={options}
+                                    getTime={getFormattedTime} 
+                                />
+
+                            </View>
+                        
+                            <View style={styles.travelInfo}>
+                                <Image style={styles.battery} source={batteryImages[`${battery}`]}></Image>
+
+                                <Text>35 km</Text>
+                            </View>
+                    </View>
+
                     </View>
 
                 </View>
  
                 <Pressable style={styles.tourButton} onPress={() => {
                     stopJourney();
+                    setToggleTimer(false);
                 }}>
                     <Text style={{color: 'white'}}>Finish the ride</Text>
                 </Pressable>
@@ -150,7 +179,7 @@ const styles = StyleSheet.create({
         width: '60%',
         marginBottom: 10,
         // padding: 0
-        alignItems: 'center'
+        alignItems: 'center',
         // flexDirection: 'row'
     },
 
@@ -158,7 +187,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         width: '100%',
         height: '35%',
-        justifyContent: 'space-evenly',
+        justifyContent: 'space-around',
         alignItems: 'center',
         paddingTop: 10,
         // flexDirection: 'row'
@@ -168,14 +197,17 @@ const styles = StyleSheet.create({
 
     scooterTitle: {
         fontWeight: 'bold',
-        marginBottom: 10,
-        fontSize: 20
+        marginBottom: 40,
+        fontSize: 26,
+        // backgroundColor: 'red',
+        // width: '100%'
     },
     
     battery: {
         marginLeft: 5,
-        // width: 15,
-        // height: 28
+        // width: 58,
+        // height: 25
+        marginBottom: 15
     },
 
     scooterImage: {
@@ -193,4 +225,24 @@ const styles = StyleSheet.create({
         // marginBottom: 
         // marginTop: 120,
     },
+
+    timer: {
+        backgroundColor: 'white'
+    },
+
+    travelInfoContainer: {
+        flexDirection: 'row',
+        // backgroundColor: 'red',
+        justifyContent: 'space-evenly',
+        width: '100%'
+    },
+
+    travelInfo: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
+        // width: '100%'
+    },
+
+
 })

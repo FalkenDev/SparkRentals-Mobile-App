@@ -28,6 +28,7 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
     const [currentZone, setCurrentZone] = useState(null);
     const [cameraVisible, setCameraVisible] = useState(false);
     const [journeyModal, setJourneyModal] = useState(false);
+    const [toggleTimer, setToggleTimer] = useState(false);
 
     
     
@@ -171,12 +172,13 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
             </MapView>
 
     
-            <ScooterModal navigation={navigation} scooter={currentScooter} modalVisible={modalVisible} currentCity={currentCity} setModalVisible={setModalVisible} setJourneyModal={setJourneyModal}/>
+            <ScooterModal navigation={navigation} scooter={currentScooter} modalVisible={modalVisible} currentCity={currentCity} setModalVisible={setModalVisible} setJourneyModal={setJourneyModal} setToggleTimer={setToggleTimer}/>
 
             <ZoneModal navigation={navigation} zone={currentZone} zoneModalVisible={zoneModalVisible} setZoneModalVisible={setZoneModalVisible} />
-
-            <JourneyModal navigation={navigation} scooter={currentScooter} journeyModal={journeyModal} setJourneyModal={setJourneyModal} />
             
+ 
+            <JourneyModal navigation={navigation} scooter={currentScooter} journeyModal={journeyModal} setJourneyModal={setJourneyModal} toggleTimer={toggleTimer} setToggleTimer={setToggleTimer}/>
+
             <Pressable onPress={() => {setCameraVisible(true)}} style={styles.googleLogin}>
                     <Icon 
                         name='screen-full' 

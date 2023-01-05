@@ -88,6 +88,10 @@ export default function Wallet({navigation}): any {
                     onSubmitEditing={() => addBalance()
                     }
                     />
+
+                <Pressable style={styles.submitButton} onPress={() => addBalance()}>
+                    <Text style={styles.buttonText}>Submit</Text>
+                </Pressable>
                 </View>
             </Modal>
             
@@ -117,6 +121,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 30,
+    },
+
+    submitButton: {
+        backgroundColor: 'forestgreen',
+        width: '50%',
+        height: 50,
+        borderRadius: 50,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        // marginTop: ,
     },
 
     infoContainer: {
@@ -211,7 +226,7 @@ const styles = StyleSheet.create({
     modalMessage: {
         backgroundColor: 'white',
         width: '100%',
-        height: '25%',
+        height: 200,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 25

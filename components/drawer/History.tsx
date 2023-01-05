@@ -26,6 +26,7 @@ export default function Wallet({navigation}): any {
                 setNoHistory(false);
             };
             getHistory();
+            
         });
 
     return (

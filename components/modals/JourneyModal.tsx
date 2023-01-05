@@ -239,8 +239,10 @@ const styles = StyleSheet.create({
 
     travelInfo: {
         flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center'
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        // backgroundColor: 'red',
+        height: 75
         // width: '100%'
     },
 

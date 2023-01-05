@@ -32,10 +32,12 @@ const userModel = {
         /**
          * HARDCODED VALUES FOR TESTING, NOT FINAL FUNCTION!!
          */
+        const user = await storage.readUser();
+        const userId = user['userData']['id']
         
         // const userData = await storage.readUser();
         const token = await storage.readToken();                
-        const respone = await fetch(`${config.base_url}users/63b422b2883e38e2b9b32680?api_key=${API_KEY}`, {
+        const respone = await fetch(`${config.base_url}users/${userId}?api_key=${API_KEY}`, {
             method: 'GET',
             headers: {
                 'x-access-token': token['token']
@@ -46,14 +48,8 @@ const userModel = {
         const result = await respone.json();
 
         const userData = result['user'];
-        
-
-        // const user = await userModel.getUserData(userData);
-
-        // const userHistory = user['user']['history'];
-        
+                
         const userHistory = userData['history'];
-        // console.log(userHistory);
         
         return userHistory;
     },

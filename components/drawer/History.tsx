@@ -11,16 +11,22 @@ export default function Wallet({navigation}): any {
     const [history, setHistory] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [currentJourney, setCurrentJourney] = useState(null);
+    const [noHistory, setNoHistory] = useState(false);
 
         // Get balance for logged in user
         useEffect(() => {
             async function getHistory(): Promise<void> {
                 const result = await userModel.getHistory();
+
+                if (result.length === 0) {
+                    setNoHistory(true);
+                    return;
+                }
                 setHistory(result);
-                
+                setNoHistory(false);
             };
             getHistory();
-        }, []);
+        });
 
     return (
         <View style={styles.container}>
@@ -37,7 +43,10 @@ export default function Wallet({navigation}): any {
                 <Text style={styles.title}>Ride History</Text>
             </View>
             
-            <ScrollView style={styles.prepaidContainer}>
+            {noHistory ? 
+                <Text style={{color: 'gray'}}>No travel history to show</Text>
+                :
+                <ScrollView style={styles.prepaidContainer}>
                 {history.map((h, index) => (
                 <Pressable onPress={() => {
                     setCurrentJourney(h)
@@ -45,6 +54,8 @@ export default function Wallet({navigation}): any {
                 }}
                 key={index}
                 >
+
+         
                 <View style={styles.rideHistory}>
 
                     <View style={styles.primaryInfo}>
@@ -60,7 +71,10 @@ export default function Wallet({navigation}): any {
                 </View>
                 </Pressable>
                 ))}
-            </ScrollView>
+                </ScrollView>
+                
+                }
+           
             
 
                 <HistoryMap navigation={navigation} journey={currentJourney} modalVisible={modalVisible} setModalVisible={setModalVisible}></HistoryMap>

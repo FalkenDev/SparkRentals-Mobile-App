@@ -70,8 +70,6 @@ export default function EmailForm({setToken, navigation, setIsLoggedIn}) {
                 type: 'danger'
             })
         } else {
-            console.log(loginUser);
-            
             setToken(loginUser['token']);
             setIsLoggedIn(true);
         }

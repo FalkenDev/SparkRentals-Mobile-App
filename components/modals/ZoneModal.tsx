@@ -2,7 +2,7 @@ import { stopLocationUpdatesAsync } from "expo-location";
 import React from "react";
 import { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, Pressable, StyleSheet, Image, StatusBar, Modal } from "react-native";
-import mapModel from "../models/map";
+import mapModel from "../../models/map";
 import GestureRecognizer from 'react-native-swipe-gestures';
 
 export default function ZoneModal({navigation, zone, zoneModalVisible, setZoneModalVisible}) {

@@ -2,22 +2,25 @@ import { stopLocationUpdatesAsync } from "expo-location";
 import React from "react";
 import { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, Pressable, StyleSheet, Image, StatusBar, Modal } from "react-native";
-import mapModel from "../models/map";
+import mapModel from "../../models/map";
 import GestureRecognizer from 'react-native-swipe-gestures';
+import scooterModel from "../../models/scooter";
+import { start } from "react-native-compass-heading";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
-export default function ScooterModal({navigation, scooter, modalVisible, setModalVisible, currentCity}) {
+export default function ScooterModal({navigation, scooter, modalVisible, setModalVisible, currentCity, setJourneyModal, setToggleTimer}) {
     const [scooterName, setScooterName] = useState(null);
-    const [scooterId, setScooterId] = useState(null);
+    const [scooterNumber, setScooterNumber] = useState(null);
     const [battery, setBattery] = useState(null);
     const [fixedRate, setFixedRate] = useState(null);
     const [timeRate, setTimeRate] = useState(null);
-
+    const [scooterId, setScooterId] = useState(null);
 
     const batteryImages = {
-        '100': require('../assets/battery_100.png'),
-        '75': require('../assets/battery_75.png'),
-        '50': require('../assets/battery_50.png'),
-        '25': require('../assets/battery_25.png')
+        '100': require('../../assets/battery_100.png'),
+        '75': require('../../assets/battery_75.png'),
+        '50': require('../../assets/battery_50.png'),
+        '25': require('../../assets/battery_25.png')
     }
 
     function getBattery(batteryPercentage) {
@@ -37,21 +40,39 @@ export default function ScooterModal({navigation, scooter, modalVisible, setModa
             if (scooter) {
                 const title = scooter['name'].split('#');
                 setScooterName(title[0]);
-                setScooterId(title[1]);
+                setScooterNumber(title[1]);
                 setBattery(getBattery(scooter['battery']));
+                setScooterId(scooter['_id']);
 
                 setFixedRate(currentCity['taxRates']['fixedRate']);
-                setTimeRate(currentCity['taxRates']['timeRate']);
-                // console.log(currentCity['taxRates']);
-                
+                setTimeRate(currentCity['taxRates']['timeRate']);                
             }
         }
         getScooterInfo();
     });
 
 
-    // console.log(scooter);
-    
+    async function startJourney() {
+        const result = await scooterModel.startScooter(scooterId);
+
+        if (Object.prototype.hasOwnProperty.call(result, 'errors')) {
+            showMessage({
+                message: result['errors']['title'],
+                type: 'danger'
+            })
+
+            return;
+        };
+
+        showMessage({
+            message: result['message'],
+            type: 'success'
+        });
+
+        setModalVisible(!modalVisible);
+        setJourneyModal(true);
+    };
+
     return (
         <GestureRecognizer
             style={{flex: 1}}
@@ -73,16 +94,19 @@ export default function ScooterModal({navigation, scooter, modalVisible, setModa
             <View style={styles.swipeButton}></View>
 
                 <View style={styles.titleContainer}>
-                    <Image style={styles.scooterImage} source={require('../assets/scooter2.png')}></Image>
+                    <Image style={styles.scooterImage} source={require('../../assets/scooter2.png')}></Image>
 
                     <View style={styles.textContainer}>
-                        <Text style={styles.scooterTitle}> {scooterName} {scooterId}</Text>
+                        <Text style={styles.scooterTitle}> {scooterName} {scooterNumber}</Text>
                         <Image style={styles.battery} source={batteryImages[`${battery}`]}></Image>
                     </View>
 
                 </View>
  
-                <Pressable style={styles.tourButton} >
+                <Pressable style={styles.tourButton} onPress={() => {
+                    startJourney();
+                    setToggleTimer(true);
+                }}>
                     <Text style={{color: 'white'}}>Start tour</Text>
                 </Pressable>
 
@@ -130,9 +154,10 @@ const styles = StyleSheet.create({
         height: '30%',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        paddingTop: 10
+        paddingTop: 10,
         // flexDirection: 'row'
-        // borderRadius: 25
+        borderTopLeftRadius: 25,
+        borderTopRightRadius: 25
     },
 
     scooterTitle: {

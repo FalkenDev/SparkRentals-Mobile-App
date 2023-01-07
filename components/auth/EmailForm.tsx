@@ -16,7 +16,7 @@ export default function EmailForm({setToken, navigation, setIsLoggedIn}) {
 
     async function createUser() {
 
-        const userName = name.split('');
+        const userName = name.split(' ');
         const firstName = userName[0];
         const lastName = userName[1];
 

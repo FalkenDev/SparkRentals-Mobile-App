@@ -85,7 +85,11 @@ const authModel = {
         console.log(
          'authmodel'
         );
-    }
+    },
+
+    logout: async function logout() {
+        await storage.deleteToken();
+    },
 };
 
 export default authModel;

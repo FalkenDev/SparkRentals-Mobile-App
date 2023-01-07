@@ -82,7 +82,15 @@ const userModel = {
         const result = await response;        
         
         return result;
-    }
+    },
+
+    getProfile: async function getProfile() {
+        const userData = await storage.readUser();        
+        const user = await userModel.getUserData(userData);
+
+        return user;
+    },
+
 };
 
 export default userModel;

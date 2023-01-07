@@ -8,9 +8,13 @@ import scooterModel from '../models/scooter';
 import {API_KEY} from "@env";
 import config from '../config/config.json';
 import Icon from 'react-native-vector-icons/Octicons';
-import ScooterModal from './ScooterModal';
+import ScooterModal from './modals/ScooterModal';
 import NavBar from './drawer/NavBar';
-import ZoneModal from './ZoneModal';
+import ZoneModal from './modals/ZoneModal';
+import ScanScreen from './modals/QrScanner';
+import QRCodeScanner from 'react-native-qrcode-scanner';
+import QrScanner from './modals/QrScanner';
+import JourneyModal from './modals/JourneyModal';
 
 export default function Map({navigation, API_KEY, position, setPosition, token}): any {
     const [locationMarker, setLocationMarker] = useState(null);
@@ -22,6 +26,10 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
     const [modalVisible, setModalVisible] = useState(false);
     const [zoneModalVisible, setZoneModalVisible] = useState(false);
     const [currentZone, setCurrentZone] = useState(null);
+    const [cameraVisible, setCameraVisible] = useState(false);
+    const [journeyModal, setJourneyModal] = useState(false);
+    const [toggleTimer, setToggleTimer] = useState(false);
+
     
     
     /**
@@ -164,12 +172,26 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
             </MapView>
 
     
-            <ScooterModal navigation={navigation} scooter={currentScooter} modalVisible={modalVisible} currentCity={currentCity} setModalVisible={setModalVisible} />
+            <ScooterModal navigation={navigation} scooter={currentScooter} modalVisible={modalVisible} currentCity={currentCity} setModalVisible={setModalVisible} setJourneyModal={setJourneyModal} setToggleTimer={setToggleTimer}/>
 
             <ZoneModal navigation={navigation} zone={currentZone} zoneModalVisible={zoneModalVisible} setZoneModalVisible={setZoneModalVisible} />
+            
+ 
+            <JourneyModal navigation={navigation} scooter={currentScooter} journeyModal={journeyModal} setJourneyModal={setJourneyModal} toggleTimer={toggleTimer} setToggleTimer={setToggleTimer}/>
+
+            <Pressable onPress={() => {setCameraVisible(true)}} style={styles.googleLogin}>
+                    <Icon 
+                        name='screen-full' 
+                        size={15} 
+                        color='white'
+                    />
+                    <Text style={styles.googleText}>Scan to unlock</Text>
+            </Pressable>
 
             <NavBar navigation={navigation} />
+            <QrScanner navigation={navigation} cameraVisible={cameraVisible} setCameraVisible={setCameraVisible}/>
         </View>
+        
     )
 }
 
@@ -204,6 +226,30 @@ const styles = StyleSheet.create({
     shadowProp: {
         elevation: 5,
         shadowColor: 'black'
-      },
+    },
+
+    googleLogin: {
+        backgroundColor: '#1A1A1A',
+        width: '65%',
+        height: 45,
+        borderRadius: 25,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 30
+    },
+
+    googleText: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 18,
+        marginLeft: 10
+    },
+
+    googleIcon: {
+        height: 20,
+        width: 20
+    }
 });
 

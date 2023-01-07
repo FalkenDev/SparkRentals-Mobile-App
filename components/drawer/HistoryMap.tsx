@@ -13,14 +13,16 @@ import { start } from 'react-native-compass-heading';
 export default function HistoryMap({navigation, journey, modalVisible, setModalVisible}): any {
     const [startCoordinates, setStartCoordinates] = useState([]);
     const [endCoordinates, setEndCoordinates] = useState([]);
+    const [journeyData, setJourneyData] = useState([]);
 
-    console.log(journey);
+    // console.log(journey);
     
     useEffect(() => {
         function setCoordinates() {
             if (modalVisible) {
                 setStartCoordinates(journey['startPosition']);
                 setEndCoordinates(journey['endPosition']);
+                setJourneyData(journey);
             }
             
         };
@@ -70,24 +72,24 @@ export default function HistoryMap({navigation, journey, modalVisible, setModalV
 
                         <View style={styles.listInfo}>
                             <Text style={styles.infoTitle}>Journey started</Text>
-                            <Text>{journey.date}</Text>
+                            <Text>{journeyData['date']}</Text>
                         </View>
 
                         <View style={styles.listInfo}>
                             <Text style={styles.infoTitle}>Information about the trip</Text>
-                            <Text>{mapModel.calcDistance(startCoordinates[0], startCoordinates[1], endCoordinates[0], endCoordinates[1])} km / {journey.totalMin} min </Text>
+                            <Text>{mapModel.calcDistance(startCoordinates[0], startCoordinates[1], endCoordinates[0], endCoordinates[1])} km / {journeyData['totalMin']} min </Text>
 
-                            <Text> {journey.totalPrice} kr</Text>
+                            <Text> {journeyData['totalPrice']} kr</Text>
                         </View>
 
                         <View style={styles.listInfo}>
                             <Text style={styles.infoTitle}>ID</Text>
-                            <Text>{journey['_id']}</Text>
+                            <Text>{journeyData['_id']}</Text>
                         </View>
 
                         <View style={styles.listInfo}>
                             <Text style={styles.infoTitle}>Vehicle</Text>
-                            <Text>{journey.scooterName}</Text>
+                            <Text>{journeyData['scooterName']}</Text>
                         </View>
 
                     </View>

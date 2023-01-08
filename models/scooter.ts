@@ -41,12 +41,17 @@ const scooterModel = {
     startScooter: async function startScooter(scooterId: string, position: object, scooterPosition: object) {
         const token = await storage.readToken();
         const user = await storage.readUser();
+        const maxDistance2Scooter = 20;
 
         const userId = user['userData']['id'];        
         
         const distance2User = scooterModel.getProximity(position, scooterPosition);
 
-        if (distance2User > 20) {
+        /**
+         * Check if user is close enough to unlock the scooter
+         * Comment below if-statement to remove this functionality
+         */
+        if (distance2User > maxDistance2Scooter) {
             const message = {
                 errors: {
                     title: 'You are too far away from this scooter'
@@ -55,6 +60,7 @@ const scooterModel = {
 
             return message;
         }
+
 
         const body = {
             'scooter_id': `${scooterId}`,
@@ -143,8 +149,6 @@ const scooterModel = {
     },
 
     getProximity: function getProximity(userPosition, scooterPosition) {
-        
-
         
         function degrees2Radius(deg) {
             return deg * (Math.PI/180)

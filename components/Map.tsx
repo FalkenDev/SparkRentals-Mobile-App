@@ -114,28 +114,39 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
              */
             const zones = mapModel.getZones(city);
             setZones(zones);
-
-
-            /**
-             * Get all scooters and create markers for them on the map
-             */
-            const result = await scooterModel.getScooters(API_KEY, city); 
-
-            const scooters = result['cityScooters'];
-            const sortedScooters = scooterModel.sortAvailableScooters(scooters);
-
-            setScooters(sortedScooters);
             
         };
         setUpMap();
     }, []);
+
+    /**
+     * Get scooters for current city,
+     * Updated every 5 seconds
+     */
+    useEffect(() => {
+        const interval = setInterval(() => {
+
+            // Get scooters
+            async function getScooters() {
+                const result = await scooterModel.getScooters(API_KEY, currentCity); 
+
+                const scooters = result['cityScooters'];
+                const sortedScooters = scooterModel.sortAvailableScooters(scooters);
+                setScooters(sortedScooters);
+            };
+
+            getScooters();
+
+        }, 5000);
+        return () => clearInterval(interval);
+      }, []);
 
 
     return (
         <View style={styles.container}>
             <MapView
                 style={styles.map}
-                region={{
+                initialRegion={{
                     latitude: position.latitude? position.latitude : 0,
                     longitude: position.longitude? position.longitude : 0,
                     latitudeDelta: 0.03,
@@ -147,8 +158,6 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
 
                 {scooters.map((s, index) => 
                     <Marker
-                        // title={s['name']}
-                        // description={`Charge ${s['battery']}% ${s['status']}`}
                         coordinate={s['coordinates']}
                         icon={markerIcon(index, markerSelected)}
                         tappable={true}

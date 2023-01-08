@@ -6,6 +6,7 @@ import userModel from '../../models/user';
 import authModel from '../../models/auth';
 import Icon from 'react-native-vector-icons/Octicons';
 import { showMessage, hideMessage } from "react-native-flash-message";
+import DeleteModal from '../modals/DeleteModal';
 
 
 export default function Profile({navigation, setIsLoggedIn}): any {
@@ -140,13 +141,16 @@ export default function Profile({navigation, setIsLoggedIn}): any {
                         <Text>Logout</Text>
                     </Pressable>
 
-                    <Pressable style={[styles.prepaidButton, {backgroundColor: 'tomato'}]} >
+                    <Pressable style={[styles.prepaidButton, {backgroundColor: 'tomato'}]} onPress={() => {
+                        setModalVisible(!modalVisible);
+                    }}>
                         <Text>Delete account</Text>
                     </Pressable>
                 </View>
                 
-            </View>            
-
+            </View>
+            
+            <DeleteModal navigation={navigation} modalVisible={modalVisible} setModalVisible={setModalVisible} setIsLoggedIn={setIsLoggedIn}></DeleteModal>
         </View>
     )
 }

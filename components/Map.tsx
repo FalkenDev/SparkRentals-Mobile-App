@@ -123,9 +123,6 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
 
             const scooters = result['cityScooters'];
             const sortedScooters = scooterModel.sortAvailableScooters(scooters);
-            // console.log(scooters[0]);
-            
-            // console.log(sortedScooters[0]);
 
             setScooters(sortedScooters);
             
@@ -180,7 +177,7 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
                 ))}
             </MapView>
 
-            <ScooterModal navigation={navigation} scooter={currentScooter} modalVisible={modalVisible} currentCity={currentCity} setModalVisible={setModalVisible} setJourneyModal={setJourneyModal} setToggleTimer={setToggleTimer}/> 
+            <ScooterModal navigation={navigation} scooter={currentScooter} modalVisible={modalVisible} currentCity={currentCity} setModalVisible={setModalVisible} setJourneyModal={setJourneyModal} setToggleTimer={setToggleTimer} position={position}/> 
 
             <ZoneModal navigation={navigation} zone={currentZone} zoneModalVisible={zoneModalVisible} setZoneModalVisible={setZoneModalVisible} />
             

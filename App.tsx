@@ -17,6 +17,7 @@ import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList,DrawerIt
 import { useNavigation } from '@react-navigation/native';
 import Wallet from './components/drawer/Wallet';
 import History from './components/drawer/History';
+import Profile from './components/drawer/Profile';
 
 
 const Stack = createNativeStackNavigator();
@@ -62,6 +63,9 @@ export default function App() {
           {(screenProps) => <History {...screenProps} />}
         </Drawer.Screen>
 
+        <Drawer.Screen name='Profile'>
+          {(screenProps) => <Profile {...screenProps} setIsLoggedIn={setIsLoggedIn}/>}
+        </Drawer.Screen>
         </Drawer.Navigator>
       </NavigationContainer>
 

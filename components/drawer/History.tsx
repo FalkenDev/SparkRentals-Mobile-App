@@ -26,13 +26,13 @@ export default function Wallet({navigation}): any {
                 setNoHistory(false);
             };
             getHistory();
-            
+
         });
 
     return (
         <View style={styles.container}>
 
-            <View style={[styles.infoContainer]}>
+            {/* <View style={[styles.infoContainer]}>
                 <Pressable style={[styles.backButton, styles.shadowProp]} onPress={() => navigation.navigate('Map')}>
                     <Icon 
                         name='x' 
@@ -42,6 +42,22 @@ export default function Wallet({navigation}): any {
                 </Pressable>
 
                 <Text style={styles.title}>Ride History</Text>
+            </View> */}
+
+            <View style={styles.titleContainer}>
+                
+                <Pressable style={[styles.backButton, styles.shadowProp]} onPress={() => navigation.navigate('Map')}>
+                    <Icon 
+                        name='x' 
+                        size={25} 
+                        color='black'
+                    />
+                </Pressable>
+                
+                <Text style={styles.title}>Ride History</Text>
+
+                <View style={{width: 50}}></View>
+
             </View>
             
             {noHistory ? 
@@ -72,13 +88,14 @@ export default function Wallet({navigation}): any {
                 </View>
                 </Pressable>
                 ))}
+                <HistoryMap navigation={navigation} journey={currentJourney} modalVisible={modalVisible} setModalVisible={setModalVisible}></HistoryMap>
                 </ScrollView>
-                
+                  
                 }
            
             
 
-                <HistoryMap navigation={navigation} journey={currentJourney} modalVisible={modalVisible} setModalVisible={setModalVisible}></HistoryMap>
+              
                 
         </View>
     )
@@ -105,6 +122,16 @@ const styles = StyleSheet.create({
         borderBottomColor: 'grey',
         // height: '100%'
         // justifyContent: 'space-around'
+    },
+
+    titleContainer: {
+        marginTop: 15,
+        // backgroundColor: 'orange',
+        width: '100%',
+        flexDirection: 'row',
+        height: 100,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
 
     textDistance: {
@@ -167,12 +194,9 @@ const styles = StyleSheet.create({
     },
 
     backButton: {
-        position: 'absolute',
         width: 40,
         height: 40, 
-        left: 20,
         backgroundColor: 'white',
-        top: 50,
         borderRadius: 25,
         borderWidth: 1,
         borderColor: 'gray',
@@ -197,7 +221,10 @@ const styles = StyleSheet.create({
 
     title: {
         fontWeight: 'bold',
-        fontSize: 20
+        fontSize: 20,
+        width: '70%',
+        textAlign: 'center'
+        // marginBottom: 30
     },
 
     balance: {

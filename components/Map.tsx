@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ScrollView, Image, Text, View, StyleSheet, StatusBar, Button, Pressable } from 'react-native';
+import { ScrollView, Image, Text, View, StyleSheet, StatusBar, Button, Pressable, InteractionManagerStatic } from 'react-native';
 import MapView, { Marker, Circle, Polygon } from 'react-native-maps';
 import * as Location from 'expo-location';
 import React from 'react';
@@ -16,9 +16,30 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 import QrScanner from './modals/QrScanner';
 import JourneyModal from './modals/JourneyModal';
 
+const marker = require('../assets/scooter_white.png');
+const selectedMarker = require('../assets/scooter_blue.png');
+
+function markerIcon(index, selected) {
+    if (index === selected) {
+        return selectedMarker;
+    }
+    return marker;
+};
+
+function DrawerButton({navigation}) {
+    return (
+      <Pressable style={[styles.drawer, styles.shadowProp]} onPress={() => navigation.openDrawer()}> 
+        <Icon 
+        name='three-bars' 
+        size={30} 
+        color='black'
+        />
+      </Pressable>
+    );
+};
+
 export default function Map({navigation, API_KEY, position, setPosition, token}): any {
     const [locationMarker, setLocationMarker] = useState(null);
-    const [highlight, setHighlight] = useState(null);    
     const [currentCity, setCurrentCity] = useState(null);
     const [zones, setZones] = useState([]);
     const [scooters, setScooters] = useState([]);
@@ -29,9 +50,8 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
     const [cameraVisible, setCameraVisible] = useState(false);
     const [journeyModal, setJourneyModal] = useState(false);
     const [toggleTimer, setToggleTimer] = useState(false);
-
-    
-    
+    const [markerSelected, setMarkerSelected] = useState(null);
+        
     /**
      * Set user position
      */
@@ -114,18 +134,6 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
     }, []);
 
 
-    function DrawerButton({navigation}) {
-        return (
-          <Pressable style={[styles.drawer, styles.shadowProp]} onPress={() => navigation.openDrawer()}> 
-            <Icon 
-            name='three-bars' 
-            size={30} 
-            color='black'
-            />
-          </Pressable>
-        );
-      };
-
     return (
         <View style={styles.container}>
             <MapView
@@ -145,12 +153,13 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
                         // title={s['name']}
                         // description={`Charge ${s['battery']}% ${s['status']}`}
                         coordinate={s['coordinates']}
-                        icon={require('../assets/Scooter1.png')}
+                        icon={markerIcon(index, markerSelected)}
                         tappable={true}
                         key={index}
                         onPress={() => {
-                            setCurrentScooter(s)
-                            setModalVisible(true)
+                            setCurrentScooter(s);
+                            setModalVisible(true);
+                            setMarkerSelected(index);
                         }}
                         >
                     </Marker>
@@ -171,8 +180,7 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
                 ))}
             </MapView>
 
-    
-            <ScooterModal navigation={navigation} scooter={currentScooter} modalVisible={modalVisible} currentCity={currentCity} setModalVisible={setModalVisible} setJourneyModal={setJourneyModal} setToggleTimer={setToggleTimer}/>
+            <ScooterModal navigation={navigation} scooter={currentScooter} modalVisible={modalVisible} currentCity={currentCity} setModalVisible={setModalVisible} setJourneyModal={setJourneyModal} setToggleTimer={setToggleTimer}/> 
 
             <ZoneModal navigation={navigation} zone={currentZone} zoneModalVisible={zoneModalVisible} setZoneModalVisible={setZoneModalVisible} />
             

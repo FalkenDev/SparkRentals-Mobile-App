@@ -54,6 +54,7 @@ export default function ScooterModal({navigation, scooter, modalVisible, setModa
 
     async function startJourney() {
         const result = await scooterModel.startScooter(scooterId);
+        setToggleTimer(true);
 
         if (Object.prototype.hasOwnProperty.call(result, 'errors')) {
             showMessage({
@@ -68,7 +69,6 @@ export default function ScooterModal({navigation, scooter, modalVisible, setModa
             message: result['message'],
             type: 'success'
         });
-
         setModalVisible(!modalVisible);
         setJourneyModal(true);
     };
@@ -83,7 +83,7 @@ export default function ScooterModal({navigation, scooter, modalVisible, setModa
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-            setModalVisible(!modalVisible)
+            setModalVisible(!modalVisible);
         }}
 
         >
@@ -105,7 +105,6 @@ export default function ScooterModal({navigation, scooter, modalVisible, setModa
  
                 <Pressable style={styles.tourButton} onPress={() => {
                     startJourney();
-                    setToggleTimer(true);
                 }}>
                     <Text style={{color: 'white'}}>Start tour</Text>
                 </Pressable>

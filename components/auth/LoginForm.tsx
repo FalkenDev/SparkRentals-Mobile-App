@@ -51,7 +51,8 @@ export default function LoginForm({navigation, setIsLoggedIn}) {
             <TextInput
             placeholder="Password"
             style={styles.input}
-            keyboardType="visible-password"
+            keyboardType='numbers-and-punctuation'
+            secureTextEntry={true}
             onChangeText={(content: string) => {
                 setPassword(content)
             }}

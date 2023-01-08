@@ -88,6 +88,55 @@ const userModel = {
         return user;
     },
 
+    updateUser: async function updateUser(userData: object) {
+        const token = await storage.readToken();
+        const userId = await storage.readUser();
+        const user = await userModel.getUserData(userId);
+        
+        const body = {
+            'user_id': user['user']['_id'],
+            'firstName': userData['firstname'],
+            'lastName': userData['lastname'],
+            'phoneNumber': userData['phonenumber'],
+            'email': userData['email'],
+            'api_key': API_KEY
+        };
+
+        
+
+        // Prepare body to be urlencoded
+        const formBody = [];
+
+        for (const property in body) {
+            const encodedKey = encodeURIComponent(property);
+            const encodedValue = encodeURIComponent(body[property]);
+                formBody.push(encodedKey + "=" + encodedValue);
+        };
+        
+        const requestBody = formBody.join("&");
+
+        const response = await fetch(`${config.base_url}users`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                'x-access-token': token['token']
+            },
+            body: requestBody
+        });
+
+        if (response.status === 204) {
+            const message = {
+                message: 'Profile Changed',
+            };
+
+            return message;
+        };
+
+        const result = await response.json();
+
+        return result;
+        
+    }
 };
 
 export default userModel;

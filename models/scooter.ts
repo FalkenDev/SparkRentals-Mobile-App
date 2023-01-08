@@ -26,7 +26,7 @@ const scooterModel = {
         return result;
     },
 
-    sortAvailableScooters: function sortAvailableScooters(scooters: object) {
+    sortAvailableScooters: function sortAvailableScooters(scooters: string[]) {
         const availableScooters = [];
         
         for (let i = 0; i < scooters.length; i++) {

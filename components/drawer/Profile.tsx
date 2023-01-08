@@ -5,6 +5,8 @@ import { StyleSheet, Text, View, Pressable, Modal, TextInput} from 'react-native
 import userModel from '../../models/user';
 import authModel from '../../models/auth';
 import Icon from 'react-native-vector-icons/Octicons';
+import { showMessage, hideMessage } from "react-native-flash-message";
+
 
 export default function Profile({navigation, setIsLoggedIn}): any {
     const [balance, setBalance] = useState(null);
@@ -30,12 +32,13 @@ export default function Profile({navigation, setIsLoggedIn}): any {
 
         };
         getUser();
-    });
+    }, []);
 
     function setFirstLastName(name: string): void {
         const userName = name.split(' ');
+        
         const firstName = userName[0];
-        const lastName = userName[1];
+        const lastName = userName[1];        
 
         setFirstname(firstName);
         setLastname(lastName);
@@ -45,6 +48,32 @@ export default function Profile({navigation, setIsLoggedIn}): any {
         await authModel.logout();
         setIsLoggedIn(false);
         navigation.navigate('Auth');
+    };
+
+    async function save() {
+        // Prepare user data object
+        const userData = {
+            firstname: firstname,
+            lastname: lastname,
+            email: email,
+            phonenumber: phonenumber
+        };        
+
+        const result = await userModel.updateUser(userData);
+
+        if (Object.prototype.hasOwnProperty.call(result, 'errors')) {
+            showMessage({
+                message: result['errors']['title'],
+                type: 'danger'
+            })
+
+            return;
+        };
+
+        showMessage({
+            message: result['message'],
+            type: 'success'
+        });
     };
 
     return (
@@ -65,7 +94,7 @@ export default function Profile({navigation, setIsLoggedIn}): any {
                     
                     <Text style={styles.title}>Profile</Text>
 
-                    <Pressable style={styles.saveButton} >
+                    <Pressable style={styles.saveButton} onPress={() => save()}>
                             <Text style={styles.saveText}>Save</Text>
                     </Pressable>
 
@@ -78,15 +107,16 @@ export default function Profile({navigation, setIsLoggedIn}): any {
                     
 
                     <TextInput
-                        placeholder={`${firstname} ${lastname}`}
+                        value={`${firstname} ${lastname}`}
                         style={styles.input}
                         onChangeText={(content: string) => {
                             setFirstLastName(content)
                         }}
+
                     />
 
                     <TextInput
-                        placeholder={email}
+                        value={email}
                         style={styles.input}
                         keyboardType="email-address"
                         onChangeText={(content: string) => {
@@ -96,7 +126,7 @@ export default function Profile({navigation, setIsLoggedIn}): any {
 
 
                     <TextInput
-                        placeholder={phonenumber}
+                        value={phonenumber}
                         style={styles.input}
                         keyboardType="phone-pad"
                         onChangeText={(content: string) => {

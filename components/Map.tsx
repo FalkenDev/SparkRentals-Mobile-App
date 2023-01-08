@@ -125,16 +125,19 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
      */
     useEffect(() => {
         const interval = setInterval(() => {
-
+            
             // Get scooters
             async function getScooters() {
-                const result = await scooterModel.getScooters(API_KEY, currentCity); 
+                const city = await mapModel.getClosestCity(position);
+
+                const result = await scooterModel.getScooters(API_KEY, city); 
 
                 const scooters = result['cityScooters'];
                 const sortedScooters = scooterModel.sortAvailableScooters(scooters);
                 setScooters(sortedScooters);
             };
 
+      
             getScooters();
 
         }, 5000);
@@ -147,8 +150,8 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
             <MapView
                 style={styles.map}
                 initialRegion={{
-                    latitude: position.latitude? position.latitude : 0,
-                    longitude: position.longitude? position.longitude : 0,
+                    latitude: position.latitude? position.latitude : 56.161013580817986,
+                    longitude: position.longitude? position.longitude : 15.587742977884904,
                     latitudeDelta: 0.03,
                     longitudeDelta: 0.03,
                 }}

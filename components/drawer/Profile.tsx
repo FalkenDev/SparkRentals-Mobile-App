@@ -127,7 +127,8 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       alignItems: 'center',
       height: '50%',
-      width: '100%'
+      width: '100%',
+    //   position: 'absolute'
 
     },
 
@@ -174,11 +175,9 @@ const styles = StyleSheet.create({
 
     infoContainer: {
         width: '100%',
-        height: '100%',
+        height: 900,
         alignItems: 'center',
         justifyContent: 'center',
-        // backgroundColor: 'blue',
-
     },
 
     buttonContainer: {

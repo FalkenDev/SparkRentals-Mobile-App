@@ -16,9 +16,10 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 import QrScanner from './modals/QrScanner';
 import JourneyModal from './modals/JourneyModal';
 
+
+
 export default function Map({navigation, API_KEY, position, setPosition, token}): any {
     const [locationMarker, setLocationMarker] = useState(null);
-    const [highlight, setHighlight] = useState(null);    
     const [currentCity, setCurrentCity] = useState(null);
     const [zones, setZones] = useState([]);
     const [scooters, setScooters] = useState([]);
@@ -145,7 +146,7 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
                         // title={s['name']}
                         // description={`Charge ${s['battery']}% ${s['status']}`}
                         coordinate={s['coordinates']}
-                        icon={require('../assets/Scooter1.png')}
+                        icon={require('../assets/scooter_white.png')}
                         tappable={true}
                         key={index}
                         onPress={() => {

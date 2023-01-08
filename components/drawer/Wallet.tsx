@@ -31,9 +31,8 @@ export default function Wallet({navigation}): any {
 
     return (
         <View style={styles.container}>
-
-
-            <View style={[styles.infoContainer]}>
+        <View style={styles.titleContainer}>
+                
                 <Pressable style={[styles.backButton, styles.shadowProp]} onPress={() => navigation.navigate('Map')}>
                     <Icon 
                         name='x' 
@@ -41,8 +40,15 @@ export default function Wallet({navigation}): any {
                         color='black'
                     />
                 </Pressable>
+                
+                <Text style={styles.title}>Your balance</Text>
 
-                <Text style={styles.title}>Your Balance</Text>
+                <View style={{width: 50}}></View>
+
+            </View>
+
+
+            <View style={[styles.infoContainer]}>
                 <Text style={styles.balance}>{balance} kr</Text>
                 <Text style={styles.info}>You should have at least SEK 30 in your wallet to start the journey</Text>
             </View>
@@ -112,6 +118,17 @@ const styles = StyleSheet.create({
 
     },
 
+    titleContainer: {
+        marginTop: 15,
+        // backgroundColor: 'orange',
+        width: '100%',
+        flexDirection: 'row',
+        height: 100,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+
+
     prepaidButton: {
         backgroundColor: 'cornflowerblue',
         width: '90%',
@@ -136,7 +153,7 @@ const styles = StyleSheet.create({
 
     infoContainer: {
         width: '100%',
-        height: '50%',
+        height: 350,
         alignItems: 'center',
         justifyContent: 'space-evenly',
         // backgroundColor: 'blue',
@@ -161,12 +178,9 @@ const styles = StyleSheet.create({
     },
 
     backButton: {
-        position: 'absolute',
         width: 40,
         height: 40, 
-        left: 20,
         backgroundColor: 'white',
-        top: 50,
         borderRadius: 25,
         borderWidth: 1,
         borderColor: 'gray',
@@ -191,7 +205,10 @@ const styles = StyleSheet.create({
 
     title: {
         fontWeight: 'bold',
-        fontSize: 20
+        fontSize: 20,
+        width: '70%',
+        textAlign: 'center'
+        // marginBottom: 30
     },
 
     balance: {

@@ -29,13 +29,10 @@ const userModel = {
     },
 
     getHistory: async function getHistory(): Promise<any> {
-        /**
-         * HARDCODED VALUES FOR TESTING, NOT FINAL FUNCTION!!
-         */
         const user = await storage.readUser();
         const userId = user['userData']['id']
         
-        // const userData = await storage.readUser();
+
         const token = await storage.readToken();                
         const respone = await fetch(`${config.base_url}users/${userId}?api_key=${API_KEY}`, {
             method: 'GET',

@@ -8,13 +8,14 @@ import scooterModel from "../../models/scooter";
 import { start } from "react-native-compass-heading";
 import { showMessage, hideMessage } from "react-native-flash-message";
 
-export default function ScooterModal({navigation, scooter, modalVisible, setModalVisible, currentCity, setJourneyModal, setToggleTimer}) {
+export default function ScooterModal({navigation, scooter, modalVisible, setModalVisible, currentCity, setJourneyModal, setToggleTimer, position}) {
     const [scooterName, setScooterName] = useState(null);
     const [scooterNumber, setScooterNumber] = useState(null);
     const [battery, setBattery] = useState(null);
     const [fixedRate, setFixedRate] = useState(null);
     const [timeRate, setTimeRate] = useState(null);
     const [scooterId, setScooterId] = useState(null);
+    const [scooterPosition, setScooterPosition] = useState(null);
 
     const batteryImages = {
         '100': require('../../assets/battery_100.png'),
@@ -43,9 +44,10 @@ export default function ScooterModal({navigation, scooter, modalVisible, setModa
                 setScooterNumber(title[1]);
                 setBattery(getBattery(scooter['battery']));
                 setScooterId(scooter['_id']);
-
+                setScooterPosition(scooter['coordinates']);
                 setFixedRate(currentCity['taxRates']['fixedRate']);
-                setTimeRate(currentCity['taxRates']['timeRate']);                
+                setTimeRate(currentCity['taxRates']['timeRate']);
+                
             }
         }
         getScooterInfo();
@@ -53,7 +55,7 @@ export default function ScooterModal({navigation, scooter, modalVisible, setModa
 
 
     async function startJourney() {
-        const result = await scooterModel.startScooter(scooterId);
+        const result = await scooterModel.startScooter(scooterId, position, scooterPosition);
         setToggleTimer(true);
 
         if (Object.prototype.hasOwnProperty.call(result, 'errors')) {

@@ -112,7 +112,8 @@ export default function EmailForm({setToken, navigation, setIsLoggedIn}) {
             <TextInput
             placeholder="Password"
             style={styles.input}
-            keyboardType="visible-password"
+            keyboardType='numbers-and-punctuation'
+            secureTextEntry={true}
             onChangeText={(content: string) => {
                 setPassword(content)
             }}

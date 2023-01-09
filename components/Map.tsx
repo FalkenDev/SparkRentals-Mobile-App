@@ -114,33 +114,44 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
              */
             const zones = mapModel.getZones(city);
             setZones(zones);
-
-
-            /**
-             * Get all scooters and create markers for them on the map
-             */
-            const result = await scooterModel.getScooters(API_KEY, city); 
-
-            const scooters = result['cityScooters'];
-            const sortedScooters = scooterModel.sortAvailableScooters(scooters);
-            // console.log(scooters[0]);
-            
-            // console.log(sortedScooters[0]);
-
-            setScooters(sortedScooters);
             
         };
         setUpMap();
     }, []);
+
+    /**
+     * Get scooters for current city,
+     * Updated every 5 seconds
+     */
+    useEffect(() => {
+        const interval = setInterval(() => {
+
+            // Get scooters
+            async function getScooters() {
+                const city = await mapModel.getClosestCity(position);
+
+                const result = await scooterModel.getScooters(API_KEY, city); 
+
+                const scooters = result['cityScooters'];
+                const sortedScooters = scooterModel.sortAvailableScooters(scooters);
+                setScooters(sortedScooters);
+            };
+
+      
+            getScooters();
+
+        }, 5000);
+        return () => clearInterval(interval);
+      }, []);
 
 
     return (
         <View style={styles.container}>
             <MapView
                 style={styles.map}
-                region={{
-                    latitude: position.latitude? position.latitude : 0,
-                    longitude: position.longitude? position.longitude : 0,
+                initialRegion={{
+                    latitude: position.latitude? position.latitude : 56.161013580817986,
+                    longitude: position.longitude? position.longitude : 15.587742977884904,
                     latitudeDelta: 0.03,
                     longitudeDelta: 0.03,
                 }}
@@ -150,8 +161,6 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
 
                 {scooters.map((s, index) => 
                     <Marker
-                        // title={s['name']}
-                        // description={`Charge ${s['battery']}% ${s['status']}`}
                         coordinate={s['coordinates']}
                         icon={markerIcon(index, markerSelected)}
                         tappable={true}
@@ -159,7 +168,7 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
                         onPress={() => {
                             setCurrentScooter(s);
                             setModalVisible(true);
-                            setMarkerSelected(index);
+                            setMarkerSelected(index);                            
                         }}
                         >
                     </Marker>
@@ -180,7 +189,7 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
                 ))}
             </MapView>
 
-            <ScooterModal navigation={navigation} scooter={currentScooter} modalVisible={modalVisible} currentCity={currentCity} setModalVisible={setModalVisible} setJourneyModal={setJourneyModal} setToggleTimer={setToggleTimer}/> 
+            <ScooterModal navigation={navigation} scooter={currentScooter} modalVisible={modalVisible} currentCity={currentCity} setModalVisible={setModalVisible} setJourneyModal={setJourneyModal} setToggleTimer={setToggleTimer} position={position}/> 
 
             <ZoneModal navigation={navigation} zone={currentZone} zoneModalVisible={zoneModalVisible} setZoneModalVisible={setZoneModalVisible} />
             

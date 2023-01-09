@@ -38,11 +38,29 @@ const scooterModel = {
         return availableScooters;
     },
 
-    startScooter: async function startScooter(scooterId: string) {
+    startScooter: async function startScooter(scooterId: string, position: object, scooterPosition: object) {
         const token = await storage.readToken();
         const user = await storage.readUser();
+        const maxDistance2Scooter = 20;
 
-        const userId = user['userData']['id'];
+        const userId = user['userData']['id'];        
+        
+        const distance2User = scooterModel.getProximity(position, scooterPosition);
+
+        /**
+         * Check if user is close enough to unlock the scooter
+         * Comment below if-statement to remove this functionality
+         */
+        // if (distance2User > maxDistance2Scooter) {
+        //     const message = {
+        //         errors: {
+        //             title: 'You are too far away from this scooter'
+        //         }
+        //     }
+
+        //     return message;
+        // }
+
 
         const body = {
             'scooter_id': `${scooterId}`,
@@ -128,6 +146,38 @@ const scooterModel = {
         const result = await response.json();
         
         return result;
+    },
+
+    getProximity: function getProximity(userPosition, scooterPosition) {
+        
+        function degrees2Radius(deg) {
+            return deg * (Math.PI/180)
+        };
+
+        const lat1 = userPosition['latitude'];
+        const lat2 = scooterPosition['latitude'];
+
+        const lon1 = userPosition['longitude'];
+        const lon2 = scooterPosition['longitude'];
+
+        const R = 6371; //Radius of earth
+
+
+        const dLat = degrees2Radius(lat2 - lat1);
+        const dLon = degrees2Radius(lon2 - lon1);
+
+        const a =
+             Math.sin(dLat/2) * Math.sin(dLat/2) +
+             Math.cos(degrees2Radius(lat1)) * Math.cos(degrees2Radius(lat2)) *
+             Math.sin(dLon/2) * Math.sin(dLon/2)
+             ;
+
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+        const proximity = R * c;
+
+        // Return distance in meters
+        return proximity * 1000
     },
 
 }

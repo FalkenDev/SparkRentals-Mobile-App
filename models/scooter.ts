@@ -51,15 +51,15 @@ const scooterModel = {
          * Check if user is close enough to unlock the scooter
          * Comment below if-statement to remove this functionality
          */
-        if (distance2User > maxDistance2Scooter) {
-            const message = {
-                errors: {
-                    title: 'You are too far away from this scooter'
-                }
-            }
+        // if (distance2User > maxDistance2Scooter) {
+        //     const message = {
+        //         errors: {
+        //             title: 'You are too far away from this scooter'
+        //         }
+        //     }
 
-            return message;
-        }
+        //     return message;
+        // }
 
 
         const body = {

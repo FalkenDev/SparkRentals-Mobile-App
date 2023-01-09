@@ -125,7 +125,7 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
      */
     useEffect(() => {
         const interval = setInterval(() => {
-            
+
             // Get scooters
             async function getScooters() {
                 const city = await mapModel.getClosestCity(position);
@@ -168,7 +168,7 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
                         onPress={() => {
                             setCurrentScooter(s);
                             setModalVisible(true);
-                            setMarkerSelected(index);
+                            setMarkerSelected(index);                            
                         }}
                         >
                     </Marker>

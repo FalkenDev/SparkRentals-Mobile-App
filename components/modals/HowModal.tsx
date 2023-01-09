@@ -6,8 +6,6 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 
 export default function HowModal({navigation, modalVisible, setModalVisible}) {
 
-   
-
     return (
         <Modal
         animationType='fade'

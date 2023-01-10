@@ -10,7 +10,7 @@ const scooterModel = {
      * @param city 
      * @returns 
      */
-    getScooters: async function getScooters(API_KEY: string, city: object): Promise<object> {
+    getScooters: async function getScooters(city: object): Promise<object> {
         const token = await storage.readToken();
 
         const cityName = city['name'];

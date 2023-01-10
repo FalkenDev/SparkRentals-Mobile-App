@@ -26,18 +26,6 @@ function markerIcon(index, selected) {
     return marker;
 };
 
-function DrawerButton({navigation}) {
-    return (
-      <Pressable style={[styles.drawer, styles.shadowProp]} onPress={() => navigation.openDrawer()}> 
-        <Icon 
-        name='three-bars' 
-        size={30} 
-        color='black'
-        />
-      </Pressable>
-    );
-};
-
 export default function Map({navigation, API_KEY, position, setPosition, token}): any {
     const [locationMarker, setLocationMarker] = useState(null);
     const [currentCity, setCurrentCity] = useState(null);
@@ -114,7 +102,7 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
              */
             const zones = mapModel.getZones(city);
             setZones(zones);
-            
+
         };
         setUpMap();
     }, []);
@@ -129,12 +117,15 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
             // Get scooters
             async function getScooters() {
                 const city = await mapModel.getClosestCity(position);
+                
+                const result = await scooterModel.getScooters(city); 
+                
+                if (result) {
+                    const scooters = result['cityScooters'];
+                    const sortedScooters = scooterModel.sortAvailableScooters(scooters);
+                    setScooters(sortedScooters);
+                };
 
-                const result = await scooterModel.getScooters(API_KEY, city); 
-
-                const scooters = result['cityScooters'];
-                const sortedScooters = scooterModel.sortAvailableScooters(scooters);
-                setScooters(sortedScooters);
             };
 
       

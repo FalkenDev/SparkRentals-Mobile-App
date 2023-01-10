@@ -6,6 +6,18 @@ import mapModel from "../../models/map";
 import GestureRecognizer from 'react-native-swipe-gestures';
 
 export default function ZoneModal({navigation, zone, zoneModalVisible, setZoneModalVisible}) {
+    const [zoneType, setZoneType] = useState(null);
+
+    useEffect(() => {
+        function getZoneData() {
+            if (zone) {
+                setZoneType(zone['zoneType'])
+            }
+        }
+        getZoneData();
+    });
+
+
     
     return (
         <GestureRecognizer
@@ -34,7 +46,7 @@ export default function ZoneModal({navigation, zone, zoneModalVisible, setZoneMo
 
                 </View>
 
-                <Text style={{color: 'grey'}}> Park here and reduce null from your trip. </Text>
+                <Text style={{color: 'grey'}}> {zoneType}: Park here and reduce  from your trip. </Text>
  
                 <Pressable 
                 style={styles.tourButton} 

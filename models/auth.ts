@@ -34,8 +34,7 @@ const authModel = {
 
     login: async function login(user: object): Promise<Object> {
         user['api_key'] = API_KEY;
-        
-        
+                
         const response = await fetch(`${config.base_url}auth/login/server/user`, {
             method: 'POST',
             body: JSON.stringify(user),
@@ -45,8 +44,6 @@ const authModel = {
         });
 
         const result = await response.json();
-        // console.log(result);
-        // console.log(result);
         
         if (Object.prototype.hasOwnProperty.call(result, 'errors')) {
             return {
@@ -57,9 +54,7 @@ const authModel = {
         }
                 
         //Store userdata
-        const userData = result['data']['user'];
-        // console.log(userData);
-        
+        const userData = result['data']['user'];        
         
         await storage.storeUser(userData);
 
@@ -87,7 +82,7 @@ const authModel = {
         );
     },
 
-    logout: async function logout() {
+    logout: async function logout(): Promise<void> {
         await storage.deleteToken();
     },
 };

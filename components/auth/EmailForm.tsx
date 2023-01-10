@@ -6,6 +6,7 @@ import EmailRegister from "./EmailRegister";
 import CheckBox from 'expo-checkbox';
 import FlashMessage from 'react-native-flash-message';
 import { showMessage, hideMessage } from "react-native-flash-message";
+import TermsModal from "../modals/TermsModal";
 
 export default function EmailForm({setToken, navigation, setIsLoggedIn}) {
     const [name, setName] = useState(null);
@@ -13,6 +14,8 @@ export default function EmailForm({setToken, navigation, setIsLoggedIn}) {
     const [password, setPassword] = useState(null);
     const [phonenumber, setPhonenumber] = useState(null);
     const [accept, setAccepts] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [termsVisible, setTermsVisible] = useState(false);
 
     async function createUser() {
 
@@ -141,7 +144,25 @@ export default function EmailForm({setToken, navigation, setIsLoggedIn}) {
                 >
 
                 </CheckBox>
-                <Text style={styles.termsText}>By registering, you agree to our terms and conditions and privacy policy.</Text>
+                
+                <View style={styles.termsTextContainer}>
+                    <Text style={styles.termsText}>By registering, you agree to our </Text> 
+                    <Pressable onPress={() => {
+                        setModalVisible(!modalVisible);
+                        setTermsVisible(true);
+                    }}>
+                        <Text style={[styles.termsText, {color: 'blue'}]}>terms and conditions </Text> 
+                    </Pressable>
+                    <Text style={styles.termsText}>and </Text> 
+
+                    <Pressable onPress={() => {
+                        setModalVisible(!modalVisible);
+                        setTermsVisible(false);
+                    }}>
+                        <Text style={[styles.termsText, {color: 'blue'}]}>privacy policy.</Text>
+                    </Pressable>
+                </View>
+                
             </View>
             
             {accept ? 
@@ -153,6 +174,7 @@ export default function EmailForm({setToken, navigation, setIsLoggedIn}) {
                 <Text style={styles.greyedOut}>Register</Text>
                 </Pressable>
             }
+        <TermsModal navigation={navigation} modalVisible={modalVisible} setModalVisible={setModalVisible} termsVisible={termsVisible}/>
         <FlashMessage position={'top'}/>
         </View>
     );
@@ -185,7 +207,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 120,
+        marginTop: 100,
     },
 
     emailRegisterGray: {
@@ -196,7 +218,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 120,
+        marginTop: 100,
     },
 
     greyedOut: {
@@ -204,8 +226,9 @@ const styles = StyleSheet.create({
     },
 
     termsContainer: {
+        marginTop: 20,
         width: '80%',
-        alignItems: 'baseline',
+        alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
@@ -216,8 +239,8 @@ const styles = StyleSheet.create({
     },
 
     termsText: {
-        marginTop: 20,
-        width: '80%'
+        // marginTop: 20,
+        // width: '80%'
     },
 
     logo: {
@@ -234,6 +257,12 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
 
+    termsTextContainer: {
+        width: '80%',
+        flexDirection: 'row',
+        // backgroundColor: 'green',
+        flexWrap: 'wrap',
+    },
 });
 
 // firstName

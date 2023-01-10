@@ -68,10 +68,10 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
 
             const userCoordinates = {
                 //latlang hardcoded for testing
-                // latitude: currentLocation.coords.latitude,
-                // longitude: currentLocation.coords.longitude
-                latitude: 56.161013580817986,
-                longitude: 15.587742977884904
+                latitude: currentLocation.coords.latitude,
+                longitude: currentLocation.coords.longitude
+                // latitude: 56.161013580817986,
+                // longitude: 15.587742977884904
             };
 
     

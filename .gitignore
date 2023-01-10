@@ -11,6 +11,8 @@ npm-debug.*
 web-build/
 .env
 types/
+docker-compose.yml
+Dockerfile
 
 # macOS
 .DS_Store

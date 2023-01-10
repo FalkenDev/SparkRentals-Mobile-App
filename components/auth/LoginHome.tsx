@@ -22,6 +22,11 @@ export default function Login({navigation}): any {
     }
     return (
         <View style={styles.container}>
+
+            <View style={styles.logoContainer}>
+                <Image style={styles.titleLogo} source={require('../../assets/logo_light_big.png')}/>
+            </View>
+
             <View style={styles.imageContainer}>
                 <Image style={styles.splash} source={require('../../assets/splash.jpg')}></Image>
             </View>
@@ -73,7 +78,7 @@ const styles = StyleSheet.create({
     imageContainer: {
         position: 'absolute',
         width: deviceWidth * 1.1,
-        height: deviceHeight * 1.1
+        height: deviceHeight * 1.1,
     },
 
     logInContainer: {
@@ -85,6 +90,7 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         justifyContent: 'space-evenly',
+        zIndex: 2
     },
 
     googleLogin: {
@@ -117,5 +123,21 @@ const styles = StyleSheet.create({
     googleIcon: {
         height: 20,
         width: 20
+    },
+
+    titleLogo: {
+        width: 350,
+        height: 100
+    },
+
+    logoContainer: {
+        zIndex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        position: 'absolute',
+        top: 0,
+        height: deviceHeight * 0.80,
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
   });

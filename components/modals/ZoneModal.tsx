@@ -5,13 +5,27 @@ import { View, Text, TextInput, Button, Pressable, StyleSheet, Image, StatusBar,
 import mapModel from "../../models/map";
 import GestureRecognizer from 'react-native-swipe-gestures';
 
-export default function ZoneModal({navigation, zone, zoneModalVisible, setZoneModalVisible}) {
+export default function ZoneModal({navigation, zone, zoneModalVisible, setZoneModalVisible, currentCity}) {
     const [zoneType, setZoneType] = useState(null);
+    const [taxRates, setTaxRates] = useState(null);
+    const [zoneText, setZoneText] = useState(null);
+
+
 
     useEffect(() => {
         function getZoneData() {
             if (zone) {
                 setZoneType(zone['zoneType'])
+                setTaxRates(currentCity['taxRates'])
+
+                if (taxRates) {
+                    if (taxRates[`${zoneType}Rate`] > 0) {
+                        setZoneText(`Parking here will cost ${taxRates[`${zoneType}Rate`]}kr`)
+                    } else {
+                        setZoneText(`Park here to reduce ${taxRates[`${zoneType}Rate`]}kr from your trip`)
+                    }
+                }
+                
             }
         }
         getZoneData();
@@ -45,8 +59,8 @@ export default function ZoneModal({navigation, zone, zoneModalVisible, setZoneMo
                     </View>
 
                 </View>
-
-                <Text style={{color: 'grey'}}> {zoneType}: Park here and reduce  from your trip. </Text>
+                
+                <Text style={{color: 'grey'}}> {zoneType}: {zoneText}</Text>
  
                 <Pressable 
                 style={styles.tourButton} 

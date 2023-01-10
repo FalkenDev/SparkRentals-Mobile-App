@@ -122,6 +122,7 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
                 
                 if (result) {
                     const scooters = result['cityScooters'];
+                    
                     const sortedScooters = scooterModel.sortAvailableScooters(scooters);
                     setScooters(sortedScooters);
                 };
@@ -197,7 +198,7 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
             </Pressable>
 
             <NavBar navigation={navigation} />
-            <QrScanner navigation={navigation} cameraVisible={cameraVisible} setCameraVisible={setCameraVisible}/>
+            <QrScanner navigation={navigation} cameraVisible={cameraVisible} setCameraVisible={setCameraVisible} scooter={currentScooter} setModalVisible={setModalVisible} currentCity={currentCity} setCurrentScooter={setCurrentScooter}/>
         </View>
         
     )

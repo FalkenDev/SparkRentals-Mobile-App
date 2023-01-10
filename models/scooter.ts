@@ -180,6 +180,22 @@ const scooterModel = {
         return proximity * 1000
     },
 
+    checkIfValidScooter: async function checkIfValidScooter(scooterId: string, currentCity:object) {
+        const getScooters = await scooterModel.getScooters(currentCity);
+        const scooters = getScooters['cityScooters'];
+    
+        
+        
+        for (let i = 0; i < scooters.length; i++) {
+            
+            if (scooters[i]['_id'] === scooterId) {                
+                return scooters[i];
+            }
+        }
+            // console.log(scooter);
+        return false;
+    }
+
 }
 
 export default scooterModel;

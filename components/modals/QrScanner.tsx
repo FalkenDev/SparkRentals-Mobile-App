@@ -1,32 +1,61 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Button, Modal, Pressable } from 'react-native';
+import { Text, View, StyleSheet, Button, Modal, Pressable, TextInput } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import Icon from 'react-native-vector-icons/Octicons';
+import scooterModel from '../../models/scooter';
+import { showMessage, hideMessage } from "react-native-flash-message";
 
-export default function QrScanner({navigation, cameraVisible, setCameraVisible}) {
+export default function QrScanner({navigation, cameraVisible, setCameraVisible, scooter, setModalVisible, currentCity, setCurrentScooter}) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
+  const [code, setCode] = useState(null);
 
-  useEffect(() => {
-    const getBarCodeScannerPermissions = async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
+    useEffect(() => {
+      const getBarCodeScannerPermissions = async () => {
+        const { status } = await BarCodeScanner.requestPermissionsAsync();
+        setHasPermission(status === 'granted');
+      };
+
+      getBarCodeScannerPermissions();
+    }, []);
+
+    async function handleBarCodeScanned({ type, data }) {
+      setScanned(true);
+
+      await startScooter(data);
+      // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     };
 
-    getBarCodeScannerPermissions();
-  }, []);
+    if (hasPermission === null) {
+      return <Text>Requesting for camera permission</Text>;
+    }
+    if (hasPermission === false) {
+      return <Text>No access to camera</Text>;
+    }
 
-  const handleBarCodeScanned = ({ type, data }) => {
-    setScanned(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-  };
+    async function startScooter(scooter): Promise<void> {
+      // Check if QR code is a valid scooter
+      const result = await scooterModel.checkIfValidScooter(scooter, currentCity);
 
-  if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
+      
+      if (result) {
+        showMessage({
+          message: 'Scooter scanned!',
+          type: 'success'
+        });
+
+        setCameraVisible(!cameraVisible);
+        setModalVisible(true);
+        setCurrentScooter(result);
+      } else {
+        showMessage({
+          message: 'Not a scooter!',
+          type: 'danger'
+        })
+      }
+
+      
+    }
 
   return (
     <Modal
@@ -46,8 +75,15 @@ export default function QrScanner({navigation, cameraVisible, setCameraVisible})
                 />
             </Pressable>
             
-            <Text style={styles.title}> Scan the QR-code </Text>
-
+            <Text style={styles.title}>Scan the QR-code</Text>
+            <TextInput
+            placeholder="or enter code manually"
+            style={styles.input}
+            onChangeText={(content: string) => {
+                setCode(content)
+            }}
+            onSubmitEditing={() => startScooter(code)}
+            />
         <BarCodeScanner
             onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
             style={styles.viewFinder}
@@ -124,4 +160,24 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginTop: 30
     },
+
+    subTitle: {
+      position: 'absolute',
+      // fontWeight: 'bold',
+      fontSize: 12,
+      marginTop: 55,
+      color: 'gray'
+  },
+
+    input: {
+      width: '60%',
+      marginBottom: 30,
+      borderRadius: 10,
+      height: 50,
+      padding: 10,
+      borderBottomWidth: 2,
+      borderColor: 'gray',
+      marginTop: 60,
+      textAlign: 'center'
+    }
 })

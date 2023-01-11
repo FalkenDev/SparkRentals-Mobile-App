@@ -14,7 +14,7 @@ export default function HistoryMap({navigation, journey, modalVisible, setModalV
     const [startCoordinates, setStartCoordinates] = useState([]);
     const [endCoordinates, setEndCoordinates] = useState([]);
     const [journeyData, setJourneyData] = useState([]);
-
+    const [startStop, setStartStop] = useState([]);
     // console.log(journey);
     
     useEffect(() => {
@@ -23,6 +23,10 @@ export default function HistoryMap({navigation, journey, modalVisible, setModalV
                 setStartCoordinates(journey['startPosition']);
                 setEndCoordinates(journey['endPosition']);
                 setJourneyData(journey);
+                console.log(startCoordinates);
+
+                console.log(endCoordinates);
+                
             }
             
         };
@@ -43,21 +47,40 @@ export default function HistoryMap({navigation, journey, modalVisible, setModalV
      
                 <MapView
                     style={styles.map}
-                    // region={{
-                    //     // latitude: position.latitude? position.latitude : 0,
-                    //     // longitude: position.longitude? position.longitude : 0,
-                    //     // latitudeDelta: 0.03,
-                    //     // longitudeDelta: 0.03,
-                    // }}
+                    region={{
+                        latitude: startCoordinates['latitude']? startCoordinates['latitude'] : 0,
+                        longitude: startCoordinates['longitude']? startCoordinates['longitude'] : 0,
+                        latitudeDelta: 0.05,
+                        longitudeDelta: 0.05,
+                    }}
                     userInterfaceStyle={'dark'}
                 >
-                <Marker 
-                    coordinate={{latitude: startCoordinates[0], longitude: startCoordinates[1]}}
-                />
 
+            {startCoordinates ? 
                 <Marker 
-                    coordinate={{latitude: endCoordinates[0], longitude: endCoordinates[1]}}
+                coordinate={{latitude: startCoordinates['latitude']? startCoordinates['latitude'] : 0,
+                longitude: startCoordinates['longitude']? startCoordinates['longitude'] : 0
+            }}
                 />
+                : 
+                <View></View>
+            }    
+
+            {endCoordinates ? 
+                <Marker 
+                coordinate={{latitude: endCoordinates['latitude']? endCoordinates['latitude'] : 0,
+                longitude: endCoordinates['longitude']? endCoordinates['longitude'] : 0
+            }}
+                />
+                : 
+                <View></View>
+            }  
+
+
+            
+
+                
+
                 </MapView>
 
                 <View style={styles.infoContainer}>
@@ -102,10 +125,12 @@ export default function HistoryMap({navigation, journey, modalVisible, setModalV
 
 const styles = StyleSheet.create({
     container: {
+        // position: 'absolute',
         // flex: 1,
         height: '100%',
         alignItems: "center",
-        width: '100%'
+        width: '100%',
+        // backgroundColor: 'white'
     },
 
     map: {

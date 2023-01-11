@@ -2,8 +2,6 @@ import React from "react";
 import { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, Pressable, StyleSheet, Image, StatusBar } from "react-native";
 import authModel from "../../models/auth";
-import EmailRegister from "./EmailRegister";
-import CheckBox from 'expo-checkbox';
 import FlashMessage from 'react-native-flash-message';
 import { showMessage, hideMessage } from "react-native-flash-message";
 
@@ -71,14 +69,12 @@ export default function LoginForm({navigation, setIsLoggedIn}) {
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
         height: '100%',
         alignItems: "center",
         width: '100%',
     },
 
     input: {
-        // backgroundColor: 'red',
         width: '90%',
         marginBottom: 30,
         borderRadius: 10,
@@ -133,12 +129,10 @@ const styles = StyleSheet.create({
 
     logo: {
         marginTop: 60,
-        // backgroundColor: 'red'
     },
 
     formTitle: {
         fontSize: 48,
-        // backgroundColor: 'red',
         width: '90%',
         fontWeight: 'bold',
         marginTop: 40,

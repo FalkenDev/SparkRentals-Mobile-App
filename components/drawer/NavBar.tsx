@@ -65,19 +65,14 @@ export default function NavBar({navigation, mapRef, position}) {
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
         position: 'absolute',
-        // backgroundColor: 'red',
-        // height: 60,
         justifyContent: 'space-evenly',
         width: '100%',
         flexDirection: 'row',
     },
     info: {
-        // position: 'absolute',
         width: 250,
         height: 40, 
-        // left: 50,
         backgroundColor: 'white',
         marginTop: 50,
         borderRadius: 25,
@@ -87,10 +82,8 @@ const styles = StyleSheet.create({
     },
 
     drawer: {
-        // position: 'absolute',
         width: 40,
         height: 40, 
-        // left: 50,
         backgroundColor: 'white',
         marginTop: 50,
         borderRadius: 25,

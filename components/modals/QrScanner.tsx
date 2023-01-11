@@ -23,7 +23,6 @@ export default function QrScanner({navigation, cameraVisible, setCameraVisible, 
       setScanned(true);
 
       await startScooter(data);
-      // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     };
 
     if (hasPermission === null) {
@@ -107,7 +106,6 @@ export default function QrScanner({navigation, cameraVisible, setCameraVisible, 
 
 const styles = StyleSheet.create({
     container: {
-    //   flex: 1,
       width: '100%',
       alignItems: 'center',
       backgroundColor: 'white',
@@ -144,10 +142,8 @@ const styles = StyleSheet.create({
     },
 
     cameraButton: {
-        // position: 'absolute',
         width: 60,
         height: 60, 
-        // left: 20,
         backgroundColor: 'white',
         bottom: 50,
         borderRadius: 50,
@@ -166,7 +162,6 @@ const styles = StyleSheet.create({
 
     subTitle: {
       position: 'absolute',
-      // fontWeight: 'bold',
       fontSize: 12,
       marginTop: 55,
       color: 'gray'

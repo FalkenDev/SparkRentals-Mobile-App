@@ -1,4 +1,3 @@
-import { stopLocationUpdatesAsync } from 'expo-location';
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Pressable, Modal, TextInput, ScrollView} from 'react-native';
@@ -101,28 +100,22 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#fff',
-    //   backgroundColor: 'red',
       alignItems: 'center',
-    //   justifyContent: 'space-evenly',
       height: '50%',
       width: '100%'
     },
 
     rideHistory: {
-        // backgroundColor: 'red',
         width: '100%',
         flexDirection: 'column',
         marginBottom: 20,
         borderBottomWidth: 1,
         padding: 5,
         borderBottomColor: 'grey',
-        // height: '100%'
-        // justifyContent: 'space-around'
     },
 
     titleContainer: {
         marginTop: 20,
-        // backgroundColor: 'orange',
         width: '100%',
         flexDirection: 'row',
         height: 100,
@@ -167,22 +160,12 @@ const styles = StyleSheet.create({
         height: '20%',
         alignItems: 'center',
         justifyContent: 'space-evenly',
-        // backgroundColor: 'blue',
 
     },
 
     prepaidContainer: {
         width: '90%',
         height: '90%',
-        // backgroundColor: 'red'
-        // alignItems: 'center',
-        // justifyContent: 'center',
-        // padding: 20,
-        // flex: 2,
-        // backgroundColor: 'red',
-        // borderTopWidth: 1,
-        // borderBottomWidth: 1,
-        // borderColor: 'grey',
     },
 
     buttonText: {
@@ -220,7 +203,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         width: '70%',
         textAlign: 'center'
-        // marginBottom: 30
     },
 
     balance: {
@@ -262,7 +244,6 @@ const styles = StyleSheet.create({
     },
 
     input: {
-        // backgroundColor: 'red',
         width: '90%',
         marginBottom: 30,
         borderRadius: 10,

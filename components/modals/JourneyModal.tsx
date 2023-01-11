@@ -1,8 +1,6 @@
-import { stopLocationUpdatesAsync } from "expo-location";
 import React from "react";
 import { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, Button, Pressable, StyleSheet, Image, StatusBar, Modal } from "react-native";
-import mapModel from "../../models/map";
 import GestureRecognizer from 'react-native-swipe-gestures';
 import scooterModel from "../../models/scooter";
 import { showMessage, hideMessage } from "react-native-flash-message";
@@ -17,7 +15,6 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
     const [battery, setBattery] = useState(null);
     const [scooterPosition, setScooterPosition] = useState(null);
     const [scooterId, setScooterId] = useState(null);
-    const [timer, setTimer] = useState(null);
     const markerRef = useRef(null);
     const [distance, setDistance] = useState(null);
     const [batteryPercentage, setBatteryPercentage] = useState(null);
@@ -77,17 +74,6 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
         return () => clearInterval(interval);
       });
 
-    //   useEffect(() => {
-    //     const interval = setInterval(() => {
-
-    //         currentScooter ? setBatteryPercentage(currentScooter['scooter']['battery']) : null;
-    //         console.log(currentScooter['scooter']['battery']);
-            
-            
-    //     }, 1000);
-    //     return () => clearInterval(interval);
-    //   });
-
 
     async function stopJourney() {
         const result = await scooterModel.stopScooter(scooterId);
@@ -119,14 +105,12 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
     return (
         <GestureRecognizer
             style={{flex: 1}}
-            // onSwipeDown={ () => setModalVisible(false) }
         >
         <Modal
         animationType="slide"
         transparent={true}
         visible={journeyModal}
         onRequestClose={() => {
-            // setJourneyModal(!journeyModal)
         }}
 
         >
@@ -149,10 +133,7 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
                         coordinate={scooterPosition}
                         icon={require('../../assets/scooter_green.png')}
                         tappable={true}
-                        onPress={() => {
-                            // setCurrentScooter(s);                                                        
-                            // setModalVisible(true);
-                            // setMarkerSelected(index);                            
+                        onPress={() => {                           
                         }}
                         >
                     </Marker> 
@@ -163,7 +144,6 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
             </MapView>
 
             <View style={[styles.modalMessage, styles.shadowProp]}>
-            {/* <View style={styles.swipeButton}></View> */}
 
                 <View style={styles.titleContainer}>
                     <Image style={styles.scooterImage} source={require('../../assets/scooter_large_white.png')}></Image>
@@ -192,9 +172,7 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
                                     color='black'
                                 />
                                 <Stopwatch start={toggleTimer}
-                                    // reset={toggleTimer}
                                     options={styles.timer}
-                                    // options={options}
                                     getTime={(time) => {                                        
                                         getFormattedTime(time);
                                     }} 
@@ -232,7 +210,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         flex: 1,
-        // backgroundColor: 'red'
     },
 
     map: {
@@ -262,9 +239,7 @@ const styles = StyleSheet.create({
     textContainer: {
         width: '60%',
         marginBottom: 10,
-        // padding: 0
         alignItems: 'center',
-        // flexDirection: 'row'
     },
 
     modalMessage: {
@@ -274,9 +249,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         alignItems: 'center',
         paddingTop: 10,
-        // flexDirection: 'row'
-        // borderTopLeftRadius: 25,
-        // borderTopRightRadius: 25
     },
 
     scooterTitle: {
@@ -284,14 +256,10 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         fontSize: 26,
         color: 'white'
-        // backgroundColor: 'red',
-        // width: '100%'
     },
     
     battery: {
         marginLeft: 5,
-        // width: 58,
-        // height: 25
         marginBottom: 15
     },
 
@@ -304,11 +272,8 @@ const styles = StyleSheet.create({
         width: '80%',
         height: 50,
         borderRadius: 10,
-        // display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        // marginBottom: 
-        // marginTop: 120,
     },
 
     timer: {
@@ -328,9 +293,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-around',
         alignItems: 'center',
-        // backgroundColor: 'red',
         height: 75
-        // width: '100%'
     },
 
     shadowProp: {

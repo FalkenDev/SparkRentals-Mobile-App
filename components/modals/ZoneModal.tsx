@@ -1,8 +1,6 @@
-import { stopLocationUpdatesAsync } from "expo-location";
 import React from "react";
 import { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, Pressable, StyleSheet, Image, StatusBar, Modal } from "react-native";
-import mapModel from "../../models/map";
 import GestureRecognizer from 'react-native-swipe-gestures';
 
 export default function ZoneModal({navigation, zone, zoneModalVisible, setZoneModalVisible, currentCity}) {
@@ -55,7 +53,6 @@ export default function ZoneModal({navigation, zone, zoneModalVisible, setZoneMo
 
                 <View style={styles.titleContainer}>
                     <View style={styles.textContainer}>
-                        {/* <Text> Zone: {zone['_id']} </Text> */}
                     </View>
 
                 </View>
@@ -109,8 +106,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         paddingTop: 10,
-        // flexDirection: 'row'
-        // borderRadius: 25,
         borderTopLeftRadius: 25,
         borderTopRightRadius: 25
     },

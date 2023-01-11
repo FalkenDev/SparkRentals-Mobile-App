@@ -1,8 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Pressable, Modal, TextInput, ScrollView} from 'react-native';
-import userModel from '../../models/user';
-import { showMessage, hideMessage } from "react-native-flash-message";
 import Icon from 'react-native-vector-icons/Octicons';
 
 
@@ -62,7 +60,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         width: '90%',
         height: '90%',
-        // marginTop: 100,
         justifyContent: 'center',
         alignItems: 'center'
     },

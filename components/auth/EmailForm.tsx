@@ -2,7 +2,6 @@ import React from "react";
 import { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, Pressable, StyleSheet, Image, StatusBar } from "react-native";
 import authModel from "../../models/auth";
-import EmailRegister from "./EmailRegister";
 import CheckBox from 'expo-checkbox';
 import FlashMessage from 'react-native-flash-message';
 import { showMessage, hideMessage } from "react-native-flash-message";
@@ -186,14 +185,12 @@ export default function EmailForm({setToken, navigation, setIsLoggedIn}) {
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
         height: '100%',
         alignItems: "center",
         width: '100%',
     },
 
     input: {
-        // backgroundColor: 'red',
         width: '90%',
         marginBottom: 30,
         borderRadius: 10,
@@ -243,18 +240,15 @@ const styles = StyleSheet.create({
     },
 
     termsText: {
-        // marginTop: 20,
-        // width: '80%'
+
     },
 
     logo: {
         marginTop: 20,
-        // backgroundColor: 'red'
     },
 
     formTitle: {
         fontSize: 48,
-        // backgroundColor: 'red',
         width: '90%',
         fontWeight: 'bold',
         marginTop: 40,
@@ -264,25 +258,6 @@ const styles = StyleSheet.create({
     termsTextContainer: {
         width: '80%',
         flexDirection: 'row',
-        // backgroundColor: 'green',
         flexWrap: 'wrap',
     },
 });
-
-// firstName
-
-// lastName
-
-
-// phoneNumber
-
-
-// email
-
-
-// password
-
-
-// balance
-
-// api_key

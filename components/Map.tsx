@@ -5,14 +5,11 @@ import * as Location from 'expo-location';
 import React from 'react';
 import mapModel from '../models/map';
 import scooterModel from '../models/scooter';
-import {API_KEY} from "@env";
-import config from '../config/config.json';
 import Icon from 'react-native-vector-icons/Octicons';
 import ScooterModal from './modals/ScooterModal';
 import NavBar from './drawer/NavBar';
 import ZoneModal from './modals/ZoneModal';
-import ScanScreen from './modals/QrScanner';
-import QRCodeScanner from 'react-native-qrcode-scanner';
+
 import QrScanner from './modals/QrScanner';
 import JourneyModal from './modals/JourneyModal';
 
@@ -221,7 +218,6 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
         height: '100%',
         alignItems: "center",
         width: '100%'

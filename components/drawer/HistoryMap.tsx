@@ -1,13 +1,9 @@
 import { useState, useEffect } from 'react';
 import { ScrollView, Image, Text, View, StyleSheet, StatusBar, Button, Pressable, Modal } from 'react-native';
 import MapView, { Marker, Circle, Polygon } from 'react-native-maps';
-import * as Location from 'expo-location';
 import React from 'react';
 import mapModel from '../../models/map';
-import {API_KEY} from "@env";
-import config from '../../config/config.json';
 import Icon from 'react-native-vector-icons/Octicons';
-import { start } from 'react-native-compass-heading';
 
 
 export default function HistoryMap({navigation, journey, modalVisible, setModalVisible}): any {
@@ -15,7 +11,6 @@ export default function HistoryMap({navigation, journey, modalVisible, setModalV
     const [endCoordinates, setEndCoordinates] = useState([]);
     const [journeyData, setJourneyData] = useState([]);
     const [startStop, setStartStop] = useState([]);
-    // console.log(journey);
     
     useEffect(() => {
         function setCoordinates() {

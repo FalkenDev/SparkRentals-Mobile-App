@@ -19,7 +19,9 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
     const [scooterId, setScooterId] = useState(null);
     const [timer, setTimer] = useState(null);
     const markerRef = useRef(null);
-
+    const [distance, setDistance] = useState(null);
+    const [batteryPercentage, setBatteryPercentage] = useState(null);
+    const [currentScooter, setCurrentScooter] = useState(null);
 
     const batteryImages = {
         '100': require('../../assets/battery_100.png'),
@@ -47,14 +49,15 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
             setScooterNumber(title[1]);
             setBattery(getBattery(scooter['battery']));
             setScooterId(scooter['_id']);
-
+            
             const getScooter = await scooterModel.getSpecificScooter(scooter['_id']);
             
-            setScooterPosition(getScooter['scooter']['coordinates']);
+            setCurrentScooter(getScooter);
 
-            // console.log(getScooter['scooter']['trip']);
+            setScooterPosition(getScooter['scooter']['coordinates']);
+            setBatteryPercentage(getScooter['scooter']['battery'].toFixed(1));                        
+            setDistance(getScooter['scooter']['trip']['distance'].toFixed(2));
             
-            // console.log(scooterPosition);
             
             
         }
@@ -73,6 +76,17 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
         }, 100);
         return () => clearInterval(interval);
       });
+
+    //   useEffect(() => {
+    //     const interval = setInterval(() => {
+
+    //         currentScooter ? setBatteryPercentage(currentScooter['scooter']['battery']) : null;
+    //         console.log(currentScooter['scooter']['battery']);
+            
+            
+    //     }, 1000);
+    //     return () => clearInterval(interval);
+    //   });
 
 
     async function stopJourney() {
@@ -166,7 +180,7 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
                                     color='black'
                                 />
 
-                                <Text>1.2 km</Text>
+                                <Text>{distance} km</Text>
                             </View>
    
 
@@ -191,7 +205,7 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
                             <View style={styles.travelInfo}>
                                 <Image style={styles.battery} source={batteryImages[`${battery}`]}></Image>
 
-                                <Text>35 km</Text>
+                                <Text>{batteryPercentage}%</Text>
                             </View>
                     </View>
 

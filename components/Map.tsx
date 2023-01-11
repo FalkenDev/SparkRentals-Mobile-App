@@ -139,16 +139,20 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
 
     return (
         <View style={styles.container}>
-            <View
-            style={{
-                width: '100%',
-                height: 50,
-                backgroundColor: 'white',
-                zIndex: 1
-            }}
-            >
+            
+            {journeyModal ?
+                <View
+                style={{
+                    width: '100%',
+                    height: 50,
+                    backgroundColor: 'white',
+                    zIndex: 1
+                }}
+                />
+                    :
+                <View></View>
+            }
 
-            </View>
             <MapView
                 ref={mapRef}
                 style={styles.map}

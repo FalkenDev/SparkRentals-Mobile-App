@@ -12,23 +12,30 @@ export default function Wallet({navigation}): any {
     const [modalVisible, setModalVisible] = useState(false);
     const [currentJourney, setCurrentJourney] = useState(null);
     const [noHistory, setNoHistory] = useState(false);
+    
+    
+    async function getHistory(): Promise<void> {
+        const result = await userModel.getHistory();
+
+        if (result.length === 0) {
+            setNoHistory(true);
+            return;
+        }
+        setHistory(result);
+        console.log(result);
+        
+        setNoHistory(false);
+    };
+
 
         // Get history for logged in user
         useEffect(() => {
-            async function getHistory(): Promise<void> {
-                const result = await userModel.getHistory();
-
-                if (result.length === 0) {
-                    setNoHistory(true);
-                    return;
-                }
-                setHistory(result);
-                console.log(result);
-                
-                setNoHistory(false);
-            };
             getHistory();
+        }, []);
 
+        // Reload history on focus
+        useEffect(() => {
+            navigation.addListener('focus', () => getHistory())
         }, []);
 
     return (

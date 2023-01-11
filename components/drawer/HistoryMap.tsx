@@ -50,8 +50,8 @@ export default function HistoryMap({navigation, journey, modalVisible, setModalV
                     region={{
                         latitude: startCoordinates['latitude']? startCoordinates['latitude'] : 0,
                         longitude: startCoordinates['longitude']? startCoordinates['longitude'] : 0,
-                        latitudeDelta: 0.05,
-                        longitudeDelta: 0.05,
+                        latitudeDelta: 0.03,
+                        longitudeDelta: 0.03,
                     }}
                     userInterfaceStyle={'dark'}
                 >
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
         height: '100%',
         alignItems: "center",
         width: '100%',
-        // backgroundColor: 'white'
+        backgroundColor: 'white'
     },
 
     map: {
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
         left: 0,
         bottom: 0,
         right: 0,
-        // height: '60%'
+        height: '55%'
     },
     
     shadowProp: {

@@ -26,18 +26,6 @@ function markerIcon(index, selected) {
     return marker;
 };
 
-function DrawerButton({navigation}) {
-    return (
-      <Pressable style={[styles.drawer, styles.shadowProp]} onPress={() => navigation.openDrawer()}> 
-        <Icon 
-        name='three-bars' 
-        size={30} 
-        color='black'
-        />
-      </Pressable>
-    );
-};
-
 export default function Map({navigation, API_KEY, position, setPosition, token}): any {
     const [locationMarker, setLocationMarker] = useState(null);
     const [currentCity, setCurrentCity] = useState(null);
@@ -114,7 +102,7 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
              */
             const zones = mapModel.getZones(city);
             setZones(zones);
-            
+
         };
         setUpMap();
     }, []);
@@ -129,12 +117,16 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
             // Get scooters
             async function getScooters() {
                 const city = await mapModel.getClosestCity(position);
+                
+                const result = await scooterModel.getScooters(city); 
+                
+                if (result) {
+                    const scooters = result['cityScooters'];
+                    
+                    const sortedScooters = scooterModel.sortAvailableScooters(scooters);
+                    setScooters(sortedScooters);
+                };
 
-                const result = await scooterModel.getScooters(API_KEY, city); 
-
-                const scooters = result['cityScooters'];
-                const sortedScooters = scooterModel.sortAvailableScooters(scooters);
-                setScooters(sortedScooters);
             };
 
       
@@ -191,7 +183,7 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
 
             <ScooterModal navigation={navigation} scooter={currentScooter} modalVisible={modalVisible} currentCity={currentCity} setModalVisible={setModalVisible} setJourneyModal={setJourneyModal} setToggleTimer={setToggleTimer} position={position}/> 
 
-            <ZoneModal navigation={navigation} zone={currentZone} zoneModalVisible={zoneModalVisible} setZoneModalVisible={setZoneModalVisible} />
+            <ZoneModal navigation={navigation} zone={currentZone} zoneModalVisible={zoneModalVisible} setZoneModalVisible={setZoneModalVisible} currentCity={currentCity}/>
             
  
             <JourneyModal navigation={navigation} scooter={currentScooter} journeyModal={journeyModal} setJourneyModal={setJourneyModal} toggleTimer={toggleTimer} setToggleTimer={setToggleTimer}/>
@@ -206,7 +198,7 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
             </Pressable>
 
             <NavBar navigation={navigation} />
-            <QrScanner navigation={navigation} cameraVisible={cameraVisible} setCameraVisible={setCameraVisible}/>
+            <QrScanner navigation={navigation} cameraVisible={cameraVisible} setCameraVisible={setCameraVisible} scooter={currentScooter} setModalVisible={setModalVisible} currentCity={currentCity} setCurrentScooter={setCurrentScooter}/>
         </View>
         
     )

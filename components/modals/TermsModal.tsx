@@ -12,9 +12,7 @@ export default function TermsModal({navigation, modalVisible, setModalVisible, t
     useEffect(() => {
         function getText(): void {
             // Determine what text file to display
-            (termsVisible) ? setText(terms_conditions) : setText(privacy_policy);
-            console.log(text);
-            
+            (termsVisible) ? setText(terms_conditions) : setText(privacy_policy);            
         };
 
         getText();

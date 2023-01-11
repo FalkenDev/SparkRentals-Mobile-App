@@ -34,6 +34,7 @@ const mapModel = {
      */
     getClosestCity: async function getClosestCity(userData: object): Promise<Object> {
         const cities = await mapModel.getCities(API_KEY);
+        
         // for (const city of Object.entries(cities['cities'])) {
         //     console.log(city[1]['zones'][0]);
         // };
@@ -56,10 +57,10 @@ const mapModel = {
         
         // Zone colors based on zoneType
         const zoneColors = {
-            parkingZone: 'rgba(0, 194, 0, 0.3)',
-            noParkingZone: 'rgba(255, 0, 0, 0.3)',
-            bonusParkingZone: 'rgba(245, 40, 145, 0.3)',
-            chargingZone: 'rgba(255, 255, 5, 0.3)'
+            parkingZone: '#96FF7166',
+            noParkingZone: '#FF606066',
+            bonusParkingZone: '#C64EFF66',
+            chargingZone: '#638FFF66'
         };
 
         // Array to be returned containing all zones and data

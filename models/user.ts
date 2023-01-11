@@ -22,7 +22,7 @@ const userModel = {
     getBalance: async function getBalance(): Promise<any> {
         const userData = await storage.readUser();        
         const user = await userModel.getUserData(userData);
-
+        
         const userBalance = user['user']['balance'];
         
         return userBalance;

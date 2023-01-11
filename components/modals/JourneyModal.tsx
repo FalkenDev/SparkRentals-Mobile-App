@@ -72,6 +72,7 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
 
     function getFormattedTime(time) {
         const currentTime = time;
+        return currentTime;
     };
 
     return (
@@ -121,10 +122,12 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
                                     color='black'
                                 />
                                 <Stopwatch start={toggleTimer}
-                                    reset={toggleTimer}
+                                    // reset={toggleTimer}
                                     options={styles.timer}
                                     // options={options}
-                                    getTime={getFormattedTime} 
+                                    getTime={(time) => {                                        
+                                        getFormattedTime(time);
+                                    }} 
                                 />
 
                             </View>

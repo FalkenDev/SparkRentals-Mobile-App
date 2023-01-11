@@ -24,7 +24,6 @@ export default function Wallet({navigation}): any {
         setModalVisible(false);
         const result = await userModel.addFunds(prepaid);
         const updatedBalance = await userModel.getBalance();
-        console.log(updatedBalance);
         
         setBalance(updatedBalance);
     };

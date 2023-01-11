@@ -13,7 +13,7 @@ export default function Wallet({navigation}): any {
     const [currentJourney, setCurrentJourney] = useState(null);
     const [noHistory, setNoHistory] = useState(false);
 
-        // Get balance for logged in user
+        // Get history for logged in user
         useEffect(() => {
             async function getHistory(): Promise<void> {
                 const result = await userModel.getHistory();
@@ -23,11 +23,13 @@ export default function Wallet({navigation}): any {
                     return;
                 }
                 setHistory(result);
+                console.log(result);
+                
                 setNoHistory(false);
             };
             getHistory();
 
-        });
+        }, []);
 
     return (
         <View style={styles.container}>
@@ -125,7 +127,7 @@ const styles = StyleSheet.create({
     },
 
     titleContainer: {
-        marginTop: 15,
+        marginTop: 20,
         // backgroundColor: 'orange',
         width: '100%',
         flexDirection: 'row',

@@ -10,7 +10,7 @@ const scooterModel = {
      * @param city 
      * @returns 
      */
-    getScooters: async function getScooters(API_KEY: string, city: object): Promise<object> {
+    getScooters: async function getScooters(city: object): Promise<object> {
         const token = await storage.readToken();
 
         const cityName = city['name'];
@@ -49,17 +49,17 @@ const scooterModel = {
 
         /**
          * Check if user is close enough to unlock the scooter
-         * Comment below if-statement to remove this functionality
+         * Change config.json distanceLimit to 0 to disable this
          */
-        // if (distance2User > maxDistance2Scooter) {
-        //     const message = {
-        //         errors: {
-        //             title: 'You are too far away from this scooter'
-        //         }
-        //     }
+        if (distance2User > maxDistance2Scooter && config.distanceLimit === 1) {
+            const message = {
+                errors: {
+                    title: 'You are too far away from this scooter'
+                }
+            }
 
-        //     return message;
-        // }
+            return message;
+        }
 
 
         const body = {
@@ -179,6 +179,22 @@ const scooterModel = {
         // Return distance in meters
         return proximity * 1000
     },
+
+    checkIfValidScooter: async function checkIfValidScooter(scooterId: string, currentCity:object) {
+        const getScooters = await scooterModel.getScooters(currentCity);
+        const scooters = getScooters['cityScooters'];
+    
+        
+        
+        for (let i = 0; i < scooters.length; i++) {
+            
+            if (scooters[i]['_id'] === scooterId) {                
+                return scooters[i];
+            }
+        }
+            // console.log(scooter);
+        return false;
+    }
 
 }
 

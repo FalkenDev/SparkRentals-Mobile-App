@@ -50,10 +50,11 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
             const getScooter = await scooterModel.getSpecificScooter(scooter['_id']);
             
             setCurrentScooter(getScooter);
-
+            
             setScooterPosition(getScooter['scooter']['coordinates']);
             setBatteryPercentage(getScooter['scooter']['battery'].toFixed(1));                        
             setDistance(getScooter['scooter']['trip']['distance'].toFixed(2));
+
             
             
             

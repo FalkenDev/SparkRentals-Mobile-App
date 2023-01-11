@@ -186,7 +186,6 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
                     latitudeDelta: 0.03,
                     longitudeDelta: 0.03,
                 }}
-                userInterfaceStyle={'dark'}
             >
                 {locationMarker}
 

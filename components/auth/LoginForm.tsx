@@ -21,12 +21,14 @@ export default function LoginForm({navigation, setIsLoggedIn}) {
         if (loginUser['type'] === 'danger') {
             showMessage({
                 message: loginUser['title'],
-                type: 'danger'
+                type: 'danger',
+                position: 'bottom'
             })
         } else {
             showMessage({
                 message: loginUser['message'],
-                type: 'success'
+                type: 'success',
+                position: 'bottom'
             })
             setIsLoggedIn(true);
             

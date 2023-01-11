@@ -192,8 +192,21 @@ const scooterModel = {
                 return scooters[i];
             }
         }
-            // console.log(scooter);
         return false;
+    },
+
+    getSpecificScooter: async function getSpecificScooter(scooterId: string) {
+        const token = await storage.readToken();
+
+        const response = await fetch(`${config.base_url}scooters/${scooterId}?api_key=${API_KEY}`, {
+            method: 'GET',
+            headers: {
+                'x-access-token': token['token']
+            }
+        });
+        const result = await response.json();
+        
+        return result;
     }
 
 }

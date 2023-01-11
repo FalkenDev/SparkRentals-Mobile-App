@@ -22,7 +22,6 @@ export default function Wallet({navigation}): any {
             return;
         }
         setHistory(result);
-        console.log(result);
         
         setNoHistory(false);
     };
@@ -40,18 +39,6 @@ export default function Wallet({navigation}): any {
 
     return (
         <View style={styles.container}>
-
-            {/* <View style={[styles.infoContainer]}>
-                <Pressable style={[styles.backButton, styles.shadowProp]} onPress={() => navigation.navigate('Map')}>
-                    <Icon 
-                        name='x' 
-                        size={25} 
-                        color='black'
-                    />
-                </Pressable>
-
-                <Text style={styles.title}>Ride History</Text>
-            </View> */}
 
             <View style={styles.titleContainer}>
                 

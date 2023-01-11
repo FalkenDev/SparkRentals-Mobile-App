@@ -160,6 +160,8 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
                         key={index}
                         onPress={() => {
                             setCurrentScooter(s);
+                            console.log(s);
+                            
                             setModalVisible(true);
                             setMarkerSelected(index);                            
                         }}
@@ -182,7 +184,7 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
                 ))}
             </MapView>
 
-            <ScooterModal navigation={navigation} scooter={currentScooter} modalVisible={modalVisible} currentCity={currentCity} setModalVisible={setModalVisible} setJourneyModal={setJourneyModal} setToggleTimer={setToggleTimer} position={position}/> 
+            <ScooterModal navigation={navigation} scooter={currentScooter} modalVisible={modalVisible} currentCity={currentCity} setModalVisible={setModalVisible} setJourneyModal={setJourneyModal} setToggleTimer={setToggleTimer} position={position} setCurrentScooter={setCurrentScooter}/> 
 
             <ZoneModal navigation={navigation} zone={currentZone} zoneModalVisible={zoneModalVisible} setZoneModalVisible={setZoneModalVisible} currentCity={currentCity}/>
             

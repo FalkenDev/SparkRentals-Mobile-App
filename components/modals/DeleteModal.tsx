@@ -12,7 +12,8 @@ export default function DeleteModal({navigation, modalVisible, setModalVisible, 
         if (Object.prototype.hasOwnProperty.call(result, 'errors')) {
             showMessage({
                 message: result['errors']['title'],
-                type: 'danger'
+                type: 'danger',
+                position: 'bottom'
             })
 
             return;
@@ -20,7 +21,8 @@ export default function DeleteModal({navigation, modalVisible, setModalVisible, 
 
         showMessage({
             message: result['message'],
-            type: 'danger'
+            type: 'danger',
+            position: 'bottom'
         });
 
         setIsLoggedIn(false);

@@ -8,7 +8,7 @@ import scooterModel from "../../models/scooter";
 import { start } from "react-native-compass-heading";
 import { showMessage, hideMessage } from "react-native-flash-message";
 
-export default function ScooterModal({navigation, scooter, modalVisible, setModalVisible, currentCity, setJourneyModal, setToggleTimer, position}) {
+export default function ScooterModal({navigation, scooter, modalVisible, setModalVisible, currentCity, setJourneyModal, setToggleTimer, position, setCurrentScooter}) {
     const [scooterName, setScooterName] = useState(null);
     const [scooterNumber, setScooterNumber] = useState(null);
     const [battery, setBattery] = useState(null);
@@ -16,6 +16,7 @@ export default function ScooterModal({navigation, scooter, modalVisible, setModa
     const [timeRate, setTimeRate] = useState(null);
     const [scooterId, setScooterId] = useState(null);
     const [scooterPosition, setScooterPosition] = useState(null);
+    // const [currentScooter, setCurrentScooter] = useState(null);
 
     const batteryImages = {
         '100': require('../../assets/battery_100.png'),
@@ -35,23 +36,46 @@ export default function ScooterModal({navigation, scooter, modalVisible, setModa
             return '25'
         }
     };
+    
+    async function getScooterInfo(): Promise<void> {            
+        if (scooter) {
+            const title = scooter['name'].split('#');
+            const getScooter = await scooterModel.getSpecificScooter(scooter['_id']);
+            setScooterName(title[0]);
+            setScooterNumber(title[1]);
+            setBattery(getBattery(scooter['battery']));
+            setScooterId(scooter['_id']);
+            setScooterPosition(scooter['coordinates']);
+            setFixedRate(currentCity['taxRates']['fixedRate']);
+            setTimeRate(currentCity['taxRates']['timeRate']);
+            setCurrentScooter(getScooter['scooter']);
+                        
+        }
+    }
+
 
     useEffect(() => {
-        function getScooterInfo(): void {            
-            if (scooter) {
-                const title = scooter['name'].split('#');
-                setScooterName(title[0]);
-                setScooterNumber(title[1]);
-                setBattery(getBattery(scooter['battery']));
-                setScooterId(scooter['_id']);
-                setScooterPosition(scooter['coordinates']);
-                setFixedRate(currentCity['taxRates']['fixedRate']);
-                setTimeRate(currentCity['taxRates']['timeRate']);
-                
-            }
-        }
         getScooterInfo();
-    });
+    }, []);
+
+        useEffect(() => {
+        const interval = setInterval(() => {
+
+            modalVisible ? getScooterInfo() : null;
+
+        }, 1000);
+        return () => clearInterval(interval);
+      }, []);
+
+    // useEffect(() => {
+    //     const interval = setInterval(() => {
+
+    //         modalVisible ? getScooterInfo() : null;
+
+    //     }, 500);
+    //     return () => clearInterval(interval);
+    //   }, []);
+
 
 
     async function startJourney() {

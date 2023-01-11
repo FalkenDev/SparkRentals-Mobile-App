@@ -27,7 +27,8 @@ export default function EmailForm({setToken, navigation, setIsLoggedIn}) {
         if (!(checkEmail(email))) {
             showMessage({
                 message: 'Invalid email',
-                type: 'danger'
+                type: 'danger',
+                position: 'bottom'
             })
         } else {
             
@@ -53,6 +54,7 @@ export default function EmailForm({setToken, navigation, setIsLoggedIn}) {
                 message: result['title'],
                 description: result['message'],
                 type: result['type'],
+                position: 'bottom'
 
             });
 
@@ -70,7 +72,8 @@ export default function EmailForm({setToken, navigation, setIsLoggedIn}) {
         if (Object.prototype.hasOwnProperty.call(loginUser, 'errors')) {
             showMessage({
                 message: loginUser['errors']['title'],
-                type: 'danger'
+                type: 'danger',
+                position: 'bottom'
             })
         } else {
             setToken(loginUser['token']);
@@ -86,7 +89,8 @@ export default function EmailForm({setToken, navigation, setIsLoggedIn}) {
     function checkAlert() {
         showMessage({
             message: 'You must agree to terms to register',
-            type: 'danger'
+            type: 'danger',
+            position: 'bottom'
         });
     };    
 

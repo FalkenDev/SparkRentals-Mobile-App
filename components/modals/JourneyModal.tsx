@@ -56,7 +56,8 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
         if (Object.prototype.hasOwnProperty.call(result, 'errors')) {
             showMessage({
                 message: result['errors']['title'],
-                type: 'danger'
+                type: 'danger',
+                position: 'bottom'
             })
 
             return;
@@ -64,7 +65,8 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
 
         showMessage({
             message: result['message'],
-            type: 'success'
+            type: 'success',
+            position: 'bottom'
         });
 
         setJourneyModal(!journeyModal)

@@ -41,7 +41,9 @@ export default function QrScanner({navigation, cameraVisible, setCameraVisible, 
       if (result) {
         showMessage({
           message: 'Scooter scanned!',
-          type: 'success'
+          type: 'success',
+          position: 'bottom'
+
         });
 
         setCameraVisible(!cameraVisible);
@@ -50,7 +52,8 @@ export default function QrScanner({navigation, cameraVisible, setCameraVisible, 
       } else {
         showMessage({
           message: 'Not a scooter!',
-          type: 'danger'
+          type: 'danger',
+          position: 'center'
         })
       }
 

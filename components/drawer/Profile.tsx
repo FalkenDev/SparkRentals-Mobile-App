@@ -66,7 +66,8 @@ export default function Profile({navigation, setIsLoggedIn}): any {
         if (Object.prototype.hasOwnProperty.call(result, 'errors')) {
             showMessage({
                 message: result['errors']['title'],
-                type: 'danger'
+                type: 'danger',
+                position: 'bottom'
             })
 
             return;
@@ -74,7 +75,8 @@ export default function Profile({navigation, setIsLoggedIn}): any {
 
         showMessage({
             message: result['message'],
-            type: 'success'
+            type: 'success',
+            position: 'bottom'
         });
     };
 

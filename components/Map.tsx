@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { ScrollView, Image, Text, View, StyleSheet, StatusBar, Button, Pressable, InteractionManagerStatic } from 'react-native';
+import { useState, useEffect, useRef } from 'react';
+import { ScrollView, Image, Text, View, StyleSheet, StatusBar, Button, Pressable, InteractionManagerStatic, TouchableHighlightBase } from 'react-native';
 import MapView, { Marker, Circle, Polygon } from 'react-native-maps';
 import * as Location from 'expo-location';
 import React from 'react';
@@ -39,7 +39,8 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
     const [journeyModal, setJourneyModal] = useState(false);
     const [toggleTimer, setToggleTimer] = useState(false);
     const [markerSelected, setMarkerSelected] = useState(null);
-        
+    
+    const mapRef = useRef(null);    
     /**
      * Set user position
      */
@@ -56,10 +57,10 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
 
             const userCoordinates = {
                 //latlang hardcoded for testing
-                latitude: currentLocation.coords.latitude,
-                longitude: currentLocation.coords.longitude
-                // latitude: 56.161013580817986,
-                // longitude: 15.587742977884904
+                // latitude: currentLocation.coords.latitude,
+                // longitude: currentLocation.coords.longitude
+                latitude: 56.161013580817986,
+                longitude: 15.587742977884904
             };
 
     
@@ -136,10 +137,10 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
         return () => clearInterval(interval);
       }, []);
 
-
     return (
         <View style={styles.container}>
             <MapView
+                ref={mapRef}
                 style={styles.map}
                 initialRegion={{
                     latitude: position.latitude? position.latitude : 56.161013580817986,
@@ -196,8 +197,8 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
                     />
                     <Text style={styles.googleText}>Scan to unlock</Text>
             </Pressable>
-
-            <NavBar navigation={navigation} />
+            
+            <NavBar navigation={navigation} mapRef={mapRef} position={position}/>
             <QrScanner navigation={navigation} cameraVisible={cameraVisible} setCameraVisible={setCameraVisible} scooter={currentScooter} setModalVisible={setModalVisible} currentCity={currentCity} setCurrentScooter={setCurrentScooter}/>
         </View>
         

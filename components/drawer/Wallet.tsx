@@ -9,17 +9,23 @@ export default function Wallet({navigation}): any {
     const [balance, setBalance] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [prepaid, setPrepaid] = useState(null);
+    
+    async function getBalance(): Promise<void> {
+        const result = await userModel.getBalance();
+        setBalance(result);
+
+    };
 
     //Get balance for logged in user
     useEffect(() => {
-        async function getBalance(): Promise<void> {
-            const result = await userModel.getBalance();
-            setBalance(result);
-
-        };
         getBalance();
     });
-
+    
+    useEffect(() => {
+        console.log("useEffect")
+        navigation.addListener('focus', () => getBalance())
+    }, []);
+    
     async function addBalance() {
         setModalVisible(false);
         const result = await userModel.addFunds(prepaid);
@@ -27,6 +33,8 @@ export default function Wallet({navigation}): any {
         
         setBalance(updatedBalance);
     };
+
+
 
     return (
         <View style={styles.container}>

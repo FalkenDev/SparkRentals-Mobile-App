@@ -11,6 +11,7 @@ export default function Wallet({navigation}): any {
     const [modalVisible, setModalVisible] = useState(false);
     const [currentJourney, setCurrentJourney] = useState(null);
     const [noHistory, setNoHistory] = useState(false);
+    const [distance, setDistance] = useState(null)
     
     
     async function getHistory(): Promise<void> {
@@ -22,6 +23,12 @@ export default function Wallet({navigation}): any {
         }
         setHistory(result);
         
+        console.log(history);
+        
+        // const travelDistance = mapModel.calcDistance(result['startPosition']['latitude'], result['startPosition']['longitudo'], result['endPosition']['latitude'], result['endPosition']['longitude'])
+
+        // setDistance(travelDistance);
+
         setNoHistory(false);
     };
 
@@ -29,6 +36,7 @@ export default function Wallet({navigation}): any {
         // Get history for logged in user
         useEffect(() => {
             getHistory();
+            
         }, []);
 
         // Reload history on focus
@@ -36,6 +44,14 @@ export default function Wallet({navigation}): any {
             navigation.addListener('focus', () => getHistory())
         }, []);
 
+
+        function getDistance(history) {
+            const travelDistance = mapModel.calcDistance(history['startPosition']['latitude'], history['startPosition']['longitude'], history['endPosition']['latitude'], history['endPosition']['longitude']);
+
+            return travelDistance.toFixed(2).toString();
+            
+            
+        }
     return (
         <View style={styles.container}>
 
@@ -72,7 +88,7 @@ export default function Wallet({navigation}): any {
 
                     <View style={styles.primaryInfo}>
                         <Text style={styles.textDistance}>
-                            {mapModel.calcDistance(h.startPosition[0], h.startPosition[1], h.endPosition[0], h.endPosition[1])} km / {h.totalMin} min 
+                            {getDistance(h)} km / {h.totalMin} min 
                         </Text>
                         <Text style={styles.textCost}>{h.totalPrice} kr</Text>
                     </View>

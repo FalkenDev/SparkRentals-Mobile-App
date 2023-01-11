@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/Octicons';
 import ScooterModal from './modals/ScooterModal';
 import NavBar from './drawer/NavBar';
 import ZoneModal from './modals/ZoneModal';
-
+import { showMessage, hideMessage } from "react-native-flash-message";
 import QrScanner from './modals/QrScanner';
 import JourneyModal from './modals/JourneyModal';
 
@@ -42,67 +42,66 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
      * Set user position
      */
     useEffect(() => {
-        async function fetchPosition(): Promise<void> {
+        async function setUpMap(): Promise<void> {
             const { status } = await Location.requestForegroundPermissionsAsync();
 
-            // if (status !== 'granted') {
-            //     setErrorMessage('Permission to access location was denied');
-            //     return;
-            // }
+            if (status !== 'granted') {
+                showMessage({
+                    message: 'Permission to access location was denied',
+                    type: 'danger',
+                    position: 'center'
+                });
+                return;
+            }
 
             const currentLocation = await Location.getCurrentPositionAsync({});
 
             const userCoordinates = {
                 //latlang hardcoded for testing
-                // latitude: currentLocation.coords.latitude,
-                // longitude: currentLocation.coords.longitude
-                latitude: 56.161013580817986,
-                longitude: 15.587742977884904
+                latitude: await currentLocation.coords.latitude,
+                longitude: await currentLocation.coords.longitude
+                // latitude: 56.674283063446495,
+                // longitude: 12.857826360096537
             };
 
-    
+            
+            
             setPosition(userCoordinates);
             
-            mapModel.getClosestCity(position);
+            // mapModel.getClosestCity(position);
 
             setLocationMarker(<Marker
                 coordinate={{
                     //latlang hardcoded for testing
-                    // latitude: currentLocation.coords.latitude,
-                    // longitude: currentLocation.coords.longitude
-                    latitude: 56.161013580817986,
-                    longitude: 15.587742977884904
+                    latitude: currentLocation.coords.latitude,
+                    longitude: currentLocation.coords.longitude
+                    // latitude: 56.161013580817986,
+                    // longitude: 15.587742977884904
                 }}
                 title="My location"
                 pinColor="blue"
                 flat={false}
             />);
-        };
 
 
-        fetchPosition();
-
-    }, []);
-
-    /**
-     * Set city to city that is closest to user and zones for that city
-     */
-    useEffect(() => {
-        async function setUpMap(): Promise<void> {
-            const city = await mapModel.getClosestCity(position);
+            // Get closest city to user location
+            const city = await mapModel.getClosestCity(userCoordinates);
             
             
             // Set city that is closest to user
             setCurrentCity(city);
-                        
+            
+            
             /**
              * Set zones on map
              */
             const zones = mapModel.getZones(city);
             setZones(zones);
-
         };
+
+
         setUpMap();
+
     }, []);
 
     /**
@@ -114,9 +113,9 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
 
             // Get scooters
             async function getScooters() {
-                const city = await mapModel.getClosestCity(position);
+                // const city = await mapModel.getClosestCity(position);
                 
-                const result = await scooterModel.getScooters(city); 
+                const result = await scooterModel.getScooters(currentCity); 
                 
                 if (result) {
                     const scooters = result['cityScooters'];
@@ -130,9 +129,37 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
       
             getScooters();
 
-        }, 5000);
+        }, 2000);
         return () => clearInterval(interval);
-      }, []);
+      });
+    
+    /**
+     * Update user position
+     */
+    useEffect(() => {
+        const interval = setInterval(() => {
+
+            // Get scooters
+            async function updateUserPosition() {
+                const currentLocation = await Location.getCurrentPositionAsync({});
+                const userCoordinates = {
+                    //latlang hardcoded for testing
+                    latitude: await currentLocation.coords.latitude,
+                    longitude: await currentLocation.coords.longitude
+                    // latitude: 56.674283063446495,
+                    // longitude: 12.857826360096537
+                };
+                
+                setPosition(userCoordinates);
+            };
+
+            updateUserPosition();
+
+        }, 2000);
+        return () => clearInterval(interval);
+      });
+
+
 
     return (
         <View style={styles.container}>

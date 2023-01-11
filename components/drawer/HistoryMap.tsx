@@ -28,6 +28,13 @@ export default function HistoryMap({navigation, journey, modalVisible, setModalV
 
         setCoordinates();
     })
+
+
+    function getDistance() {
+        const travelDistance = mapModel.calcDistance(startCoordinates['latitude'], endCoordinates['longitude'], endCoordinates['latitude'], endCoordinates['longitude']);
+        
+        return travelDistance.toFixed(2).toString();
+    }
     
     return (
         <Modal
@@ -90,7 +97,7 @@ export default function HistoryMap({navigation, journey, modalVisible, setModalV
 
                         <View style={styles.listInfo}>
                             <Text style={styles.infoTitle}>Information about the trip</Text>
-                            <Text>{mapModel.calcDistance(startCoordinates[0], startCoordinates[1], endCoordinates[0], endCoordinates[1])} km / {journeyData['totalMin']} min </Text>
+                            <Text>{getDistance()} km / {journeyData['totalMin']} min </Text>
 
                             <Text> {journeyData['totalPrice']} kr</Text>
                         </View>

@@ -48,44 +48,32 @@ export default function ScooterModal({navigation, scooter, modalVisible, setModa
             setScooterPosition(scooter['coordinates']);
             setFixedRate(currentCity['taxRates']['fixedRate']);
             setTimeRate(currentCity['taxRates']['timeRate']);
-            setCurrentScooter(getScooter['scooter']);
-                        
+            setCurrentScooter(getScooter['scooter'])
         }
     }
 
-
     useEffect(() => {
-        getScooterInfo();
-    }, []);
-
-        useEffect(() => {
         const interval = setInterval(() => {
 
             modalVisible ? getScooterInfo() : null;
 
-        }, 1000);
+        }, 100);
         return () => clearInterval(interval);
-      }, []);
-
-    // useEffect(() => {
-    //     const interval = setInterval(() => {
-
-    //         modalVisible ? getScooterInfo() : null;
-
-    //     }, 500);
-    //     return () => clearInterval(interval);
-    //   }, []);
+      });
 
 
 
     async function startJourney() {
+        console.log(scooterId);
+                
         const result = await scooterModel.startScooter(scooterId, position, scooterPosition);
         setToggleTimer(true);
 
         if (Object.prototype.hasOwnProperty.call(result, 'errors')) {
             showMessage({
                 message: result['errors']['title'],
-                type: 'danger'
+                type: 'danger',
+                position: 'center'
             })
 
             return;
@@ -93,7 +81,7 @@ export default function ScooterModal({navigation, scooter, modalVisible, setModa
 
         showMessage({
             message: result['message'],
-            type: 'success'
+            type: 'success',
         });
         setModalVisible(!modalVisible);
         setJourneyModal(true);

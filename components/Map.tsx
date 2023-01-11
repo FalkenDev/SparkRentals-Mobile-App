@@ -139,6 +139,16 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
 
     return (
         <View style={styles.container}>
+            <View
+            style={{
+                width: '100%',
+                height: 50,
+                backgroundColor: 'white',
+                zIndex: 1
+            }}
+            >
+
+            </View>
             <MapView
                 ref={mapRef}
                 style={styles.map}
@@ -159,9 +169,7 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
                         tappable={true}
                         key={index}
                         onPress={() => {
-                            setCurrentScooter(s);
-                            console.log(s);
-                            
+                            setCurrentScooter(s);                                                        
                             setModalVisible(true);
                             setMarkerSelected(index);                            
                         }}

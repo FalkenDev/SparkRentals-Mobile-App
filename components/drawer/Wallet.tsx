@@ -22,10 +22,9 @@ export default function Wallet({navigation}): any {
     });
     
     useEffect(() => {
-        console.log("useEffect")
         navigation.addListener('focus', () => getBalance())
     }, []);
-    
+
     async function addBalance() {
         setModalVisible(false);
         const result = await userModel.addFunds(prepaid);
@@ -126,7 +125,7 @@ const styles = StyleSheet.create({
     },
 
     titleContainer: {
-        marginTop: 15,
+        marginTop: 20,
         // backgroundColor: 'orange',
         width: '100%',
         flexDirection: 'row',

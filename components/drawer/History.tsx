@@ -35,7 +35,6 @@ export default function Wallet({navigation}): any {
 
         // Reload history on focus
         useEffect(() => {
-            console.log("useEffect")
             navigation.addListener('focus', () => getHistory())
         }, []);
 

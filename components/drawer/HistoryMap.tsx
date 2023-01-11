@@ -56,25 +56,20 @@ export default function HistoryMap({navigation, journey, modalVisible, setModalV
                     userInterfaceStyle={'dark'}
                 >
 
-            {startCoordinates ? 
+      
                 <Marker 
                 coordinate={{latitude: startCoordinates['latitude']? startCoordinates['latitude'] : 0,
                 longitude: startCoordinates['longitude']? startCoordinates['longitude'] : 0
-            }}
+                }}
                 />
-                : 
-                <View></View>
-            }    
 
-            {endCoordinates ? 
+          
                 <Marker 
                 coordinate={{latitude: endCoordinates['latitude']? endCoordinates['latitude'] : 0,
                 longitude: endCoordinates['longitude']? endCoordinates['longitude'] : 0
-            }}
+                }}
                 />
-                : 
-                <View></View>
-            }  
+
 
 
             
@@ -139,6 +134,7 @@ const styles = StyleSheet.create({
         left: 0,
         bottom: 0,
         right: 0,
+        // height: '60%'
     },
     
     shadowProp: {

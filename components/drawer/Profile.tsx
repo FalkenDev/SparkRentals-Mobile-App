@@ -1,12 +1,13 @@
 import { stopLocationUpdatesAsync } from 'expo-location';
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Pressable, Modal, TextInput} from 'react-native';
+import { StyleSheet, Text, View, Pressable, Modal, TextInput, Dimensions} from 'react-native';
 import userModel from '../../models/user';
 import authModel from '../../models/auth';
 import Icon from 'react-native-vector-icons/Octicons';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import DeleteModal from '../modals/DeleteModal';
+const deviceHeight = Dimensions.get('window').height;
 
 
 export default function Profile({navigation, setIsLoggedIn}): any {
@@ -209,7 +210,7 @@ const styles = StyleSheet.create({
 
     infoContainer: {
         width: '100%',
-        height: 900,
+        height: deviceHeight ,
         alignItems: 'center',
         justifyContent: 'center',
     },

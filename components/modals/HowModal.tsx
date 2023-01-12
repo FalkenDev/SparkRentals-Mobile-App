@@ -1,8 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Pressable, Modal, TextInput} from 'react-native';
-import userModel from '../../models/user';
-import { showMessage, hideMessage } from "react-native-flash-message";
 
 export default function HowModal({navigation, modalVisible, setModalVisible}) {
 
@@ -50,7 +47,6 @@ const styles = StyleSheet.create({
         width: '100%', 
         backgroundColor: 'rgba(0, 0, 0, 0.8)', 
         position:'absolute',
-        // justifyContent: 'center',
         alignItems: 'center'
     },
 
@@ -95,7 +91,6 @@ const styles = StyleSheet.create({
 
     textContainer: {
         width: '80%',
-        // backgroundColor: 'red',
         height: 150,
         justifyContent: 'space-evenly',
         marginTop: 10

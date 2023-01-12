@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Pressable, Modal, TextInput} from 'react-native';
 import userModel from '../../models/user';
 import { showMessage, hideMessage } from "react-native-flash-message";
@@ -12,7 +11,8 @@ export default function DeleteModal({navigation, modalVisible, setModalVisible, 
         if (Object.prototype.hasOwnProperty.call(result, 'errors')) {
             showMessage({
                 message: result['errors']['title'],
-                type: 'danger'
+                type: 'danger',
+                position: 'bottom'
             })
 
             return;
@@ -20,7 +20,8 @@ export default function DeleteModal({navigation, modalVisible, setModalVisible, 
 
         showMessage({
             message: result['message'],
-            type: 'danger'
+            type: 'danger',
+            position: 'bottom'
         });
 
         setIsLoggedIn(false);
@@ -64,7 +65,6 @@ const styles = StyleSheet.create({
         width: '100%', 
         backgroundColor: 'rgba(0, 0, 0, 0.8)', 
         position:'absolute',
-        // justifyContent: 'center',
         alignItems: 'center'
     },
 

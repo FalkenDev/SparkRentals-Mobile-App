@@ -57,7 +57,6 @@ const userModel = {
         const userData = await userModel.getUserData(user);
 
         const userId = userData['user']['_id'];
-        // console.log(userId);
         
         const requestBody = {
             'user_id': userId,

@@ -1,21 +1,24 @@
-import { stopLocationUpdatesAsync } from "expo-location";
 import React from "react";
 import { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, Button, Pressable, StyleSheet, Image, StatusBar, Modal } from "react-native";
-import mapModel from "../../models/map";
 import GestureRecognizer from 'react-native-swipe-gestures';
 import scooterModel from "../../models/scooter";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import Icon from 'react-native-vector-icons/Octicons';
 import { Stopwatch, Timer } from 'react-native-stopwatch-timer';
+import MapView, { Marker, Circle, Polygon } from 'react-native-maps';
+
 
 export default function JourneyModal({navigation, scooter, journeyModal, setJourneyModal, toggleTimer, setToggleTimer}) {
     const [scooterName, setScooterName] = useState(null);
     const [scooterNumber, setScooterNumber] = useState(null);
     const [battery, setBattery] = useState(null);
-    const [fixedRate, setFixedRate] = useState(null);
+    const [scooterPosition, setScooterPosition] = useState(null);
     const [scooterId, setScooterId] = useState(null);
-    const [timer, setTimer] = useState(null);
+    const markerRef = useRef(null);
+    const [distance, setDistance] = useState(null);
+    const [batteryPercentage, setBatteryPercentage] = useState(null);
+    const [currentScooter, setCurrentScooter] = useState(null);
 
     const batteryImages = {
         '100': require('../../assets/battery_100.png'),
@@ -36,18 +39,41 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
         }
     };
 
-    useEffect(() => {
-        function getScooterInfo(): void {            
-            if (scooter) {
-                const title = scooter['name'].split('#');
-                setScooterName(title[0]);
-                setScooterNumber(title[1]);
-                setBattery(getBattery(scooter['battery']));
-                setScooterId(scooter['_id']);
-            }
+    async function getScooterInfo(): Promise<void> {            
+        if (scooter) {            
+            const title = scooter['name'].split('#');
+            setScooterName(title[0]);
+            setScooterNumber(title[1]);
+            setBattery(getBattery(scooter['battery']));
+            setScooterId(scooter['_id']);
+            
+            const getScooter = await scooterModel.getSpecificScooter(scooter['_id']);
+            
+            setCurrentScooter(getScooter);
+            
+            setScooterPosition(getScooter['scooter']['coordinates']);
+            setBatteryPercentage(getScooter['scooter']['battery'].toFixed(1));                        
+            setDistance(getScooter['scooter']['trip']['distance'].toFixed(2));
+
+            
+            
+            
         }
-        getScooterInfo();
-    });
+    }
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+
+            journeyModal ? getScooterInfo() : null;
+
+            if (markerRef.current) {
+                markerRef.current.animateMarkerToCoordinate(scooterPosition, 100);
+            };
+            
+            
+        }, 100);
+        return () => clearInterval(interval);
+      });
 
 
     async function stopJourney() {
@@ -56,7 +82,8 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
         if (Object.prototype.hasOwnProperty.call(result, 'errors')) {
             showMessage({
                 message: result['errors']['title'],
-                type: 'danger'
+                type: 'danger',
+                position: 'bottom'
             })
 
             return;
@@ -64,7 +91,8 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
 
         showMessage({
             message: result['message'],
-            type: 'success'
+            type: 'success',
+            position: 'bottom'
         });
 
         setJourneyModal(!journeyModal)
@@ -78,25 +106,48 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
     return (
         <GestureRecognizer
             style={{flex: 1}}
-            // onSwipeDown={ () => setModalVisible(false) }
         >
         <Modal
         animationType="slide"
         transparent={true}
         visible={journeyModal}
         onRequestClose={() => {
-            // setJourneyModal(!journeyModal)
         }}
 
         >
             <View style={styles.modalContainer}></View>
+            
+            <MapView
+                // ref={mapRef}
+                style={styles.map}
+                region={{
+                    latitude: scooterPosition? scooterPosition['latitude'] : 56.161013580817986,
+                    longitude: scooterPosition? scooterPosition['longitude'] : 15.587742977884904,
+                    latitudeDelta: 0.001,
+                    longitudeDelta: 0.001,
+                }}
+                userInterfaceStyle={'dark'}
+            >
+                {scooterPosition ? 
+                    <Marker
+                        ref={markerRef}                        
+                        coordinate={scooterPosition}
+                        icon={require('../../assets/scooter_green.png')}
+                        tappable={true}
+                        onPress={() => {                           
+                        }}
+                        >
+                    </Marker> 
+                    : 
+                    <View></View>
+                }
 
+            </MapView>
 
-            <View style={styles.modalMessage}>
-            {/* <View style={styles.swipeButton}></View> */}
+            <View style={[styles.modalMessage, styles.shadowProp]}>
 
                 <View style={styles.titleContainer}>
-                    <Image style={styles.scooterImage} source={require('../../assets/scooter_large.png')}></Image>
+                    <Image style={styles.scooterImage} source={require('../../assets/scooter_large_white.png')}></Image>
 
                     <View style={styles.textContainer}>
                         <Text style={styles.scooterTitle}> {scooterName} {scooterNumber}</Text>
@@ -110,7 +161,7 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
                                     color='black'
                                 />
 
-                                <Text>1.2 km</Text>
+                                <Text>{distance} km</Text>
                             </View>
    
 
@@ -122,9 +173,7 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
                                     color='black'
                                 />
                                 <Stopwatch start={toggleTimer}
-                                    // reset={toggleTimer}
                                     options={styles.timer}
-                                    // options={options}
                                     getTime={(time) => {                                        
                                         getFormattedTime(time);
                                     }} 
@@ -135,7 +184,7 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
                             <View style={styles.travelInfo}>
                                 <Image style={styles.battery} source={batteryImages[`${battery}`]}></Image>
 
-                                <Text>35 km</Text>
+                                <Text>{batteryPercentage}%</Text>
                             </View>
                     </View>
 
@@ -147,7 +196,7 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
                     stopJourney();
                     setToggleTimer(false);
                 }}>
-                    <Text style={{color: 'white'}}>Finish the ride</Text>
+                    <Text style={{color: 'black'}}>Finish the ride</Text>
                 </Pressable>
                 
             </View>
@@ -158,11 +207,21 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
 
 const styles = StyleSheet.create({
     modalContainer: {
-        // backgroundColor: 'rgba(80, 80, 80, 0.6)',
+        backgroundColor: 'rgba(80, 80, 80, 0.6)',
         width: '100%',
         height: '100%',
         flex: 1,
     },
+
+    map: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        height: '65%',
+    },
+
 
     titleContainer: {
         flexDirection: 'row',
@@ -181,35 +240,27 @@ const styles = StyleSheet.create({
     textContainer: {
         width: '60%',
         marginBottom: 10,
-        // padding: 0
         alignItems: 'center',
-        // flexDirection: 'row'
     },
 
     modalMessage: {
-        backgroundColor: 'white',
+        backgroundColor: 'cornflowerblue',
         width: '100%',
         height: '35%',
         justifyContent: 'space-around',
         alignItems: 'center',
         paddingTop: 10,
-        // flexDirection: 'row'
-        borderTopLeftRadius: 25,
-        borderTopRightRadius: 25
     },
 
     scooterTitle: {
         fontWeight: 'bold',
-        marginBottom: 40,
+        marginBottom: 10,
         fontSize: 26,
-        // backgroundColor: 'red',
-        // width: '100%'
+        color: 'white'
     },
     
     battery: {
         marginLeft: 5,
-        // width: 58,
-        // height: 25
         marginBottom: 15
     },
 
@@ -218,36 +269,38 @@ const styles = StyleSheet.create({
     },
 
     tourButton: {
-        backgroundColor: 'cornflowerblue',
+        backgroundColor: 'white',
         width: '80%',
         height: 50,
         borderRadius: 10,
-        // display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        // marginBottom: 
-        // marginTop: 120,
     },
 
     timer: {
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     },
 
     travelInfoContainer: {
         flexDirection: 'row',
-        // backgroundColor: 'red',
+        backgroundColor: 'white',
         justifyContent: 'space-evenly',
-        width: '100%'
+        width: '100%',
+        padding: 10,
+        borderRadius: 25
     },
 
     travelInfo: {
         flexDirection: 'column',
         justifyContent: 'space-around',
         alignItems: 'center',
-        // backgroundColor: 'red',
         height: 75
-        // width: '100%'
     },
+
+    shadowProp: {
+        elevation: 5,
+        shadowColor: 'black'
+      },
 
 
 })

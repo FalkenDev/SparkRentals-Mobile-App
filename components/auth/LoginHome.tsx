@@ -1,8 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
 import { ScrollView, Image, Text, View, StyleSheet, StatusBar, Dimensions, Pressable } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import EmailRegister from './EmailRegister';
 // Get width and height of users display
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
@@ -82,7 +79,6 @@ const styles = StyleSheet.create({
     },
 
     logInContainer: {
-        // flex: 4,
         position: 'absolute',
         bottom: 0,
         backgroundColor: 'white',

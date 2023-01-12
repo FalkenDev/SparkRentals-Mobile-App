@@ -1,13 +1,9 @@
 import { useState, useEffect } from 'react';
 import { ScrollView, Image, Text, View, StyleSheet, StatusBar, Button, Pressable, Modal } from 'react-native';
 import MapView, { Marker, Circle, Polygon } from 'react-native-maps';
-import * as Location from 'expo-location';
 import React from 'react';
 import mapModel from '../../models/map';
-import {API_KEY} from "@env";
-import config from '../../config/config.json';
 import Icon from 'react-native-vector-icons/Octicons';
-import { start } from 'react-native-compass-heading';
 
 
 export default function HistoryMap({navigation, journey, modalVisible, setModalVisible}): any {
@@ -15,7 +11,6 @@ export default function HistoryMap({navigation, journey, modalVisible, setModalV
     const [endCoordinates, setEndCoordinates] = useState([]);
     const [journeyData, setJourneyData] = useState([]);
     const [startStop, setStartStop] = useState([]);
-    // console.log(journey);
     
     useEffect(() => {
         function setCoordinates() {
@@ -33,6 +28,13 @@ export default function HistoryMap({navigation, journey, modalVisible, setModalV
 
         setCoordinates();
     })
+
+
+    function getDistance() {
+        const travelDistance = mapModel.calcDistance(startCoordinates['latitude'], endCoordinates['longitude'], endCoordinates['latitude'], endCoordinates['longitude']);
+        
+        return travelDistance.toFixed(2).toString();
+    }
     
     return (
         <Modal
@@ -50,31 +52,26 @@ export default function HistoryMap({navigation, journey, modalVisible, setModalV
                     region={{
                         latitude: startCoordinates['latitude']? startCoordinates['latitude'] : 0,
                         longitude: startCoordinates['longitude']? startCoordinates['longitude'] : 0,
-                        latitudeDelta: 0.05,
-                        longitudeDelta: 0.05,
+                        latitudeDelta: 0.03,
+                        longitudeDelta: 0.03,
                     }}
                     userInterfaceStyle={'dark'}
                 >
 
-            {startCoordinates ? 
+      
                 <Marker 
                 coordinate={{latitude: startCoordinates['latitude']? startCoordinates['latitude'] : 0,
                 longitude: startCoordinates['longitude']? startCoordinates['longitude'] : 0
-            }}
+                }}
                 />
-                : 
-                <View></View>
-            }    
 
-            {endCoordinates ? 
+          
                 <Marker 
                 coordinate={{latitude: endCoordinates['latitude']? endCoordinates['latitude'] : 0,
                 longitude: endCoordinates['longitude']? endCoordinates['longitude'] : 0
-            }}
+                }}
                 />
-                : 
-                <View></View>
-            }  
+
 
 
             
@@ -100,7 +97,7 @@ export default function HistoryMap({navigation, journey, modalVisible, setModalV
 
                         <View style={styles.listInfo}>
                             <Text style={styles.infoTitle}>Information about the trip</Text>
-                            <Text>{mapModel.calcDistance(startCoordinates[0], startCoordinates[1], endCoordinates[0], endCoordinates[1])} km / {journeyData['totalMin']} min </Text>
+                            <Text>{getDistance()} km / {journeyData['totalMin']} min </Text>
 
                             <Text> {journeyData['totalPrice']} kr</Text>
                         </View>
@@ -130,7 +127,7 @@ const styles = StyleSheet.create({
         height: '100%',
         alignItems: "center",
         width: '100%',
-        // backgroundColor: 'white'
+        backgroundColor: 'white'
     },
 
     map: {
@@ -139,6 +136,7 @@ const styles = StyleSheet.create({
         left: 0,
         bottom: 0,
         right: 0,
+        height: '55%'
     },
     
     shadowProp: {

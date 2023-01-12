@@ -35,14 +35,28 @@ const mapModel = {
     getClosestCity: async function getClosestCity(userData: object): Promise<Object> {
         const cities = await mapModel.getCities(API_KEY);
         
-        // for (const city of Object.entries(cities['cities'])) {
-        //     console.log(city[1]['zones'][0]);
-        // };
-        // const currentCity = {
-        //     'name':
-        // }
+        const city2User = [];
+        for (const city of Object.entries(cities['cities'])) {
+            // console.log(city[1]['zones'][0]);
+            // console.log(city[1]['name']);
+            const cityCoordinates = mapModel.cityCoordinates(city[1]['name']);
+            const distance2User = mapModel.calcDistance(cityCoordinates['latitude'], cityCoordinates['longitude'], userData['latitude'], userData['longitude']);
+
+            city2User.push([city[1], distance2User]);
+        };
         
-        return cities['cities'][1];
+        const sortedCity2User = city2User.sort((a, b) => {
+            return a[1] - b[1];
+        });
+
+        // console.log(userData);
+
+        // console.log(sortedCity2User[0][0]);
+        // console.log(cities['cities'][0]);
+        
+        
+        // return cities['cities'][1];
+        return sortedCity2User[0][0];
     },
 
     /**
@@ -104,7 +118,17 @@ const mapModel = {
         ; 
         var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
         var d = R * c; // Distance in km
-        return Math.round(d);
+        return d;
+    },
+
+    cityCoordinates: function cityCoordinates(cityName) {
+        const cities = {
+            'Stockholm': {latitude: 59.325025453165885, longitude: 18.067812149589304},
+            'Halmstad': {latitude: 56.674283063446495, longitude: 12.857826360096537},
+            'Karlskrona': {latitude: 56.16116530651073, longitude: 15.586898701061049}
+        };
+
+        return cities[cityName]
     }
 };
 

@@ -1,4 +1,3 @@
-import { stopLocationUpdatesAsync } from 'expo-location';
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Pressable, Modal, TextInput, ScrollView} from 'react-native';
@@ -12,6 +11,7 @@ export default function Wallet({navigation}): any {
     const [modalVisible, setModalVisible] = useState(false);
     const [currentJourney, setCurrentJourney] = useState(null);
     const [noHistory, setNoHistory] = useState(false);
+    const [distance, setDistance] = useState(null)
     
     
     async function getHistory(): Promise<void> {
@@ -22,8 +22,13 @@ export default function Wallet({navigation}): any {
             return;
         }
         setHistory(result);
-        console.log(result);
         
+        console.log(history);
+        
+        // const travelDistance = mapModel.calcDistance(result['startPosition']['latitude'], result['startPosition']['longitudo'], result['endPosition']['latitude'], result['endPosition']['longitude'])
+
+        // setDistance(travelDistance);
+
         setNoHistory(false);
     };
 
@@ -31,6 +36,7 @@ export default function Wallet({navigation}): any {
         // Get history for logged in user
         useEffect(() => {
             getHistory();
+            
         }, []);
 
         // Reload history on focus
@@ -38,20 +44,16 @@ export default function Wallet({navigation}): any {
             navigation.addListener('focus', () => getHistory())
         }, []);
 
+
+        function getDistance(history) {
+            const travelDistance = mapModel.calcDistance(history['startPosition']['latitude'], history['startPosition']['longitude'], history['endPosition']['latitude'], history['endPosition']['longitude']);
+
+            return travelDistance.toFixed(2).toString();
+            
+            
+        }
     return (
         <View style={styles.container}>
-
-            {/* <View style={[styles.infoContainer]}>
-                <Pressable style={[styles.backButton, styles.shadowProp]} onPress={() => navigation.navigate('Map')}>
-                    <Icon 
-                        name='x' 
-                        size={25} 
-                        color='black'
-                    />
-                </Pressable>
-
-                <Text style={styles.title}>Ride History</Text>
-            </View> */}
 
             <View style={styles.titleContainer}>
                 
@@ -86,7 +88,7 @@ export default function Wallet({navigation}): any {
 
                     <View style={styles.primaryInfo}>
                         <Text style={styles.textDistance}>
-                            {mapModel.calcDistance(h.startPosition[0], h.startPosition[1], h.endPosition[0], h.endPosition[1])} km / {h.totalMin} min 
+                            {getDistance(h)} km / {h.totalMin} min 
                         </Text>
                         <Text style={styles.textCost}>{h.totalPrice} kr</Text>
                     </View>
@@ -114,28 +116,22 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#fff',
-    //   backgroundColor: 'red',
       alignItems: 'center',
-    //   justifyContent: 'space-evenly',
       height: '50%',
       width: '100%'
     },
 
     rideHistory: {
-        // backgroundColor: 'red',
         width: '100%',
         flexDirection: 'column',
         marginBottom: 20,
         borderBottomWidth: 1,
         padding: 5,
         borderBottomColor: 'grey',
-        // height: '100%'
-        // justifyContent: 'space-around'
     },
 
     titleContainer: {
         marginTop: 20,
-        // backgroundColor: 'orange',
         width: '100%',
         flexDirection: 'row',
         height: 100,
@@ -180,22 +176,12 @@ const styles = StyleSheet.create({
         height: '20%',
         alignItems: 'center',
         justifyContent: 'space-evenly',
-        // backgroundColor: 'blue',
 
     },
 
     prepaidContainer: {
         width: '90%',
         height: '90%',
-        // backgroundColor: 'red'
-        // alignItems: 'center',
-        // justifyContent: 'center',
-        // padding: 20,
-        // flex: 2,
-        // backgroundColor: 'red',
-        // borderTopWidth: 1,
-        // borderBottomWidth: 1,
-        // borderColor: 'grey',
     },
 
     buttonText: {
@@ -233,7 +219,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         width: '70%',
         textAlign: 'center'
-        // marginBottom: 30
     },
 
     balance: {
@@ -275,7 +260,6 @@ const styles = StyleSheet.create({
     },
 
     input: {
-        // backgroundColor: 'red',
         width: '90%',
         marginBottom: 30,
         borderRadius: 10,

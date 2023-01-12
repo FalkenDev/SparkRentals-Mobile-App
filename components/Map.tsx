@@ -1,18 +1,15 @@
-import { useState, useEffect } from 'react';
-import { ScrollView, Image, Text, View, StyleSheet, StatusBar, Button, Pressable, InteractionManagerStatic } from 'react-native';
+import { useState, useEffect, useRef } from 'react';
+import { ScrollView, Image, Text, View, StyleSheet, StatusBar, Button, Pressable, InteractionManagerStatic, TouchableHighlightBase } from 'react-native';
 import MapView, { Marker, Circle, Polygon } from 'react-native-maps';
 import * as Location from 'expo-location';
 import React from 'react';
 import mapModel from '../models/map';
 import scooterModel from '../models/scooter';
-import {API_KEY} from "@env";
-import config from '../config/config.json';
 import Icon from 'react-native-vector-icons/Octicons';
 import ScooterModal from './modals/ScooterModal';
 import NavBar from './drawer/NavBar';
 import ZoneModal from './modals/ZoneModal';
-import ScanScreen from './modals/QrScanner';
-import QRCodeScanner from 'react-native-qrcode-scanner';
+import { showMessage, hideMessage } from "react-native-flash-message";
 import QrScanner from './modals/QrScanner';
 import JourneyModal from './modals/JourneyModal';
 
@@ -39,72 +36,72 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
     const [journeyModal, setJourneyModal] = useState(false);
     const [toggleTimer, setToggleTimer] = useState(false);
     const [markerSelected, setMarkerSelected] = useState(null);
-        
+    
+    const mapRef = useRef(null);    
     /**
      * Set user position
      */
     useEffect(() => {
-        async function fetchPosition(): Promise<void> {
+        async function setUpMap(): Promise<void> {
             const { status } = await Location.requestForegroundPermissionsAsync();
 
-            // if (status !== 'granted') {
-            //     setErrorMessage('Permission to access location was denied');
-            //     return;
-            // }
+            if (status !== 'granted') {
+                showMessage({
+                    message: 'Permission to access location was denied',
+                    type: 'danger',
+                    position: 'center'
+                });
+                return;
+            }
 
             const currentLocation = await Location.getCurrentPositionAsync({});
 
             const userCoordinates = {
                 //latlang hardcoded for testing
-                latitude: currentLocation.coords.latitude,
-                longitude: currentLocation.coords.longitude
-                // latitude: 56.161013580817986,
-                // longitude: 15.587742977884904
+                latitude: await currentLocation.coords.latitude,
+                longitude: await currentLocation.coords.longitude
+                // latitude: 56.674283063446495,
+                // longitude: 12.857826360096537
             };
 
-    
+            
+            
             setPosition(userCoordinates);
             
-            mapModel.getClosestCity(position);
+            // mapModel.getClosestCity(position);
 
             setLocationMarker(<Marker
                 coordinate={{
                     //latlang hardcoded for testing
-                    // latitude: currentLocation.coords.latitude,
-                    // longitude: currentLocation.coords.longitude
-                    latitude: 56.161013580817986,
-                    longitude: 15.587742977884904
+                    latitude: currentLocation.coords.latitude,
+                    longitude: currentLocation.coords.longitude
+                    // latitude: 56.161013580817986,
+                    // longitude: 15.587742977884904
                 }}
                 title="My location"
                 pinColor="blue"
                 flat={false}
             />);
-        };
 
 
-        fetchPosition();
-
-    }, []);
-
-    /**
-     * Set city to city that is closest to user and zones for that city
-     */
-    useEffect(() => {
-        async function setUpMap(): Promise<void> {
-            const city = await mapModel.getClosestCity(position);
+            // Get closest city to user location
+            const city = await mapModel.getClosestCity(userCoordinates);
             
             
             // Set city that is closest to user
             setCurrentCity(city);
-                        
+            
+            
             /**
              * Set zones on map
              */
             const zones = mapModel.getZones(city);
             setZones(zones);
-
         };
+
+
         setUpMap();
+
     }, []);
 
     /**
@@ -116,9 +113,9 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
 
             // Get scooters
             async function getScooters() {
-                const city = await mapModel.getClosestCity(position);
+                // const city = await mapModel.getClosestCity(position);
                 
-                const result = await scooterModel.getScooters(city); 
+                const result = await scooterModel.getScooters(currentCity); 
                 
                 if (result) {
                     const scooters = result['cityScooters'];
@@ -132,14 +129,56 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
       
             getScooters();
 
-        }, 5000);
+        }, 2000);
         return () => clearInterval(interval);
-      }, []);
+      });
+    
+    /**
+     * Update user position
+     */
+    useEffect(() => {
+        const interval = setInterval(() => {
+
+            // Get scooters
+            async function updateUserPosition() {
+                const currentLocation = await Location.getCurrentPositionAsync({});
+                const userCoordinates = {
+                    //latlang hardcoded for testing
+                    latitude: await currentLocation.coords.latitude,
+                    longitude: await currentLocation.coords.longitude
+                    // latitude: 56.674283063446495,
+                    // longitude: 12.857826360096537
+                };
+                
+                setPosition(userCoordinates);
+            };
+
+            updateUserPosition();
+
+        }, 2000);
+        return () => clearInterval(interval);
+      });
+
 
 
     return (
         <View style={styles.container}>
+            
+            {journeyModal ?
+                <View
+                style={{
+                    width: '100%',
+                    height: 50,
+                    backgroundColor: 'white',
+                    zIndex: 1
+                }}
+                />
+                    :
+                <View></View>
+            }
+
             <MapView
+                ref={mapRef}
                 style={styles.map}
                 initialRegion={{
                     latitude: position.latitude? position.latitude : 56.161013580817986,
@@ -147,7 +186,6 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
                     latitudeDelta: 0.03,
                     longitudeDelta: 0.03,
                 }}
-                userInterfaceStyle={'dark'}
             >
                 {locationMarker}
 
@@ -158,7 +196,7 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
                         tappable={true}
                         key={index}
                         onPress={() => {
-                            setCurrentScooter(s);
+                            setCurrentScooter(s);                                                        
                             setModalVisible(true);
                             setMarkerSelected(index);                            
                         }}
@@ -181,7 +219,7 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
                 ))}
             </MapView>
 
-            <ScooterModal navigation={navigation} scooter={currentScooter} modalVisible={modalVisible} currentCity={currentCity} setModalVisible={setModalVisible} setJourneyModal={setJourneyModal} setToggleTimer={setToggleTimer} position={position}/> 
+            <ScooterModal navigation={navigation} scooter={currentScooter} modalVisible={modalVisible} currentCity={currentCity} setModalVisible={setModalVisible} setJourneyModal={setJourneyModal} setToggleTimer={setToggleTimer} position={position} setCurrentScooter={setCurrentScooter}/> 
 
             <ZoneModal navigation={navigation} zone={currentZone} zoneModalVisible={zoneModalVisible} setZoneModalVisible={setZoneModalVisible} currentCity={currentCity}/>
             
@@ -196,8 +234,8 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
                     />
                     <Text style={styles.googleText}>Scan to unlock</Text>
             </Pressable>
-
-            <NavBar navigation={navigation} />
+            
+            <NavBar navigation={navigation} mapRef={mapRef} position={position}/>
             <QrScanner navigation={navigation} cameraVisible={cameraVisible} setCameraVisible={setCameraVisible} scooter={currentScooter} setModalVisible={setModalVisible} currentCity={currentCity} setCurrentScooter={setCurrentScooter}/>
         </View>
         
@@ -206,7 +244,6 @@ export default function Map({navigation, API_KEY, position, setPosition, token})
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
         height: '100%',
         alignItems: "center",
         width: '100%'

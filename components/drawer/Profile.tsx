@@ -1,12 +1,12 @@
-import { stopLocationUpdatesAsync } from 'expo-location';
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Pressable, Modal, TextInput} from 'react-native';
+import { StyleSheet, Text, View, Pressable, Modal, TextInput, Dimensions} from 'react-native';
 import userModel from '../../models/user';
 import authModel from '../../models/auth';
 import Icon from 'react-native-vector-icons/Octicons';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import DeleteModal from '../modals/DeleteModal';
+const deviceHeight = Dimensions.get('window').height;
 
 
 export default function Profile({navigation, setIsLoggedIn}): any {
@@ -65,7 +65,8 @@ export default function Profile({navigation, setIsLoggedIn}): any {
         if (Object.prototype.hasOwnProperty.call(result, 'errors')) {
             showMessage({
                 message: result['errors']['title'],
-                type: 'danger'
+                type: 'danger',
+                position: 'bottom'
             })
 
             return;
@@ -73,7 +74,8 @@ export default function Profile({navigation, setIsLoggedIn}): any {
 
         showMessage({
             message: result['message'],
-            type: 'success'
+            type: 'success',
+            position: 'bottom'
         });
     };
 
@@ -162,13 +164,10 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       height: '50%',
       width: '100%',
-    //   position: 'absolute'
 
     },
 
     titleContainer: {
-        // marginTop: 10,
-        // backgroundColor: 'orange',
         width: '100%',
         flexDirection: 'row',
         height: 100,
@@ -209,7 +208,7 @@ const styles = StyleSheet.create({
 
     infoContainer: {
         width: '100%',
-        height: 900,
+        height: deviceHeight ,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -262,7 +261,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         width: '70%',
         textAlign: 'center'
-        // marginBottom: 30
     },
 
     balance: {
@@ -304,7 +302,6 @@ const styles = StyleSheet.create({
     },
 
     input: {
-        // backgroundColor: 'red',
         width: '90%',
         marginBottom: 30,
         borderRadius: 10,

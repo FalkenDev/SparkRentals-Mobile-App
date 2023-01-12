@@ -1,14 +1,11 @@
-import { stopLocationUpdatesAsync } from "expo-location";
 import React from "react";
 import { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, Pressable, StyleSheet, Image, StatusBar, Modal } from "react-native";
-import mapModel from "../../models/map";
+import { View, Text, Button, Pressable, StyleSheet, Image, Modal } from "react-native";
 import GestureRecognizer from 'react-native-swipe-gestures';
 import scooterModel from "../../models/scooter";
-import { start } from "react-native-compass-heading";
 import { showMessage, hideMessage } from "react-native-flash-message";
 
-export default function ScooterModal({navigation, scooter, modalVisible, setModalVisible, currentCity, setJourneyModal, setToggleTimer, position}) {
+export default function ScooterModal({navigation, scooter, modalVisible, setModalVisible, currentCity, setJourneyModal, setToggleTimer, position, setCurrentScooter}) {
     const [scooterName, setScooterName] = useState(null);
     const [scooterNumber, setScooterNumber] = useState(null);
     const [battery, setBattery] = useState(null);
@@ -16,6 +13,7 @@ export default function ScooterModal({navigation, scooter, modalVisible, setModa
     const [timeRate, setTimeRate] = useState(null);
     const [scooterId, setScooterId] = useState(null);
     const [scooterPosition, setScooterPosition] = useState(null);
+    // const [currentScooter, setCurrentScooter] = useState(null);
 
     const batteryImages = {
         '100': require('../../assets/battery_100.png'),
@@ -35,33 +33,44 @@ export default function ScooterModal({navigation, scooter, modalVisible, setModa
             return '25'
         }
     };
+    
+    async function getScooterInfo(): Promise<void> {            
+        if (scooter) {
+            const title = scooter['name'].split('#');
+            const getScooter = await scooterModel.getSpecificScooter(scooter['_id']);
+            setScooterName(title[0]);
+            setScooterNumber(title[1]);
+            setBattery(getBattery(scooter['battery']));
+            setScooterId(scooter['_id']);
+            setScooterPosition(scooter['coordinates']);
+            setFixedRate(currentCity['taxRates']['fixedRate']);
+            setTimeRate(currentCity['taxRates']['timeRate']);
+            setCurrentScooter(getScooter['scooter'])
+        }
+    }
 
     useEffect(() => {
-        function getScooterInfo(): void {            
-            if (scooter) {
-                const title = scooter['name'].split('#');
-                setScooterName(title[0]);
-                setScooterNumber(title[1]);
-                setBattery(getBattery(scooter['battery']));
-                setScooterId(scooter['_id']);
-                setScooterPosition(scooter['coordinates']);
-                setFixedRate(currentCity['taxRates']['fixedRate']);
-                setTimeRate(currentCity['taxRates']['timeRate']);
-                
-            }
-        }
-        getScooterInfo();
-    });
+        const interval = setInterval(() => {
+
+            modalVisible ? getScooterInfo() : null;
+
+        }, 100);
+        return () => clearInterval(interval);
+      });
+
 
 
     async function startJourney() {
+        console.log(scooterId);
+                
         const result = await scooterModel.startScooter(scooterId, position, scooterPosition);
         setToggleTimer(true);
 
         if (Object.prototype.hasOwnProperty.call(result, 'errors')) {
             showMessage({
                 message: result['errors']['title'],
-                type: 'danger'
+                type: 'danger',
+                position: 'center'
             })
 
             return;
@@ -69,7 +78,7 @@ export default function ScooterModal({navigation, scooter, modalVisible, setModa
 
         showMessage({
             message: result['message'],
-            type: 'success'
+            type: 'success',
         });
         setModalVisible(!modalVisible);
         setJourneyModal(true);
@@ -121,7 +130,6 @@ export default function ScooterModal({navigation, scooter, modalVisible, setModa
 
 const styles = StyleSheet.create({
     modalContainer: {
-        // backgroundColor: 'rgba(80, 80, 80, 0.6)',
         width: '100%',
         height: '100%',
         flex: 1,
@@ -144,9 +152,6 @@ const styles = StyleSheet.create({
     textContainer: {
         width: '45%',
         marginBottom: 10,
-        // padding: 0
-        // alignItems: 'center'
-        // flexDirection: 'row'
     },
 
     modalMessage: {
@@ -156,7 +161,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         paddingTop: 10,
-        // flexDirection: 'row'
         borderTopLeftRadius: 25,
         borderTopRightRadius: 25
     },
@@ -169,8 +173,6 @@ const styles = StyleSheet.create({
     
     battery: {
         marginLeft: 5,
-        // width: 15,
-        // height: 28
     },
 
     scooterImage: {
@@ -182,10 +184,8 @@ const styles = StyleSheet.create({
         width: '80%',
         height: 50,
         borderRadius: 10,
-        // display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 10
-        // marginTop: 120,
     },
 })

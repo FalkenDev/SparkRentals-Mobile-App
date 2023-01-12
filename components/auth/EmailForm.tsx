@@ -7,6 +7,18 @@ import FlashMessage from 'react-native-flash-message';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import TermsModal from "../modals/TermsModal";
 
+function checkEmail(email: string): Boolean {
+    return authModel.checkEmail(email);
+};
+
+function checkAlert() {
+    showMessage({
+        message: 'You must agree to terms to register',
+        type: 'danger',
+        position: 'bottom'
+    });
+};   
+
 export default function EmailForm({setToken, navigation, setIsLoggedIn}) {
     const [name, setName] = useState(null);
     const [email, setEmail] = useState(null);
@@ -79,19 +91,7 @@ export default function EmailForm({setToken, navigation, setIsLoggedIn}) {
             setIsLoggedIn(true);
         }
     };
-
-
-    function checkEmail(email: string): Boolean {
-        return authModel.checkEmail(email);
-    };
-
-    function checkAlert() {
-        showMessage({
-            message: 'You must agree to terms to register',
-            type: 'danger',
-            position: 'bottom'
-        });
-    };    
+ 
 
     return (
         <View style={styles.container}>

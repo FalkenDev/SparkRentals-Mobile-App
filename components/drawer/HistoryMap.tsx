@@ -57,8 +57,9 @@ export default function HistoryMap({navigation, journey, modalVisible, setModalV
       
                 <Marker
                 title='Start'
-                coordinate={{latitude: startCoordinates['latitude']? startCoordinates['latitude'] : 0,
-                longitude: startCoordinates['longitude']? startCoordinates['longitude'] : 0
+                coordinate={{
+                    latitude: startCoordinates['latitude']? startCoordinates['latitude'] : 0,
+                    longitude: startCoordinates['longitude']? startCoordinates['longitude'] : 0
                 }}
                 />
 
@@ -66,17 +67,12 @@ export default function HistoryMap({navigation, journey, modalVisible, setModalV
                 <Marker
                 pinColor='blue'
                 title='Stop'
-                coordinate={{latitude: endCoordinates['latitude']? endCoordinates['latitude'] : 0,
-                longitude: endCoordinates['longitude']? endCoordinates['longitude'] : 0
+                coordinate={{
+                    latitude: endCoordinates['latitude']? endCoordinates['latitude'] : 0,
+                    longitude: endCoordinates['longitude']? endCoordinates['longitude'] : 0
                 }}
                 />
-
-
-
-            
-
                 
-
                 </MapView>
 
                 <View style={styles.infoContainer}>

@@ -5,6 +5,26 @@ import GestureRecognizer from 'react-native-swipe-gestures';
 import scooterModel from "../../models/scooter";
 import { showMessage, hideMessage } from "react-native-flash-message";
 
+
+const batteryImages = {
+    '100': require('../../assets/battery_100.png'),
+    '75': require('../../assets/battery_75.png'),
+    '50': require('../../assets/battery_50.png'),
+    '25': require('../../assets/battery_25.png')
+}
+
+function getBattery(batteryPercentage) {
+    if (batteryPercentage >= 75) {
+        return '100'
+    } else if (batteryPercentage >= 50) {
+        return '75'
+    } else if (batteryPercentage >= 25) {
+        return '50'
+    } else {
+        return '25'
+    }
+};
+
 export default function ScooterModal({navigation, scooter, modalVisible, setModalVisible, currentCity, setJourneyModal, setToggleTimer, position, setCurrentScooter}) {
     const [scooterName, setScooterName] = useState(null);
     const [scooterNumber, setScooterNumber] = useState(null);
@@ -15,24 +35,6 @@ export default function ScooterModal({navigation, scooter, modalVisible, setModa
     const [scooterPosition, setScooterPosition] = useState(null);
     // const [currentScooter, setCurrentScooter] = useState(null);
 
-    const batteryImages = {
-        '100': require('../../assets/battery_100.png'),
-        '75': require('../../assets/battery_75.png'),
-        '50': require('../../assets/battery_50.png'),
-        '25': require('../../assets/battery_25.png')
-    }
-
-    function getBattery(batteryPercentage) {
-        if (batteryPercentage >= 75) {
-            return '100'
-        } else if (batteryPercentage >= 50) {
-            return '75'
-        } else if (batteryPercentage >= 25) {
-            return '50'
-        } else {
-            return '25'
-        }
-    };
     
     async function getScooterInfo(): Promise<void> {            
         if (scooter) {
@@ -60,9 +62,7 @@ export default function ScooterModal({navigation, scooter, modalVisible, setModa
 
 
 
-    async function startJourney() {
-        console.log(scooterId);
-                
+    async function startJourney() {                
         const result = await scooterModel.startScooter(scooterId, position, scooterPosition);
         setToggleTimer(true);
 

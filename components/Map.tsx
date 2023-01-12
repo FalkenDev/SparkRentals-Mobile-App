@@ -23,6 +23,7 @@ function markerIcon(index, selected) {
     return marker;
 };
 
+
 export default function Map({navigation, API_KEY, position, setPosition, token}): any {
     const [locationMarker, setLocationMarker] = useState(null);
     const [currentCity, setCurrentCity] = useState(null);

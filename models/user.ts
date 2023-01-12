@@ -61,10 +61,7 @@ const userModel = {
         const requestBody = {
             'user_id': userId,
             'prepaid_code': prepaid
-        };    
-
-        console.log(JSON.stringify(requestBody));
-        
+        };            
         
         const response = await fetch(`${config.base_url}users/addfund?api_key=${API_KEY}`, {
             method: 'POST',

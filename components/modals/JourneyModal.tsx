@@ -9,6 +9,30 @@ import { Stopwatch, Timer } from 'react-native-stopwatch-timer';
 import MapView, { Marker, Circle, Polygon } from 'react-native-maps';
 
 
+const batteryImages = {
+    '100': require('../../assets/battery_100.png'),
+    '75': require('../../assets/battery_75.png'),
+    '50': require('../../assets/battery_50.png'),
+    '25': require('../../assets/battery_25.png')
+}
+
+function getBattery(batteryPercentage) {
+    if (batteryPercentage >= 75) {
+        return '100'
+    } else if (batteryPercentage >= 50) {
+        return '75'
+    } else if (batteryPercentage >= 25) {
+        return '50'
+    } else {
+        return '25'
+    }
+};
+
+function getFormattedTime(time) {
+    const currentTime = time;
+    return currentTime;
+};
+
 export default function JourneyModal({navigation, scooter, journeyModal, setJourneyModal, toggleTimer, setToggleTimer}) {
     const [scooterName, setScooterName] = useState(null);
     const [scooterNumber, setScooterNumber] = useState(null);
@@ -20,24 +44,7 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
     const [batteryPercentage, setBatteryPercentage] = useState(null);
     const [currentScooter, setCurrentScooter] = useState(null);
 
-    const batteryImages = {
-        '100': require('../../assets/battery_100.png'),
-        '75': require('../../assets/battery_75.png'),
-        '50': require('../../assets/battery_50.png'),
-        '25': require('../../assets/battery_25.png')
-    }
 
-    function getBattery(batteryPercentage) {
-        if (batteryPercentage >= 75) {
-            return '100'
-        } else if (batteryPercentage >= 50) {
-            return '75'
-        } else if (batteryPercentage >= 25) {
-            return '50'
-        } else {
-            return '25'
-        }
-    };
 
     async function getScooterInfo(): Promise<void> {            
         if (scooter) {            
@@ -53,13 +60,10 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
             
             setScooterPosition(getScooter['scooter']['coordinates']);
             setBatteryPercentage(getScooter['scooter']['battery'].toFixed(1));                        
-            setDistance(getScooter['scooter']['trip']['distance'].toFixed(2));
-
-            
-            
+            setDistance(getScooter['scooter']['trip']['distance'].toFixed(2)); 
             
         }
-    }
+    };
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -98,10 +102,7 @@ export default function JourneyModal({navigation, scooter, journeyModal, setJour
         setJourneyModal(!journeyModal)
     };
 
-    function getFormattedTime(time) {
-        const currentTime = time;
-        return currentTime;
-    };
+
 
     return (
         <GestureRecognizer
